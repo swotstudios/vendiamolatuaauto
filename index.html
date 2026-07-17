@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vendiamolatuaauto.com — Vendi la tua auto in modo semplice e veloce</title>
+<meta name="description" content="Vendi la tua auto in 3 semplici passi. Gratuito, senza vincoli, risposta in 24h da un rivenditore vicino a te.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #4361EE;
+    --color-primary-dark: #3450d9;
+    --color-primary-text: #FFFFFF;
+    --color-secondary-text: #282C4D;
+    --color-accent: #FFF644;
+    --color-card-bg: #F1F4FF;
+    --color-card-dark: #3853d8;
+    --color-red: #E63946;
+    --color-green: #2ecc71;
+    --font-main: 'Poppins', sans-serif;
+    --max-width: 1200px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-main);
+    color: var(--color-secondary-text);
+    background: #fff;
+    overflow-x: hidden;
+  }
+
+  img { max-width: 100%; display: block; }
+
+  .container {
+    width: 90%;
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  section {
+    padding: 60px 0;
+  }
+
+  /* ---------- Fade-in animation ---------- */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ---------- Header ---------- */
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 12px rgba(40,44,77,0.06);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+  }
+  .logo img {
+    height: 42px;
+    width: auto;
+  }
+  .header-cta {
+    display: none;
+  }
+  @media (min-width: 640px) {
+    .header-cta { display: inline-flex; }
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--font-main);
+    font-weight: 500;
+    font-size: 18px;
+    padding: 14px 30px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    white-space: nowrap;
+  }
+  @media (min-width: 768px) {
+    .btn { font-size: 20px; }
+  }
+  .btn-primary {
+    background: var(--color-primary);
+    color: var(--color-accent);
+    box-shadow: 0 8px 20px rgba(67,97,238,0.35);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(67,97,238,0.45);
+    background: var(--color-primary-dark);
+  }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-outline {
+    background: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+  }
+  .btn-outline:hover {
+    background: var(--color-primary);
+    color: #fff;
+  }
+  .btn-small { padding: 10px 20px; font-size: 15px; }
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 110px;
+    position: relative;
+    background: linear-gradient(160deg, #ffffff 0%, var(--color-card-bg) 55%, #ffffff 100%);
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: -120px;
+    right: -160px;
+    width: 480px;
+    height: 480px;
+    background: radial-gradient(circle, rgba(67,97,238,0.15) 0%, rgba(67,97,238,0) 70%);
+    border-radius: 50%;
+    animation: float 8s ease-in-out infinite;
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    bottom: -140px;
+    left: -140px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(255,246,68,0.35) 0%, rgba(255,246,68,0) 70%);
+    border-radius: 50%;
+    animation: float 10s ease-in-out infinite reverse;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(30px) translateX(-20px); }
+  }
+  .hero-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    position: relative;
+    z-index: 2;
+  }
+  @media (min-width: 960px) {
+    .hero-inner {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+  .hero-content {
+    max-width: 620px;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--color-accent);
+    color: var(--color-secondary-text);
+    font-weight: 600;
+    font-size: 13px;
+    padding: 8px 16px;
+    border-radius: 50px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    font-size: 38px;
+    line-height: 1.15;
+    color: var(--color-secondary-text);
+    margin-bottom: 20px;
+  }
+  .hero h1 span {
+    color: var(--color-primary);
+    position: relative;
+    white-space: nowrap;
+  }
+  @media (min-width: 768px) {
+    .hero h1 { font-size: 48px; }
+  }
+  .hero-subtitle {
+    font-weight: 500;
+    font-size: 22px;
+    color: #4b4f6b;
+    margin-bottom: 30px;
+    line-height: 1.4;
+  }
+  @media (min-width: 768px) {
+    .hero-subtitle { font-size: 24px; }
+  }
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 26px;
+  }
+  .hero-trust {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    font-size: 14px;
+    color: #6b6f8c;
+    font-weight: 500;
+  }
+  .hero-trust span { display: flex; align-items: center; gap: 6px; }
+
+  .hero-visual {
+    position: relative;
+    flex-shrink: 0;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+  @media (min-width: 960px) {
+    .hero-visual { margin: 0; }
+  }
+  .hero-visual-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 40px 30px;
+    box-shadow: 0 20px 60px rgba(40,44,77,0.15);
+    text-align: center;
+    animation: floatCard 5s ease-in-out infinite;
+  }
+  @keyframes floatCard {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+  .hero-visual-emoji {
+    font-size: 90px;
+    line-height: 1;
+    margin-bottom: 10px;
+    animation: drive 3.5s ease-in-out infinite;
+  }
+  @keyframes drive {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    25% { transform: translateX(-6px) rotate(-2deg); }
+    75% { transform: translateX(6px) rotate(2deg); }
+  }
+  .hero-visual-card h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .hero-visual-card p {
+    font-size: 15px;
+    color: #6b6f8c;
+  }
+  .hero-visual-tag {
+    position: absolute;
+    background: var(--color-primary);
+    color: var(--color-accent);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 10px 18px;
+    border-radius: 50px;
+    box-shadow: 0 10px 24px rgba(67,97,238,0.35);
+  }
+  .hero-visual-tag.tag-1 { top: -10px; right: -10px; animation: float 6s ease-in-out infinite; }
+  .hero-visual-tag.tag-2 { bottom: 10px; left: -20px; animation: float 7s ease-in-out infinite reverse; background: var(--color-secondary-text); color: #fff; }
+
+  /* ---------- Section headers ---------- */
+  .section-title {
+    font-weight: 600;
+    font-size: 30px;
+    text-align: center;
+    margin-bottom: 14px;
+    line-height: 1.2;
+  }
+  @media (min-width: 768px) {
+    .section-title { font-size: 48px; }
+  }
+  .section-subtitle {
+    text-align: center;
+    font-size: 17px;
+    color: #6b6f8c;
+    max-width: 640px;
+    margin: 0 auto 40px;
+    font-weight: 400;
+  }
+  @media (min-width: 768px) {
+    .section-subtitle { font-size: 19px; }
+  }
+
+  /* ---------- Benefit cards ---------- */
+  .benefits {
+    background: #fff;
+  }
+  .benefit-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  @media (min-width: 900px) {
+    .benefit-grid {
+      flex-direction: row;
+      gap: 24px;
+    }
+  }
+  .benefit-card {
+    background: var(--color-card-bg);
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(67,97,238,0.08);
+    padding: 30px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .benefit-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 30px rgba(67,97,238,0.16);
+  }
+  .benefit-emoji { font-size: 40px; }
+  .benefit-card h3 { font-size: 23px; font-weight: 500; }
+  .benefit-card p { font-size: 18px; font-weight: 400; color: #4b4f6b; line-height: 1.5; }
+
+  /* ---------- Form section ---------- */
+  .form-section {
+    background: linear-gradient(160deg, #f7f9ff 0%, #eef1ff 100%);
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+  }
+  .form-intro {
+    text-align: center;
+    margin-bottom: 34px;
+  }
+  .form-card {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    background: var(--color-primary);
+    border-radius: 24px;
+    padding: 30px 20px;
+    box-shadow: 0 30px 60px rgba(67,97,238,0.3);
+    color: #fff;
+  }
+  @media (min-width: 640px) {
+    .form-card { padding: 44px 50px; }
+  }
+
+  .progress-wrap {
+    margin-bottom: 30px;
+  }
+  .progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: rgba(255,255,255,0.85);
+  }
+  .progress-labels .active { color: var(--color-accent); font-weight: 700; }
+  .progress-bar-track {
+    width: 100%;
+    height: 10px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 50px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    width: 33.33%;
+    background: var(--color-accent);
+    border-radius: 50px;
+    transition: width 0.4s ease;
+  }
+
+  .form-step-intro {
+    background: rgba(255,255,255,0.1);
+    border-left: 4px solid var(--color-accent);
+    padding: 14px 18px;
+    border-radius: 10px;
+    margin-bottom: 26px;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  .form-step { display: none; }
+  .form-step.active {
+    display: block;
+    animation: stepIn 0.4s ease;
+  }
+  @keyframes stepIn {
+    from { opacity: 0; transform: translateX(16px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  @media (min-width: 640px) {
+    .form-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field label {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .field .required { color: var(--color-accent); }
+  .field input,
+  .field select {
+    font-family: var(--font-main);
+    font-size: 16px;
+    padding: 13px 16px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background: #fff;
+    color: var(--color-secondary-text);
+  }
+  .field input:focus,
+  .field select:focus {
+    box-shadow: 0 0 0 3px rgba(255,246,68,0.6);
+  }
+  .field-error {
+    font-size: 13px;
+    color: #ffe0e0;
+    display: none;
+    font-weight: 500;
+  }
+  .field.invalid input,
+  .field.invalid select {
+    box-shadow: 0 0 0 3px #ff8080;
+  }
+  .field.invalid .field-error { display: block; }
+
+  .checkbox-field {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 6px;
+  }
+  .checkbox-field input {
+    margin-top: 4px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    accent-color: var(--color-accent);
+  }
+  .checkbox-field label {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+  }
+  .checkbox-field a { color: var(--color-accent); }
+
+  .form-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 32px;
+    gap: 14px;
+  }
+  .form-nav .btn-outline {
+    background: transparent;
+    color: #fff;
+    border: 2px solid rgba(255,255,255,0.5);
+  }
+  .form-nav .btn-outline:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: #fff;
+  }
+  .form-nav .spacer { flex: 1; }
+
+  .form-success {
+    display: none;
+    text-align: center;
+    padding: 30px 10px;
+  }
+  .form-success.active { display: block; animation: stepIn 0.4s ease; }
+  .form-success .emoji { font-size: 60px; margin-bottom: 16px; }
+  .form-success h3 { font-size: 26px; margin-bottom: 10px; }
+  .form-success p { font-size: 16px; color: rgba(255,255,255,0.85); }
+
+  /* ---------- How it works ---------- */
+  .how-it-works {
+    background: var(--color-primary);
+    color: #fff;
+  }
+  .how-it-works .section-title,
+  .how-it-works .section-subtitle { color: #fff; }
+  .how-it-works .section-subtitle { color: rgba(255,255,255,0.85); }
+
+  .steps-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  @media (min-width: 900px) {
+    .steps-grid { flex-direction: row; gap: 24px; }
+  }
+  .step-card {
+    background: var(--color-card-dark);
+    border-radius: 16px;
+    padding: 34px 26px;
+    flex: 1;
+    transition: transform 0.25s ease;
+  }
+  .step-card:hover { transform: translateY(-6px); }
+  .step-number {
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--color-accent);
+    margin-bottom: 12px;
+  }
+  .step-card h3 { font-size: 22px; font-weight: 500; margin-bottom: 10px; }
+  .step-card p { font-size: 16px; font-weight: 400; color: rgba(255,255,255,0.85); line-height: 1.5; }
+
+  /* ---------- Comparison ---------- */
+  .comparison { background: #fff; }
+  .comparison-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: stretch;
+  }
+  @media (min-width: 860px) {
+    .comparison-grid { flex-direction: row; justify-content: center; }
+  }
+  .comparison-col {
+    flex: 1;
+    max-width: 460px;
+    border: 1px solid #dfe2f2;
+    border-radius: 18px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .comparison-header {
+    padding: 22px;
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .comparison-col.negative .comparison-header {
+    background: #fdeaea;
+    color: var(--color-red);
+  }
+  .comparison-col.positive .comparison-header {
+    background: var(--color-primary);
+    color: #fff;
+  }
+  .comparison-list {
+    list-style: none;
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    flex: 1;
+  }
+  .comparison-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+  .comparison-list .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .comparison-col.negative .icon { background: var(--color-red); }
+  .comparison-col.positive .icon { background: var(--color-primary); }
+
+  .comparison-cta {
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    background: var(--color-secondary-text);
+    color: #fff;
+    padding: 50px 0 24px;
+  }
+  .footer-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  @media (min-width: 768px) {
+    .footer-inner {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+  }
+  .footer-logo img { height: 40px; margin-bottom: 14px; }
+  .footer-logo p { font-size: 14px; color: rgba(255,255,255,0.65); max-width: 320px; line-height: 1.5; }
+  .footer-col h4 { font-size: 15px; font-weight: 600; margin-bottom: 14px; color: var(--color-accent); }
+  .footer-col a {
+    display: block;
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    font-size: 14px;
+    margin-bottom: 10px;
+    transition: color 0.2s ease;
+  }
+  .footer-col a:hover { color: #fff; }
+  .footer-bottom {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+  }
+  @media (min-width: 768px) {
+    .footer-bottom { flex-direction: row; justify-content: space-between; text-align: left; }
+  }
+
+  /* ---------- Toast ---------- */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--color-secondary-text);
+    color: #fff;
+    padding: 14px 24px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 2000;
+    max-width: 90%;
+    text-align: center;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .toast.error { background: var(--color-red); }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="#" class="logo" aria-label="Vendiamolatuaauto.com">
+      <img src="assets/black.png" alt="Vendiamolatuaauto.com">
+    </a>
+    <a href="#form" class="btn btn-primary btn-small header-cta">Vendi ora la tua auto</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-content">
+        <span class="hero-badge">🚗 Gratuito · Nessun vincolo · Risposta in 24h</span>
+        <h1>Vendi la tua auto <span>senza pensieri</span>, al miglior prezzo</h1>
+        <p class="hero-subtitle">Compila il form in 2 minuti e ricevi la proposta di un rivenditore selezionato vicino a te. Semplice, veloce, senza sorprese.</p>
+        <div class="hero-ctas">
+          <a href="#form" class="btn btn-primary">Vendi ora la tua auto</a>
+          <a href="#come-funziona" class="btn btn-outline">Come funziona</a>
+        </div>
+        <div class="hero-trust">
+          <span>✅ 100% gratuito</span>
+          <span>⚡ Risposta in 24h</span>
+          <span>🤝 Nessun obbligo d'acquisto</span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-visual-card">
+          <div class="hero-visual-emoji">🚙</div>
+          <h3>Valutazione rapida</h3>
+          <p>Inserisci i dati della tua auto e ricevi un contatto dedicato</p>
+        </div>
+        <div class="hero-visual-tag tag-1">💰 Miglior prezzo</div>
+        <div class="hero-visual-tag tag-2">⏱️ 2 minuti</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PERCHÉ SCEGLIERCI -->
+  <section class="benefits" id="perche-sceglierci">
+    <div class="container">
+      <h2 class="section-title fade-in">Perché scegliere noi</h2>
+      <p class="section-subtitle fade-in">Vendere l'auto non è mai stato così semplice: pensiamo noi a tutto, tu pensi al prossimo viaggio.</p>
+      <div class="benefit-grid">
+        <div class="benefit-card fade-in">
+          <div class="benefit-emoji">⚡</div>
+          <h3>Veloce</h3>
+          <p>Compili il form in pochi minuti e ricevi una risposta entro 24 ore lavorative.</p>
+        </div>
+        <div class="benefit-card fade-in">
+          <div class="benefit-emoji">🆓</div>
+          <h3>Gratuito</h3>
+          <p>Il servizio è completamente gratuito e senza costi nascosti per te.</p>
+        </div>
+        <div class="benefit-card fade-in">
+          <div class="benefit-emoji">🔒</div>
+          <h3>Senza vincoli</h3>
+          <p>Nessun obbligo di vendita: valuti la proposta con calma e decidi tu.</p>
+        </div>
+        <div class="benefit-card fade-in">
+          <div class="benefit-emoji">📍</div>
+          <h3>Rivenditori locali</h3>
+          <p>Ti mettiamo in contatto con un partner affidabile e vicino a te.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORM -->
+  <section class="form-section" id="form">
+    <div class="container">
+      <div class="form-intro">
+        <h2 class="section-title fade-in">Vendi la tua auto ora</h2>
+        <p class="section-subtitle fade-in">Bastano tre semplici passaggi per ricevere la nostra proposta.</p>
+      </div>
+
+      <form class="form-card fade-in" id="carForm" novalidate>
+
+        <div class="progress-wrap">
+          <div class="progress-labels">
+            <span data-step-label="1" class="active">1. Auto</span>
+            <span data-step-label="2">2. Dettagli</span>
+            <span data-step-label="3">3. Contatti</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <!-- STEP 1 -->
+        <div class="form-step active" data-step="1">
+          <div class="form-step-intro">🚗 Facci sapere che auto vorresti vendere!</div>
+          <div class="form-grid">
+            <div class="field" data-field="marca">
+              <label>Marca <span class="required">*</span></label>
+              <select name="marca" required>
+                <option value="">Seleziona marca</option>
+                <option>Abarth</option><option>Alfa Romeo</option><option>Audi</option>
+                <option>BMW</option><option>Chevrolet</option><option>Citroën</option>
+                <option>Cupra</option><option>Dacia</option><option>DS</option>
+                <option>Fiat</option><option>Ford</option><option>Honda</option>
+                <option>Hyundai</option><option>Jaguar</option><option>Jeep</option>
+                <option>Kia</option><option>Lancia</option><option>Land Rover</option>
+                <option>Lexus</option><option>Mazda</option><option>Mercedes-Benz</option>
+                <option>Mini</option><option>Mitsubishi</option><option>Nissan</option>
+                <option>Opel</option><option>Peugeot</option><option>Porsche</option>
+                <option>Renault</option><option>Seat</option><option>Škoda</option>
+                <option>Smart</option><option>Subaru</option><option>Suzuki</option>
+                <option>Tesla</option><option>Toyota</option><option>Volkswagen</option>
+                <option>Volvo</option><option>Altro</option>
+              </select>
+              <span class="field-error">Seleziona la marca dell'auto</span>
+            </div>
+            <div class="field" data-field="modello">
+              <label>Modello <span class="required">*</span></label>
+              <input type="text" name="modello" placeholder="Es. Panda, Golf, 500..." required>
+              <span class="field-error">Inserisci il modello dell'auto</span>
+            </div>
+            <div class="field" data-field="anno">
+              <label>Anno di immatricolazione <span class="required">*</span></label>
+              <select name="anno" required>
+                <option value="">Seleziona anno</option>
+              </select>
+              <span class="field-error">Seleziona l'anno di immatricolazione</span>
+            </div>
+          </div>
+          <div class="form-nav">
+            <span class="spacer"></span>
+            <button type="button" class="btn btn-primary" data-next>Avanti</button>
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="form-step" data-step="2">
+          <div class="form-step-intro">📋 Qualche dettaglio in più per una valutazione precisa.</div>
+          <div class="form-grid">
+            <div class="field" data-field="km">
+              <label>Chilometraggio <span class="required">*</span></label>
+              <select name="km" required>
+                <option value="">Seleziona fascia km</option>
+                <option value="0-20000">0 - 20.000 km</option>
+                <option value="20000-50000">20.000 - 50.000 km</option>
+                <option value="50000-100000">50.000 - 100.000 km</option>
+                <option value="100000-150000">100.000 - 150.000 km</option>
+                <option value="150000-200000">150.000 - 200.000 km</option>
+                <option value="200000-250000">200.000 - 250.000 km</option>
+                <option value="250000+">Oltre 250.000 km</option>
+              </select>
+              <span class="field-error">Seleziona la fascia di chilometraggio</span>
+            </div>
+            <div class="field" data-field="targa">
+              <label>Targa (facoltativo)</label>
+              <input type="text" name="targa" placeholder="Es. AB123CD" maxlength="10">
+              <span class="field-error"></span>
+            </div>
+          </div>
+          <div class="form-nav">
+            <button type="button" class="btn btn-outline" data-prev>Indietro</button>
+            <span class="spacer"></span>
+            <button type="button" class="btn btn-primary" data-next>Avanti</button>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="form-step" data-step="3">
+          <div class="form-step-intro">📞 Ultimo passo: come possiamo contattarti?</div>
+          <div class="form-grid cols-2">
+            <div class="field" data-field="nome">
+              <label>Nome e Cognome <span class="required">*</span></label>
+              <input type="text" name="nome" placeholder="Mario Rossi" required>
+              <span class="field-error">Inserisci nome e cognome</span>
+            </div>
+            <div class="field" data-field="email">
+              <label>Email <span class="required">*</span></label>
+              <input type="email" name="email" placeholder="mario.rossi@email.com" required>
+              <span class="field-error">Inserisci un'email valida</span>
+            </div>
+            <div class="field" data-field="telefono">
+              <label>Telefono <span class="required">*</span></label>
+              <input type="tel" name="telefono" placeholder="333 1234567" required>
+              <span class="field-error">Inserisci un numero di telefono valido</span>
+            </div>
+            <div class="field" data-field="provincia">
+              <label>Provincia <span class="required">*</span></label>
+              <input type="text" name="provincia" placeholder="Es. Milano" required>
+              <span class="field-error">Inserisci la provincia</span>
+            </div>
+            <div class="field" data-field="cap">
+              <label>CAP <span class="required">*</span></label>
+              <input type="text" name="cap" placeholder="Es. 20100" maxlength="5" inputmode="numeric" required>
+              <span class="field-error">Inserisci un CAP valido (5 cifre)</span>
+            </div>
+          </div>
+          <div class="field" data-field="termini">
+            <div class="checkbox-field">
+              <input type="checkbox" name="termini" id="termini" required>
+              <label for="termini">Accetto i <a href="#" target="_blank">termini e condizioni</a> e l'informativa sulla <a href="#" target="_blank">privacy</a> <span class="required">*</span></label>
+            </div>
+            <span class="field-error">Devi accettare i termini per procedere</span>
+          </div>
+          <div class="form-nav">
+            <button type="button" class="btn btn-outline" data-prev>Indietro</button>
+            <span class="spacer"></span>
+            <button type="submit" class="btn btn-primary">Invia richiesta</button>
+          </div>
+        </div>
+
+        <!-- SUCCESS -->
+        <div class="form-success" id="formSuccess">
+          <div class="emoji">🎉</div>
+          <h3>Richiesta inviata!</h3>
+          <p>Grazie! Un rivenditore selezionato ti contatterà entro 24 ore con la sua proposta.</p>
+        </div>
+
+      </form>
+    </div>
+  </section>
+
+  <!-- COME FUNZIONA -->
+  <section class="how-it-works" id="come-funziona">
+    <div class="container">
+      <h2 class="section-title fade-in">Come funziona?</h2>
+      <p class="section-subtitle fade-in">Tre passaggi, zero complicazioni.</p>
+      <div class="steps-grid">
+        <div class="step-card fade-in">
+          <div class="step-number">1.</div>
+          <h3>Compila il form</h3>
+          <p>Inserisci i dati della tua auto e i tuoi contatti in meno di 2 minuti.</p>
+        </div>
+        <div class="step-card fade-in">
+          <div class="step-number">2.</div>
+          <h3>Ricevi la proposta</h3>
+          <p>Un rivenditore selezionato vicino a te analizza la richiesta e ti contatta entro 24h.</p>
+        </div>
+        <div class="step-card fade-in">
+          <div class="step-number">3.</div>
+          <h3>Vendi in sicurezza</h3>
+          <p>Valuti l'offerta senza impegno e, se ti convince, concludi la vendita in tutta tranquillità.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONFRONTO -->
+  <section class="comparison">
+    <div class="container">
+      <h2 class="section-title fade-in">Vendere da soli vs Vendiamolatuaauto.com</h2>
+      <p class="section-subtitle fade-in">Perché affidarsi a noi conviene davvero.</p>
+      <div class="comparison-grid">
+        <div class="comparison-col negative fade-in">
+          <div class="comparison-header">❌ Vendere da soli</div>
+          <ul class="comparison-list">
+            <li><span class="icon">✕</span> Devi gestire annunci, foto e trattative da solo</li>
+            <li><span class="icon">✕</span> Rischio di truffe e acquirenti poco seri</li>
+            <li><span class="icon">✕</span> Tempi di vendita lunghi e incerti</li>
+            <li><span class="icon">✕</span> Nessun supporto nella valutazione del prezzo</li>
+            <li><span class="icon">✕</span> Devi occuparti tu della burocrazia</li>
+          </ul>
+        </div>
+        <div class="comparison-col positive fade-in">
+          <div class="comparison-header">✅ Vendiamolatuaauto.com</div>
+          <ul class="comparison-list">
+            <li><span class="icon">✓</span> Compili un form e pensiamo noi al resto</li>
+            <li><span class="icon">✓</span> Rivenditori professionali e verificati</li>
+            <li><span class="icon">✓</span> Risposta garantita entro 24 ore</li>
+            <li><span class="icon">✓</span> Valutazione trasparente e gratuita</li>
+            <li><span class="icon">✓</span> Nessun vincolo: decidi tu se accettare</li>
+          </ul>
+        </div>
+      </div>
+      <div class="comparison-cta fade-in">
+        <a href="#form" class="btn btn-primary">Vendi ora la tua auto</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-logo">
+      <img src="assets/white.png" alt="Vendiamolatuaauto.com">
+      <p>Il servizio gratuito che ti mette in contatto con rivenditori selezionati per vendere la tua auto in modo semplice e sicuro.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Link utili</h4>
+      <a href="#form">Vendi la tua auto</a>
+      <a href="#come-funziona">Come funziona</a>
+      <a href="#perche-sceglierci">Perché sceglierci</a>
+    </div>
+    <div class="footer-col">
+      <h4>Area riservata</h4>
+      <a href="#" id="partnerLink">Accesso partner</a>
+      <a href="#">Diventa rivenditore partner</a>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© <span id="year"></span> Vendiamolatuaauto.com — Tutti i diritti riservati</span>
+    <span>P.IVA 00000000000</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- Anno corrente footer ---------- */
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* ---------- Popola select anni (2014-2025) ---------- */
+  var annoSelect = document.querySelector('select[name="anno"]');
+  var currentYear = new Date().getFullYear();
+  var maxYear = Math.max(2025, currentYear);
+  for (var y = maxYear; y >= 2014; y--) {
+    var opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = y;
+    annoSelect.appendChild(opt);
+  }
+
+  /* ---------- Fade-in on scroll ---------- */
+  var fadeEls = document.querySelectorAll('.fade-in');
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  fadeEls.forEach(function (el) { observer.observe(el); });
+
+  /* ---------- Toast helper ---------- */
+  var toastEl = document.getElementById('toast');
+  var toastTimer;
+  function showToast(msg, isError) {
+    clearTimeout(toastTimer);
+    toastEl.textContent = msg;
+    toastEl.classList.toggle('error', !!isError);
+    toastEl.classList.add('show');
+    toastTimer = setTimeout(function () {
+      toastEl.classList.remove('show');
+    }, 3200);
+  }
+
+  /* ---------- Multi-step form ---------- */
+  var form = document.getElementById('carForm');
+  var steps = Array.prototype.slice.call(form.querySelectorAll('.form-step'));
+  var totalSteps = steps.length;
+  var currentStep = 1;
+  var progressFill = document.getElementById('progressFill');
+  var progressLabels = document.querySelectorAll('[data-step-label]');
+  var successBox = document.getElementById('formSuccess');
+
+  function validateField(fieldEl) {
+    var input = fieldEl.querySelector('input, select');
+    if (!input) return true;
+    var isValid = true;
+
+    if (input.type === 'checkbox') {
+      isValid = input.checked;
+    } else if (input.hasAttribute('required')) {
+      isValid = input.value.trim().length > 0;
+    }
+
+    // Extra validation
+    if (isValid && input.name === 'email' && input.value.trim()) {
+      isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim());
+    }
+    if (isValid && input.name === 'telefono' && input.value.trim()) {
+      isValid = /^[+\d][\d\s]{7,}$/.test(input.value.trim());
+    }
+    if (isValid && input.name === 'cap' && input.value.trim()) {
+      isValid = /^\d{5}$/.test(input.value.trim());
+    }
+
+    fieldEl.classList.toggle('invalid', !isValid);
+    return isValid;
+  }
+
+  function validateStep(stepNumber) {
+    var stepEl = steps[stepNumber - 1];
+    var fields = stepEl.querySelectorAll('[data-field]');
+    var allValid = true;
+    fields.forEach(function (fieldEl) {
+      var fieldValid = validateField(fieldEl);
+      if (!fieldValid) allValid = false;
+    });
+    return allValid;
+  }
+
+  function goToStep(stepNumber) {
+    steps.forEach(function (stepEl) {
+      stepEl.classList.toggle('active', parseInt(stepEl.dataset.step, 10) === stepNumber);
+    });
+    progressLabels.forEach(function (label) {
+      var labelStep = parseInt(label.dataset.stepLabel, 10);
+      label.classList.toggle('active', labelStep === stepNumber);
+    });
+    progressFill.style.width = ((stepNumber - 1) / (totalSteps - 1) * 66.66 + 33.33) + '%';
+    currentStep = stepNumber;
+    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  form.querySelectorAll('[data-next]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      if (validateStep(currentStep)) {
+        if (currentStep < totalSteps) goToStep(currentStep + 1);
+      } else {
+        showToast('Compila correttamente i campi obbligatori.', true);
+      }
+    });
+  });
+
+  form.querySelectorAll('[data-prev]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      if (currentStep > 1) goToStep(currentStep - 1);
+    });
+  });
+
+  // Live-clear invalid state as user types
+  form.querySelectorAll('[data-field]').forEach(function (fieldEl) {
+    var input = fieldEl.querySelector('input, select');
+    if (!input) return;
+    input.addEventListener('input', function () {
+      if (fieldEl.classList.contains('invalid')) validateField(fieldEl);
+    });
+    input.addEventListener('change', function () {
+      if (fieldEl.classList.contains('invalid')) validateField(fieldEl);
+    });
+  });
+
+  /* ---------- Submit ---------- */
+  // Configura qui l'endpoint/webhook (es. Activepieces, Zapier, Make, Supabase Edge Function)
+  var WEBHOOK_URL = ''; // <-- inserisci l'URL del webhook
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!validateStep(3)) {
+      showToast('Compila correttamente i campi obbligatori.', true);
+      return;
+    }
+
+    var formData = new FormData(form);
+    var payload = {};
+    formData.forEach(function (value, key) {
+      payload[key] = value;
+    });
+    payload.termini = form.querySelector('[name="termini"]').checked;
+    payload.timestamp = new Date().toISOString();
+
+    var submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Invio in corso...';
+
+    function onSuccess() {
+      steps.forEach(function (s) { s.classList.remove('active'); });
+      document.querySelector('.progress-wrap').style.display = 'none';
+      successBox.classList.add('active');
+      showToast('Richiesta inviata con successo!');
+    }
+
+    function onError() {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Invia richiesta';
+      showToast('Si è verificato un errore. Riprova.', true);
+    }
+
+    if (WEBHOOK_URL) {
+      fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+        .then(function (res) {
+          if (!res.ok) throw new Error('Network error');
+          onSuccess();
+        })
+        .catch(onError);
+    } else {
+      // Nessun webhook configurato: simulazione invio per demo/sviluppo
+      console.log('Lead raccolto (nessun WEBHOOK_URL configurato):', payload);
+      setTimeout(onSuccess, 600);
+    }
+  });
+
+  /* ---------- Area riservata partner (placeholder) ---------- */
+  document.getElementById('partnerLink').addEventListener('click', function (e) {
+    e.preventDefault();
+    showToast('Area riservata partner in arrivo.');
+  });
+
+})();
+</script>
+
+</body>
+</html>

@@ -3,24 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vendiamolatuaauto.com — Vendi la tua auto in modo semplice e veloce</title>
-<meta name="description" content="Vendi la tua auto in 3 semplici passi. Gratuito, senza vincoli, risposta in 24h da un rivenditore vicino a te.">
+<title>Vendiamolatuaauto.com — Richiedi una stima gratuita per la tua auto</title>
+<meta name="description" content="Richiedi una prima stima gratuita della tua auto e parla con un rivenditore selezionato della tua zona. Gratuito, senza vincoli, nessun obbligo di vendita.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --color-primary: #4361EE;
-    --color-primary-dark: #3450d9;
+    --color-primary: #0F2D52;
+    --color-primary-dark: #0A1F3B;
     --color-primary-text: #FFFFFF;
-    --color-secondary-text: #282C4D;
-    --color-accent: #FFF644;
-    --color-card-bg: #F1F4FF;
-    --color-card-dark: #3853d8;
-    --color-red: #E63946;
-    --color-green: #2ecc71;
+    --color-secondary-text: #1C2733;
+    --color-accent: #C9A227;
+    --color-accent-dark: #A6841C;
+    --color-card-bg: #F4F6F9;
+    --color-card-dark: #16385F;
+    --color-red: #B3261E;
+    --color-neutral: #B8860B;
+    --color-neutral-bg: #FBF3DF;
+    --color-neutral-text: #8A6D1D;
+    --color-border: #DCE2EA;
+    --color-primary-soft: #E7ECF4;
     --font-main: 'Poppins', sans-serif;
     --max-width: 1200px;
+    --radius-sm: 10px;
+    --radius-md: 18px;
+    --radius-lg: 24px;
+    --radius-pill: 50px;
+    --shadow-card: 0 4px 18px rgba(15,45,82,0.08);
+    --shadow-card-hover: 0 12px 30px rgba(15,45,82,0.16);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -43,7 +54,10 @@
   }
 
   section {
-    padding: 60px 0;
+    padding: 72px 0;
+  }
+  @media (min-width: 768px) {
+    section { padding: 100px 0; }
   }
 
   /* ---------- Fade-in animation ---------- */
@@ -64,18 +78,18 @@
     left: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(255,255,255,0.92);
+    background: rgba(255,255,255,0.95);
     backdrop-filter: blur(8px);
-    box-shadow: 0 2px 12px rgba(40,44,77,0.06);
+    border-bottom: 1px solid var(--color-border);
   }
   .header-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 0;
+    padding: 14px 0;
   }
   .logo img {
-    height: 42px;
+    height: 40px;
     width: auto;
   }
   .header-cta {
@@ -92,34 +106,35 @@
     justify-content: center;
     gap: 8px;
     font-family: var(--font-main);
-    font-weight: 500;
-    font-size: 18px;
+    font-weight: 600;
+    font-size: 17px;
     padding: 14px 30px;
-    border-radius: 50px;
+    border-radius: var(--radius-pill);
     border: none;
     cursor: pointer;
     text-decoration: none;
     transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
     white-space: nowrap;
+    letter-spacing: 0.2px;
   }
   @media (min-width: 768px) {
-    .btn { font-size: 20px; }
+    .btn { font-size: 18px; }
   }
   .btn-primary {
     background: var(--color-primary);
     color: var(--color-accent);
-    box-shadow: 0 8px 20px rgba(67,97,238,0.35);
+    box-shadow: var(--shadow-card);
   }
   .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 26px rgba(67,97,238,0.45);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: var(--shadow-card-hover);
     background: var(--color-primary-dark);
   }
   .btn-primary:active { transform: translateY(0); }
   .btn-outline {
     background: transparent;
     color: var(--color-primary);
-    border: 2px solid var(--color-primary);
+    border: 1.5px solid var(--color-primary);
   }
   .btn-outline:hover {
     background: var(--color-primary);
@@ -134,229 +149,328 @@
 
   /* ---------- Hero ---------- */
   .hero {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    padding-top: 110px;
+    padding: 150px 0 90px;
     position: relative;
-    background: linear-gradient(160deg, #ffffff 0%, var(--color-card-bg) 55%, #ffffff 100%);
     overflow: hidden;
+    background: linear-gradient(180deg, #F7F9FC 0%, #FFFFFF 100%);
   }
   .hero::before {
     content: "";
     position: absolute;
-    top: -120px;
-    right: -160px;
-    width: 480px;
-    height: 480px;
-    background: radial-gradient(circle, rgba(67,97,238,0.15) 0%, rgba(67,97,238,0) 70%);
+    top: -100px;
+    right: -140px;
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(circle, rgba(15,45,82,0.09) 0%, rgba(15,45,82,0) 70%);
     border-radius: 50%;
-    animation: float 8s ease-in-out infinite;
+    animation: blob-float 9s ease-in-out infinite;
   }
   .hero::after {
     content: "";
     position: absolute;
-    bottom: -140px;
-    left: -140px;
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, rgba(255,246,68,0.35) 0%, rgba(255,246,68,0) 70%);
+    bottom: -120px;
+    left: -120px;
+    width: 360px;
+    height: 360px;
+    background: radial-gradient(circle, rgba(201,162,39,0.2) 0%, rgba(201,162,39,0) 70%);
     border-radius: 50%;
-    animation: float 10s ease-in-out infinite reverse;
+    animation: blob-float 11s ease-in-out infinite reverse;
   }
-  @keyframes float {
-    0%, 100% { transform: translateY(0) translateX(0); }
-    50% { transform: translateY(30px) translateX(-20px); }
+  @keyframes blob-float {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-18px, 22px); }
   }
   .hero-inner {
-    display: flex;
-    flex-direction: column;
-    gap: 36px;
     position: relative;
     z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
   }
   @media (min-width: 960px) {
     .hero-inner {
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
+      gap: 60px;
     }
   }
   .hero-content {
-    max-width: 620px;
-  }
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--color-accent);
-    color: var(--color-secondary-text);
-    font-weight: 600;
-    font-size: 13px;
-    padding: 8px 16px;
-    border-radius: 50px;
-    margin-bottom: 20px;
+    max-width: 600px;
   }
   .hero h1 {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--font-main);
     font-weight: 700;
-    font-size: 38px;
-    line-height: 1.15;
+    font-size: 34px;
+    line-height: 1.2;
     color: var(--color-secondary-text);
-    margin-bottom: 20px;
+    margin-bottom: 22px;
   }
   .hero h1 span {
     color: var(--color-primary);
     position: relative;
-    white-space: nowrap;
+  }
+  .hero h1 span::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 3px;
+    height: 9px;
+    background: var(--color-accent);
+    opacity: 0.3;
+    z-index: -1;
   }
   @media (min-width: 768px) {
-    .hero h1 { font-size: 48px; }
+    .hero h1 { font-size: 46px; }
   }
-  .hero-subtitle {
-    font-weight: 500;
-    font-size: 22px;
-    color: #4b4f6b;
-    margin-bottom: 30px;
-    line-height: 1.4;
+  .hero-lead {
+    font-weight: 400;
+    font-size: 17px;
+    color: #4b5567;
+    margin-bottom: 16px;
+    line-height: 1.65;
   }
   @media (min-width: 768px) {
-    .hero-subtitle { font-size: 24px; }
+    .hero-lead { font-size: 18px; }
   }
-  .hero-ctas {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
+  .hero-lead-strong {
+    font-weight: 600;
+    color: var(--color-primary);
     margin-bottom: 26px;
   }
-  .hero-trust {
+  .hero-bullets {
+    list-style: none;
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    font-size: 14px;
-    color: #6b6f8c;
-    font-weight: 500;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 32px;
   }
-  .hero-trust span { display: flex; align-items: center; gap: 6px; }
+  .hero-bullets li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-secondary-text);
+  }
+  .hero-bullets svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--color-primary); }
 
+  /* ---------- Hero trust panel ---------- */
   .hero-visual {
-    position: relative;
-    flex-shrink: 0;
     width: 100%;
-    max-width: 420px;
+    max-width: 380px;
     margin: 0 auto;
   }
   @media (min-width: 960px) {
-    .hero-visual { margin: 0; }
+    .hero-visual { margin: 0; flex-shrink: 0; }
   }
-  .hero-visual-card {
+  .hero-panel {
     background: #fff;
-    border-radius: 24px;
-    padding: 40px 30px;
-    box-shadow: 0 20px 60px rgba(40,44,77,0.15);
-    text-align: center;
-    animation: floatCard 5s ease-in-out infinite;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 48px;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  @keyframes floatCard {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-14px); }
+  .hero-panel-car {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: var(--color-primary-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  .hero-visual-emoji {
-    font-size: 90px;
-    line-height: 1;
-    margin-bottom: 10px;
-    animation: drive 3.5s ease-in-out infinite;
+  .hero-panel-car svg {
+    width: 56px;
+    height: 56px;
+    color: var(--color-primary);
+    animation: car-drive 3.5s ease-in-out infinite;
   }
-  @keyframes drive {
+  @keyframes car-drive {
     0%, 100% { transform: translateX(0) rotate(0deg); }
-    25% { transform: translateX(-6px) rotate(-2deg); }
-    75% { transform: translateX(6px) rotate(2deg); }
+    25% { transform: translateX(-3px) rotate(-3deg); }
+    75% { transform: translateX(3px) rotate(3deg); }
   }
-  .hero-visual-card h3 {
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 8px;
+
+  /* ---------- Trust bar ---------- */
+  .trust-bar {
+    padding: 36px 0;
+    background: #fff;
+    border-bottom: 1px solid var(--color-border);
   }
-  .hero-visual-card p {
-    font-size: 15px;
-    color: #6b6f8c;
+  .trust-bar-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    align-items: center;
+    text-align: center;
   }
-  .hero-visual-tag {
-    position: absolute;
-    background: var(--color-primary);
-    color: var(--color-accent);
-    font-weight: 600;
+  @media (min-width: 760px) {
+    .trust-bar-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+  }
+  .trust-counter {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  @media (min-width: 760px) { .trust-counter { justify-content: flex-start; } }
+  .trust-counter-prefix { font-size: 17px; font-weight: 500; color: #6b7280; }
+  .trust-counter-number { font-size: 38px; font-weight: 800; color: var(--color-primary); line-height: 1; }
+  .trust-counter-label { font-size: 17px; font-weight: 500; color: var(--color-secondary-text); }
+  .trust-badges { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .trust-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    color: var(--color-secondary-text);
     font-size: 14px;
+    font-weight: 500;
     padding: 10px 18px;
-    border-radius: 50px;
-    box-shadow: 0 10px 24px rgba(67,97,238,0.35);
+    border-radius: var(--radius-sm);
   }
-  .hero-visual-tag.tag-1 { top: -10px; right: -10px; animation: float 6s ease-in-out infinite; }
-  .hero-visual-tag.tag-2 { bottom: 10px; left: -20px; animation: float 7s ease-in-out infinite reverse; background: var(--color-secondary-text); color: #fff; }
+  .trust-badge svg { width: 16px; height: 16px; flex-shrink: 0; color: var(--color-primary); }
 
   /* ---------- Section headers ---------- */
   .section-title {
     font-weight: 600;
-    font-size: 30px;
+    font-size: 28px;
     text-align: center;
     margin-bottom: 14px;
-    line-height: 1.2;
+    line-height: 1.25;
+    color: var(--color-secondary-text);
   }
   @media (min-width: 768px) {
-    .section-title { font-size: 48px; }
+    .section-title { font-size: 42px; }
   }
   .section-subtitle {
     text-align: center;
-    font-size: 17px;
-    color: #6b6f8c;
+    font-size: 16px;
+    color: #6b7280;
     max-width: 640px;
     margin: 0 auto 40px;
     font-weight: 400;
   }
   @media (min-width: 768px) {
-    .section-subtitle { font-size: 19px; }
+    .section-subtitle { font-size: 18px; }
+  }
+
+  /* ---------- Value proposition (Un modo più semplice) ---------- */
+  .value-prop { background: #fff; }
+  .value-prop-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .value-prop-grid { flex-direction: row; align-items: flex-start; gap: 60px; }
+  }
+  .value-prop-text { flex: 1; width: 100%; }
+  .value-prop-text .section-title { text-align: left; margin-bottom: 20px; }
+  .value-prop-text p {
+    font-size: 17px;
+    color: #4b5567;
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+  .value-prop-card {
+    flex: 1;
+    width: 100%;
+    max-width: 460px;
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 32px 28px;
+    box-shadow: var(--shadow-card);
+  }
+  .value-prop-card-label {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-secondary-text);
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+  .value-prop-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  .value-prop-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-secondary-text);
+  }
+  .value-prop-list svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--color-primary); margin-top: 2px; }
+  .value-prop-note {
+    font-size: 14px;
+    font-style: italic;
+    color: #6b7280;
+    padding-top: 14px;
+    border-top: 1px solid var(--color-border);
   }
 
   /* ---------- Benefit cards ---------- */
   .benefits {
-    background: #fff;
+    background: var(--color-card-bg);
   }
   .benefit-grid {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 20px;
   }
-  @media (min-width: 900px) {
-    .benefit-grid {
-      flex-direction: row;
-      gap: 24px;
-    }
+  @media (min-width: 640px) {
+    .benefit-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1000px) {
+    .benefit-grid { grid-template-columns: repeat(3, 1fr); }
   }
   .benefit-card {
-    background: var(--color-card-bg);
-    border-radius: 15px;
-    box-shadow: 0 6px 20px rgba(67,97,238,0.08);
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
     padding: 30px 24px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    flex: 1;
+    gap: 12px;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
   .benefit-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 14px 30px rgba(67,97,238,0.16);
+    box-shadow: var(--shadow-card-hover);
   }
-  .benefit-emoji { font-size: 40px; }
-  .benefit-card h3 { font-size: 23px; font-weight: 500; }
-  .benefit-card p { font-size: 18px; font-weight: 400; color: #4b4f6b; line-height: 1.5; }
+  .benefit-icon-wrap {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--color-primary-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+  }
+  .benefit-icon { width: 28px; height: 28px; color: var(--color-primary); }
+  .benefit-card h3 { font-size: 21px; font-weight: 600; }
+  .benefit-card p { font-size: 16px; font-weight: 400; color: #4b5567; line-height: 1.55; }
 
   /* ---------- Form section ---------- */
   .form-section {
-    background: linear-gradient(160deg, #f7f9ff 0%, #eef1ff 100%);
-    display: flex;
-    align-items: center;
-    min-height: 100vh;
+    padding: 90px 0;
+    background: linear-gradient(180deg, #F7F9FC 0%, #EEF1F6 100%);
   }
   .form-intro {
     text-align: center;
@@ -367,9 +481,9 @@
     max-width: 760px;
     margin: 0 auto;
     background: var(--color-primary);
-    border-radius: 24px;
+    border-radius: var(--radius-lg);
     padding: 30px 20px;
-    box-shadow: 0 30px 60px rgba(67,97,238,0.3);
+    box-shadow: 0 20px 50px rgba(15,45,82,0.25);
     color: #fff;
   }
   @media (min-width: 640px) {
@@ -385,13 +499,13 @@
     font-size: 13px;
     font-weight: 500;
     margin-bottom: 10px;
-    color: rgba(255,255,255,0.85);
+    color: rgba(255,255,255,0.7);
   }
   .progress-labels .active { color: var(--color-accent); font-weight: 700; }
   .progress-bar-track {
     width: 100%;
-    height: 10px;
-    background: rgba(255,255,255,0.25);
+    height: 8px;
+    background: rgba(255,255,255,0.2);
     border-radius: 50px;
     overflow: hidden;
   }
@@ -404,14 +518,15 @@
   }
 
   .form-step-intro {
-    background: rgba(255,255,255,0.1);
-    border-left: 4px solid var(--color-accent);
+    background: rgba(255,255,255,0.08);
+    border-left: 3px solid var(--color-accent);
     padding: 14px 18px;
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     margin-bottom: 26px;
     font-size: 15px;
     font-weight: 400;
     line-height: 1.5;
+    color: rgba(255,255,255,0.9);
   }
 
   .form-step { display: none; }
@@ -443,12 +558,13 @@
     font-weight: 500;
   }
   .field .required { color: var(--color-accent); }
+  .field .optional { color: rgba(255,255,255,0.5); font-weight: 400; font-size: 12px; }
   .field input,
   .field select {
     font-family: var(--font-main);
     font-size: 16px;
     padding: 13px 16px;
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     border: none;
     outline: none;
     background: #fff;
@@ -456,19 +572,68 @@
   }
   .field input:focus,
   .field select:focus {
-    box-shadow: 0 0 0 3px rgba(255,246,68,0.6);
+    box-shadow: 0 0 0 3px rgba(201,162,39,0.45);
+  }
+  .field input[type="file"] {
+    padding: 10px 12px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  .field input[type="file"]::file-selector-button {
+    font-family: var(--font-main);
+    font-weight: 600;
+    font-size: 13px;
+    padding: 8px 14px;
+    margin-right: 12px;
+    border: none;
+    border-radius: var(--radius-pill);
+    background: var(--color-primary);
+    color: var(--color-accent);
+    cursor: pointer;
+  }
+  .field-hint {
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.55);
   }
   .field-error {
     font-size: 13px;
-    color: #ffe0e0;
+    color: #ffd9d4;
     display: none;
     font-weight: 500;
   }
   .field.invalid input,
   .field.invalid select {
-    box-shadow: 0 0 0 3px #ff8080;
+    box-shadow: 0 0 0 3px rgba(179,38,30,0.55);
   }
   .field.invalid .field-error { display: block; }
+  .field.prefilled-highlight input,
+  .field.prefilled-highlight select {
+    box-shadow: 0 0 0 3px var(--color-accent);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .form-trust-mini {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-secondary-text);
+    margin-bottom: 24px;
+  }
+  .form-trust-mini strong { color: var(--color-primary); font-weight: 800; }
+
+  .form-security-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 18px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    text-align: center;
+  }
+  .form-security-note .lock-icon { width: 16px; height: 16px; flex-shrink: 0; color: var(--color-accent); }
+  .form-security-note a { color: var(--color-accent); text-decoration: underline; }
 
   .checkbox-field {
     display: flex;
@@ -500,10 +665,10 @@
   .form-nav .btn-outline {
     background: transparent;
     color: #fff;
-    border: 2px solid rgba(255,255,255,0.5);
+    border: 1.5px solid rgba(255,255,255,0.4);
   }
   .form-nav .btn-outline:hover {
-    background: rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.1);
     border-color: #fff;
   }
   .form-nav .spacer { flex: 1; }
@@ -514,9 +679,9 @@
     padding: 30px 10px;
   }
   .form-success.active { display: block; animation: stepIn 0.4s ease; }
-  .form-success .emoji { font-size: 60px; margin-bottom: 16px; }
-  .form-success h3 { font-size: 26px; margin-bottom: 10px; }
-  .form-success p { font-size: 16px; color: rgba(255,255,255,0.85); }
+  .form-success-icon { width: 56px; height: 56px; color: var(--color-accent); margin: 0 auto 16px; }
+  .form-success h3 { font-size: 25px; margin-bottom: 10px; }
+  .form-success p { font-size: 16px; color: rgba(255,255,255,0.8); }
 
   /* ---------- How it works ---------- */
   .how-it-works {
@@ -525,35 +690,149 @@
   }
   .how-it-works .section-title,
   .how-it-works .section-subtitle { color: #fff; }
-  .how-it-works .section-subtitle { color: rgba(255,255,255,0.85); }
+  .how-it-works .section-subtitle { color: rgba(255,255,255,0.75); }
 
   .steps-grid {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 20px;
   }
-  @media (min-width: 900px) {
-    .steps-grid { flex-direction: row; gap: 24px; }
+  @media (min-width: 700px) {
+    .steps-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1100px) {
+    .steps-grid { grid-template-columns: repeat(4, 1fr); }
   }
   .step-card {
     background: var(--color-card-dark);
-    border-radius: 16px;
+    border-radius: var(--radius-md);
     padding: 34px 26px;
-    flex: 1;
     transition: transform 0.25s ease;
   }
   .step-card:hover { transform: translateY(-6px); }
+  .step-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    color: var(--color-accent);
+  }
+  .step-icon svg { width: 26px; height: 26px; }
+  .step-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
   .step-number {
-    font-size: 30px;
+    font-size: 28px;
     font-weight: 800;
     color: var(--color-accent);
     margin-bottom: 12px;
   }
-  .step-card h3 { font-size: 22px; font-weight: 500; margin-bottom: 10px; }
-  .step-card p { font-size: 16px; font-weight: 400; color: rgba(255,255,255,0.85); line-height: 1.5; }
+  .step-card h3 { font-size: 21px; font-weight: 600; margin-bottom: 10px; }
+  .step-card p { font-size: 16px; font-weight: 400; color: rgba(255,255,255,0.8); line-height: 1.55; }
+
+  /* ---------- Testimonials ---------- */
+  .testimonials { background: var(--color-card-bg); }
+  .testimonials-placeholder-note {
+    display: block;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-neutral-text);
+    background: var(--color-neutral-bg);
+    width: fit-content;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    margin: 0 auto 34px;
+  }
+  .testimonials-track {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scroll-snap-type: x mandatory;
+  }
+  @media (min-width: 900px) {
+    .testimonials-track {
+      overflow: visible;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .testimonial-card {
+    flex: 0 0 260px;
+    scroll-snap-align: start;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 24px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .testimonial-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card-hover); }
+  @media (min-width: 900px) { .testimonial-card { flex: initial; } }
+  .testimonial-stars { color: var(--color-accent-dark); font-size: 15px; letter-spacing: 2px; }
+  .testimonial-text { font-size: 15px; color: #4b5567; line-height: 1.6; font-style: italic; }
+  .testimonial-author { font-size: 14px; font-weight: 600; color: var(--color-secondary-text); }
+  .testimonial-author span { font-weight: 400; color: #6b7280; }
+
+  /* ---------- FAQ ---------- */
+  .faq { background: #fff; }
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  .faq-item {
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+  }
+  .faq-question {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 20px 24px;
+    font-family: var(--font-main);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-secondary-text);
+    cursor: pointer;
+  }
+  @media (min-width: 640px) { .faq-question { font-size: 17px; } }
+  .faq-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    color: var(--color-primary);
+    transition: transform 0.3s ease;
+  }
+  .faq-item.open .faq-icon { transform: rotate(180deg); }
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+    padding: 0 24px;
+  }
+  .faq-item.open .faq-answer { max-height: 400px; padding: 0 24px 22px; }
+  .faq-answer p { font-size: 15px; color: #4b5567; line-height: 1.6; }
+  .faq-answer a { color: var(--color-primary); font-weight: 600; }
 
   /* ---------- Comparison ---------- */
-  .comparison { background: #fff; }
+  .comparison { background: var(--color-card-bg); }
   .comparison-grid {
     display: flex;
     flex-direction: column;
@@ -561,26 +840,38 @@
     align-items: stretch;
   }
   @media (min-width: 860px) {
-    .comparison-grid { flex-direction: row; justify-content: center; }
+    .comparison-grid { flex-direction: row; justify-content: center; flex-wrap: wrap; }
   }
   .comparison-col {
-    flex: 1;
-    max-width: 460px;
-    border: 1px solid #dfe2f2;
-    border-radius: 18px;
+    flex: 1 1 280px;
+    max-width: 380px;
+    margin: 0 auto;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
     overflow: hidden;
     display: flex;
     flex-direction: column;
   }
+  @media (min-width: 860px) { .comparison-col { margin: 0; } }
   .comparison-header {
     padding: 22px;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
   }
+  .comparison-header svg { width: 22px; height: 22px; flex-shrink: 0; }
   .comparison-col.negative .comparison-header {
-    background: #fdeaea;
+    background: #FAEBEA;
     color: var(--color-red);
+  }
+  .comparison-col.neutral .comparison-header {
+    background: var(--color-neutral-bg);
+    color: var(--color-neutral-text);
   }
   .comparison-col.positive .comparison-header {
     background: var(--color-primary);
@@ -614,6 +905,7 @@
     color: #fff;
   }
   .comparison-col.negative .icon { background: var(--color-red); }
+  .comparison-col.neutral .icon { background: var(--color-neutral); }
   .comparison-col.positive .icon { background: var(--color-primary); }
 
   .comparison-cta {
@@ -625,7 +917,7 @@
   footer {
     background: var(--color-secondary-text);
     color: #fff;
-    padding: 50px 0 24px;
+    padding: 56px 0 24px;
   }
   .footer-inner {
     display: flex;
@@ -635,16 +927,18 @@
   @media (min-width: 768px) {
     .footer-inner {
       flex-direction: row;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: flex-start;
+      row-gap: 34px;
     }
   }
-  .footer-logo img { height: 40px; margin-bottom: 14px; }
-  .footer-logo p { font-size: 14px; color: rgba(255,255,255,0.65); max-width: 320px; line-height: 1.5; }
-  .footer-col h4 { font-size: 15px; font-weight: 600; margin-bottom: 14px; color: var(--color-accent); }
+  .footer-logo img { height: 38px; margin-bottom: 14px; }
+  .footer-logo p { font-size: 14px; color: rgba(255,255,255,0.6); max-width: 320px; line-height: 1.5; }
+  .footer-col h4 { font-size: 14px; font-weight: 600; letter-spacing: 0.4px; text-transform: uppercase; margin-bottom: 14px; color: var(--color-accent); }
   .footer-col a {
     display: block;
-    color: rgba(255,255,255,0.75);
+    color: rgba(255,255,255,0.7);
     text-decoration: none;
     font-size: 14px;
     margin-bottom: 10px;
@@ -659,7 +953,7 @@
     flex-direction: column;
     gap: 8px;
     font-size: 13px;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.45);
     text-align: center;
   }
   @media (min-width: 768px) {
@@ -675,7 +969,7 @@
     background: var(--color-secondary-text);
     color: #fff;
     padding: 14px 24px;
-    border-radius: 50px;
+    border-radius: var(--radius-md);
     font-size: 14px;
     font-weight: 500;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
@@ -700,7 +994,7 @@
     <a href="#" class="logo" aria-label="Vendiamolatuaauto.com">
       <img src="assets/black.png" alt="Vendiamolatuaauto.com">
     </a>
-    <a href="#form" class="btn btn-primary btn-small header-cta">Vendi ora la tua auto</a>
+    <a href="#form" class="btn btn-primary btn-small header-cta">Vendi la tua auto</a>
   </div>
 </header>
 
@@ -710,56 +1004,144 @@
   <section class="hero">
     <div class="container hero-inner">
       <div class="hero-content">
-        <span class="hero-badge">🚗 Gratuito · Nessun vincolo · Risposta in 24h</span>
-        <h1>Vendi la tua auto <span>senza pensieri</span>, al miglior prezzo</h1>
-        <p class="hero-subtitle">Compila il form in 2 minuti e ricevi la proposta di un rivenditore selezionato vicino a te. Semplice, veloce, senza sorprese.</p>
-        <div class="hero-ctas">
-          <a href="#form" class="btn btn-primary">Vendi ora la tua auto</a>
-          <a href="#come-funziona" class="btn btn-outline">Come funziona</a>
-        </div>
-        <div class="hero-trust">
-          <span>✅ 100% gratuito</span>
-          <span>⚡ Risposta in 24h</span>
-          <span>🤝 Nessun obbligo d'acquisto</span>
-        </div>
+        <h1>Vuoi <span>vendere la tua auto</span>?</h1>
+        <p class="hero-lead">Evita perdite di tempo, trattative infinite e contatti poco affidabili.</p>
+        <p class="hero-lead">Ricevi una prima stima del tuo usato e parla con un rivenditore selezionato della tua zona, che valuterà se acquistare direttamente la tua auto oppure ti proporrà la soluzione più adatta per venderla.</p>
+        <p class="hero-lead hero-lead-strong">Gratuitamente, senza vincoli e senza stress.</p>
+        <ul class="hero-bullets">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            Prima stima gratuita
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            Rivenditore della tua zona
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            Nessun obbligo di vendita
+          </li>
+        </ul>
+        <a href="#form" class="btn btn-primary">Vendi la tua auto</a>
       </div>
       <div class="hero-visual">
-        <div class="hero-visual-card">
-          <div class="hero-visual-emoji">🚙</div>
-          <h3>Valutazione rapida</h3>
-          <p>Inserisci i dati della tua auto e ricevi un contatto dedicato</p>
+        <div class="hero-panel fade-in">
+          <div class="hero-panel-car">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11"/>
+              <path d="M3 11h18v5a1 1 0 0 1-1 1h-1a2 2 0 1 1-4 0H9a2 2 0 1 1-4 0H4a1 1 0 0 1-1-1z"/>
+              <circle cx="7.5" cy="17.5" r="1.5"/>
+              <circle cx="16.5" cy="17.5" r="1.5"/>
+            </svg>
+          </div>
         </div>
-        <div class="hero-visual-tag tag-1">💰 Miglior prezzo</div>
-        <div class="hero-visual-tag tag-2">⏱️ 2 minuti</div>
       </div>
     </div>
   </section>
 
-  <!-- PERCHÉ SCEGLIERCI -->
-  <section class="benefits" id="perche-sceglierci">
+  <!-- TRUST BAR -->
+  <section class="trust-bar">
+    <div class="container trust-bar-inner">
+      <div class="trust-counter fade-in">
+        <span class="trust-counter-prefix">+ di</span>
+        <span class="trust-counter-number" data-count-to="10000">0</span>
+        <span class="trust-counter-label">auto valutate con il nostro servizio</span>
+      </div>
+      <div class="trust-badges fade-in">
+        <span class="trust-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          Servizio gratuito
+        </span>
+        <span class="trust-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          Risposta entro 24h
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- UN MODO PIÙ SEMPLICE -->
+  <section class="value-prop">
+    <div class="container value-prop-grid">
+      <div class="value-prop-text fade-in">
+        <h2 class="section-title">Un modo più semplice per vendere la tua auto</h2>
+        <p>Vendere un'auto da privato può significare pubblicare annunci, rispondere a decine di messaggi, incontrare sconosciuti e affrontare trattative che spesso non portano a nulla.</p>
+        <p>Con Vendiamolatuaauto.com parti invece da una prima stima indicativa del tuo usato.</p>
+      </div>
+      <div class="value-prop-card fade-in">
+        <span class="value-prop-card-label">Se desideri procedere, ti mettiamo in contatto con un rivenditore selezionato della tua zona, che approfondirà la valutazione e potrà:</span>
+        <ul class="value-prop-list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            Acquistare direttamente la tua auto
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            Formularti una proposta concreta
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            Valutare una soluzione alternativa per aiutarti nella vendita
+          </li>
+        </ul>
+        <p class="value-prop-note">Sarai sempre tu a decidere liberamente se procedere.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- COME FUNZIONA -->
+  <section class="how-it-works" id="come-funziona">
     <div class="container">
-      <h2 class="section-title fade-in">Perché scegliere noi</h2>
-      <p class="section-subtitle fade-in">Vendere l'auto non è mai stato così semplice: pensiamo noi a tutto, tu pensi al prossimo viaggio.</p>
-      <div class="benefit-grid">
-        <div class="benefit-card fade-in">
-          <div class="benefit-emoji">⚡</div>
-          <h3>Veloce</h3>
-          <p>Compili il form in pochi minuti e ricevi una risposta entro 24 ore lavorative.</p>
+      <h2 class="section-title fade-in">Come funziona?</h2>
+      <p class="section-subtitle fade-in">Quattro passaggi, zero complicazioni.</p>
+      <div class="steps-grid">
+        <div class="step-card fade-in">
+          <!-- Icona SVG placeholder: sostituibile con foto reale (es. persona che compila il form da smartphone) mantenendo il contenitore .step-icon -->
+          <div class="step-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="10" y="6" width="28" height="36" rx="3"/>
+              <path d="M17 17h14M17 24h14M17 31h9"/>
+            </svg>
+          </div>
+          <div class="step-number">1.</div>
+          <h3>Inserisci i dati della tua auto</h3>
+          <p>Compila il modulo con le principali informazioni sul veicolo. Bastano pochi minuti.</p>
         </div>
-        <div class="benefit-card fade-in">
-          <div class="benefit-emoji">🆓</div>
-          <h3>Gratuito</h3>
-          <p>Il servizio è completamente gratuito e senza costi nascosti per te.</p>
+        <div class="step-card fade-in">
+          <!-- Icona SVG placeholder: sostituibile con foto reale (es. grafico della stima) mantenendo il contenitore .step-icon -->
+          <div class="step-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 34a14 14 0 1 1 28 0"/>
+              <path d="M24 34 32 22"/>
+              <circle cx="24" cy="34" r="2"/>
+            </svg>
+          </div>
+          <div class="step-number">2.</div>
+          <h3>Ricevi una prima stima</h3>
+          <p>Ottieni una prima indicazione del possibile valore della tua auto, basata sui dati che hai fornito.</p>
         </div>
-        <div class="benefit-card fade-in">
-          <div class="benefit-emoji">🔒</div>
-          <h3>Senza vincoli</h3>
-          <p>Nessun obbligo di vendita: valuti la proposta con calma e decidi tu.</p>
+        <div class="step-card fade-in">
+          <!-- Icona SVG placeholder: sostituibile con foto reale (es. telefonata con il rivenditore) mantenendo il contenitore .step-icon -->
+          <div class="step-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 8c0 16 14 30 30 30l4-8-11-4-3 4c-6-3-10-7-13-13l4-3-4-11-7 2z"/>
+            </svg>
+          </div>
+          <div class="step-number">3.</div>
+          <h3>Parla con un rivenditore della tua zona</h3>
+          <p>Se la stima è in linea con le tue aspettative, la tua richiesta viene affidata a un partner selezionato vicino a te.</p>
         </div>
-        <div class="benefit-card fade-in">
-          <div class="benefit-emoji">📍</div>
-          <h3>Rivenditori locali</h3>
-          <p>Ti mettiamo in contatto con un partner affidabile e vicino a te.</p>
+        <div class="step-card fade-in">
+          <!-- Icona SVG placeholder: sostituibile con foto reale (es. consegna chiavi / firma contratto) mantenendo il contenitore .step-icon -->
+          <div class="step-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M24 5l16 7v10c0 10-7 17-16 21C15 39 8 32 8 22V12l16-7z"/>
+              <path d="M17 24l5 5 10-11"/>
+            </svg>
+          </div>
+          <div class="step-number">4.</div>
+          <h3>Valuta la proposta</h3>
+          <p>Il rivenditore potrà visionare l'auto, proporti l'acquisto diretto oppure indicarti una soluzione alternativa per venderla. Non sei obbligato ad accettare.</p>
         </div>
       </div>
     </div>
@@ -769,17 +1151,17 @@
   <section class="form-section" id="form">
     <div class="container">
       <div class="form-intro">
-        <h2 class="section-title fade-in">Vendi la tua auto ora</h2>
-        <p class="section-subtitle fade-in">Bastano tre semplici passaggi per ricevere la nostra proposta.</p>
+        <h2 class="section-title fade-in">Richiedi la tua stima gratuita</h2>
+        <p class="section-subtitle fade-in">Bastano due semplici passaggi.</p>
+        <p class="form-trust-mini fade-in"><strong>+10.000</strong> auto valutate con il nostro servizio</p>
       </div>
 
       <form class="form-card fade-in" id="carForm" novalidate>
 
         <div class="progress-wrap">
           <div class="progress-labels">
-            <span data-step-label="1" class="active">1. Auto</span>
-            <span data-step-label="2">2. Dettagli</span>
-            <span data-step-label="3">3. Contatti</span>
+            <span data-step-label="1" class="active">1. La tua auto</span>
+            <span data-step-label="2">2. I tuoi contatti</span>
           </div>
           <div class="progress-bar-track">
             <div class="progress-bar-fill" id="progressFill"></div>
@@ -788,8 +1170,8 @@
 
         <!-- STEP 1 -->
         <div class="form-step active" data-step="1">
-          <div class="form-step-intro">🚗 Facci sapere che auto vorresti vendere!</div>
-          <div class="form-grid">
+          <div class="form-step-intro">Facci sapere che auto vorresti vendere. Se vuoi, allega anche qualche foto: aiuta a rendere la stima più precisa.</div>
+          <div class="form-grid cols-2">
             <div class="field" data-field="marca">
               <label>Marca <span class="required">*</span></label>
               <select name="marca" required>
@@ -822,17 +1204,6 @@
               </select>
               <span class="field-error">Seleziona l'anno di immatricolazione</span>
             </div>
-          </div>
-          <div class="form-nav">
-            <span class="spacer"></span>
-            <button type="button" class="btn btn-primary" data-next>Avanti</button>
-          </div>
-        </div>
-
-        <!-- STEP 2 -->
-        <div class="form-step" data-step="2">
-          <div class="form-step-intro">📋 Qualche dettaglio in più per una valutazione precisa.</div>
-          <div class="form-grid">
             <div class="field" data-field="km">
               <label>Chilometraggio <span class="required">*</span></label>
               <select name="km" required>
@@ -848,21 +1219,25 @@
               <span class="field-error">Seleziona la fascia di chilometraggio</span>
             </div>
             <div class="field" data-field="targa">
-              <label>Targa (facoltativo)</label>
+              <label>Targa <span class="optional">(facoltativo)</span></label>
               <input type="text" name="targa" placeholder="Es. AB123CD" maxlength="10">
               <span class="field-error"></span>
             </div>
+            <div class="field" data-field="foto">
+              <label>Foto dell'auto <span class="optional">(facoltativo, consigliato)</span></label>
+              <input type="file" name="foto" accept="image/*" multiple>
+              <span class="field-hint">Carica una o più foto per una stima più accurata.</span>
+            </div>
           </div>
           <div class="form-nav">
-            <button type="button" class="btn btn-outline" data-prev>Indietro</button>
             <span class="spacer"></span>
             <button type="button" class="btn btn-primary" data-next>Avanti</button>
           </div>
         </div>
 
-        <!-- STEP 3 -->
-        <div class="form-step" data-step="3">
-          <div class="form-step-intro">📞 Ultimo passo: come possiamo contattarti?</div>
+        <!-- STEP 2 -->
+        <div class="form-step" data-step="2">
+          <div class="form-step-intro">Ultimo passo: come possiamo contattarti?</div>
           <div class="form-grid cols-2">
             <div class="field" data-field="nome">
               <label>Nome e Cognome <span class="required">*</span></label>
@@ -893,50 +1268,101 @@
           <div class="field" data-field="termini">
             <div class="checkbox-field">
               <input type="checkbox" name="termini" id="termini" required>
-              <label for="termini">Accetto i <a href="#" target="_blank">termini e condizioni</a> e l'informativa sulla <a href="#" target="_blank">privacy</a> <span class="required">*</span></label>
+              <label for="termini">Accetto i <a href="termini.html" target="_blank">termini e condizioni</a> e l'informativa sulla <a href="privacy.html" target="_blank">privacy</a> <span class="required">*</span></label>
             </div>
             <span class="field-error">Devi accettare i termini per procedere</span>
           </div>
           <div class="form-nav">
             <button type="button" class="btn btn-outline" data-prev>Indietro</button>
             <span class="spacer"></span>
-            <button type="submit" class="btn btn-primary">Invia richiesta</button>
+            <button type="submit" class="btn btn-primary">Vendi la tua auto</button>
+          </div>
+          <div class="form-security-note">
+            <svg class="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+            </svg>
+            <span>I tuoi dati sono trattati in sicurezza. Consulta la <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.</span>
           </div>
         </div>
 
         <!-- SUCCESS -->
         <div class="form-success" id="formSuccess">
-          <div class="emoji">🎉</div>
+          <svg class="form-success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/>
+          </svg>
           <h3>Richiesta inviata!</h3>
-          <p>Grazie! Un rivenditore selezionato ti contatterà entro 24 ore con la sua proposta.</p>
+          <p>Grazie! Riceverai a breve una prima stima. Se sarà in linea con le tue aspettative, ti metteremo in contatto con un rivenditore selezionato della tua zona.</p>
         </div>
 
       </form>
     </div>
   </section>
 
-  <!-- COME FUNZIONA -->
-  <section class="how-it-works" id="come-funziona">
+  <!-- PERCHÉ SCEGLIERCI -->
+  <section class="benefits" id="perche-sceglierci">
     <div class="container">
-      <h2 class="section-title fade-in">Come funziona?</h2>
-      <p class="section-subtitle fade-in">Tre passaggi, zero complicazioni.</p>
-      <div class="steps-grid">
-        <div class="step-card fade-in">
-          <div class="step-number">1.</div>
-          <h3>Compila il form</h3>
-          <p>Inserisci i dati della tua auto e i tuoi contatti in meno di 2 minuti.</p>
+      <h2 class="section-title fade-in">Perché scegliere Vendiamolatuaauto.com</h2>
+      <p class="section-subtitle fade-in">Ecco cosa cambia rispetto a vendere un'auto da soli.</p>
+      <div class="benefit-grid">
+        <div class="benefit-card fade-in">
+          <div class="benefit-icon-wrap">
+            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 7v5l3.5 2"/>
+            </svg>
+          </div>
+          <h3>Meno perdite di tempo</h3>
+          <p>Eviti annunci, messaggi inconcludenti, appuntamenti inutili e lunghe trattative con privati.</p>
         </div>
-        <div class="step-card fade-in">
-          <div class="step-number">2.</div>
-          <h3>Ricevi la proposta</h3>
-          <p>Un rivenditore selezionato vicino a te analizza la richiesta e ti contatta entro 24h.</p>
+        <div class="benefit-card fade-in">
+          <div class="benefit-icon-wrap">
+            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="4"/>
+              <path d="M4.5 21c0-4.4 3.4-7.5 7.5-7.5s7.5 3.1 7.5 7.5"/>
+            </svg>
+          </div>
+          <h3>Parli con un professionista</h3>
+          <p>La tua richiesta viene gestita da un rivenditore del settore, non da contatti anonimi o sconosciuti.</p>
         </div>
-        <div class="step-card fade-in">
-          <div class="step-number">3.</div>
-          <h3>Vendi in sicurezza</h3>
-          <p>Valuti l'offerta senza impegno e, se ti convince, concludi la vendita in tutta tranquillità.</p>
+        <div class="benefit-card fade-in">
+          <div class="benefit-icon-wrap">
+            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13 2 4 14h6l-1 8 9-12h-6z"/>
+            </svg>
+          </div>
+          <h3>Puoi vendere più rapidamente</h3>
+          <p>Se il rivenditore è interessato, può formularti una proposta diretta per acquistare l'auto.</p>
+        </div>
+        <div class="benefit-card fade-in">
+          <div class="benefit-icon-wrap">
+            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 7h13l-3-3M20 17H7l3 3"/>
+            </svg>
+          </div>
+          <h3>Hai anche un'alternativa</h3>
+          <p>Quando l'acquisto diretto non è la soluzione migliore, il partner può valutare altre modalità per aiutarti nella vendita.</p>
+        </div>
+        <div class="benefit-card fade-in">
+          <div class="benefit-icon-wrap">
+            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="10" width="16" height="10" rx="2"/>
+              <path d="M8 10V7a4 4 0 0 1 7.4-2"/>
+            </svg>
+          </div>
+          <h3>Nessun costo e nessun vincolo</h3>
+          <p>La richiesta, la prima stima e il contatto con il rivenditore sono gratuiti. La decisione finale resta sempre tua.</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIANZE -->
+  <section class="testimonials">
+    <div class="container">
+      <h2 class="section-title fade-in">Cosa dicono di noi</h2>
+      <p class="section-subtitle fade-in">Alcune voci di chi ha già venduto la propria auto con noi.</p>
+      <span class="testimonials-placeholder-note fade-in">⚠️ Contenuti di esempio — verranno sostituiti con recensioni reali dei clienti</span>
+      <div class="testimonials-track" id="testimonialsTrack"></div>
     </div>
   </section>
 
@@ -947,7 +1373,10 @@
       <p class="section-subtitle fade-in">Perché affidarsi a noi conviene davvero.</p>
       <div class="comparison-grid">
         <div class="comparison-col negative fade-in">
-          <div class="comparison-header">❌ Vendere da soli</div>
+          <div class="comparison-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg>
+            Vendere da soli
+          </div>
           <ul class="comparison-list">
             <li><span class="icon">✕</span> Devi gestire annunci, foto e trattative da solo</li>
             <li><span class="icon">✕</span> Rischio di truffe e acquirenti poco seri</li>
@@ -956,8 +1385,24 @@
             <li><span class="icon">✕</span> Devi occuparti tu della burocrazia</li>
           </ul>
         </div>
+        <div class="comparison-col neutral fade-in">
+          <div class="comparison-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg>
+            Permuta al concessionario
+          </div>
+          <ul class="comparison-list">
+            <li><span class="icon">–</span> Prezzo di permuta spesso inferiore al valore di mercato</li>
+            <li><span class="icon">–</span> Nessun confronto tra più proposte: prendi o lasci</li>
+            <li><span class="icon">–</span> Comoda solo se stai già comprando un'auto nuova</li>
+            <li><span class="icon">–</span> Valutazione legata all'acquisto, non a una vendita indipendente</li>
+            <li><span class="icon">–</span> Tempi rapidi ma minore trasparenza sul prezzo</li>
+          </ul>
+        </div>
         <div class="comparison-col positive fade-in">
-          <div class="comparison-header">✅ Vendiamolatuaauto.com</div>
+          <div class="comparison-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>
+            Vendiamolatuaauto.com
+          </div>
           <ul class="comparison-list">
             <li><span class="icon">✓</span> Compili un form e pensiamo noi al resto</li>
             <li><span class="icon">✓</span> Rivenditori professionali e verificati</li>
@@ -968,7 +1413,71 @@
         </div>
       </div>
       <div class="comparison-cta fade-in">
-        <a href="#form" class="btn btn-primary">Vendi ora la tua auto</a>
+        <a href="#form" class="btn btn-primary">Vendi la tua auto</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq" id="faq">
+    <div class="container">
+      <h2 class="section-title fade-in">Domande frequenti</h2>
+      <p class="section-subtitle fade-in">Le risposte alle domande più comuni su come funziona il servizio.</p>
+      <div class="faq-list fade-in">
+        <div class="faq-item">
+          <button class="faq-question" type="button" aria-expanded="false">
+            <span>È davvero gratuito? Ci sono costi nascosti?</span>
+            <span class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+          </button>
+          <div class="faq-answer">
+            <p>Sì, il servizio è completamente gratuito per chi vende l'auto: non ci sono commissioni, costi di iscrizione o spese nascoste in nessuna fase del processo.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button" aria-expanded="false">
+            <span>Chi mi contatta e dopo quanto tempo?</span>
+            <span class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+          </button>
+          <div class="faq-answer">
+            <p>Dopo l'invio riceverai una prima stima indicativa. Se deciderai di procedere, verrai messo in contatto con un rivenditore selezionato della tua zona, che ti contatterà entro 24 ore lavorative.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button" aria-expanded="false">
+            <span>Sono obbligato ad accettare l'offerta del rivenditore?</span>
+            <span class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+          </button>
+          <div class="faq-answer">
+            <p>No. La proposta che ricevi non comporta alcun obbligo: puoi valutarla con calma, chiedere chiarimenti o semplicemente rifiutarla senza alcuna conseguenza.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button" aria-expanded="false">
+            <span>Posso vendere un'auto con finanziamento in corso?</span>
+            <span class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+          </button>
+          <div class="faq-answer">
+            <p>Sì, è possibile: segnalalo al momento del contatto con il rivenditore, che ti spiegherà come gestire l'eventuale saldo del finanziamento residuo nell'ambito della trattativa.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button" aria-expanded="false">
+            <span>Che documenti mi servono per vendere?</span>
+            <span class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+          </button>
+          <div class="faq-answer">
+            <p>Generalmente servono il libretto di circolazione, il certificato di proprietà (o documento digitale equivalente) e un documento d'identità valido. Il rivenditore ti confermerà l'elenco esatto in base al tuo caso.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button" aria-expanded="false">
+            <span>Come vengono trattati i miei dati personali?</span>
+            <span class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+          </button>
+          <div class="faq-answer">
+            <p>I tuoi dati vengono utilizzati esclusivamente per metterti in contatto con un rivenditore partner e trattati nel rispetto del GDPR. Per maggiori dettagli consulta la nostra <a href="privacy.html">Privacy Policy</a>.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -983,9 +1492,15 @@
     </div>
     <div class="footer-col">
       <h4>Link utili</h4>
-      <a href="#form">Vendi la tua auto</a>
+      <a href="#form">Richiedi la tua stima</a>
       <a href="#come-funziona">Come funziona</a>
-      <a href="#perche-sceglierci">Perché sceglierci</a>
+      <a href="#faq">Domande frequenti</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legale</h4>
+      <!-- Placeholder: sostituire con gli URL reali quando le pagine saranno pubblicate -->
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="termini.html">Termini e Condizioni</a>
     </div>
     <div class="footer-col">
       <h4>Area riservata</h4>
@@ -1031,6 +1546,71 @@
   }, { threshold: 0.15 });
   fadeEls.forEach(function (el) { observer.observe(el); });
 
+  /* ---------- Count-up trust counter ---------- */
+  function animateCount(el) {
+    var target = parseInt(el.getAttribute('data-count-to'), 10);
+    var duration = 1400;
+    var startTime = null;
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      var progress = Math.min((timestamp - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(eased * target).toLocaleString('it-IT');
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        el.textContent = target.toLocaleString('it-IT');
+      }
+    }
+    requestAnimationFrame(step);
+  }
+  var countObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        animateCount(entry.target);
+        countObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-count-to]').forEach(function (el) { countObserver.observe(el); });
+
+  /* ---------- Testimonianze (placeholder — sostituire con recensioni reali) ---------- */
+  var testimonialsData = [
+    { nome: 'Marco R.', citta: 'Milano', stelle: 5, testo: 'Ho venduto la mia auto in pochi giorni, tutto molto semplice e senza sorprese.' },
+    { nome: 'Giulia B.', citta: 'Torino', stelle: 5, testo: 'Form veloce da compilare e sono stata ricontattata il giorno dopo con una proposta chiara.' },
+    { nome: 'Andrea F.', citta: 'Bologna', stelle: 4, testo: 'Servizio comodo, mi ha risparmiato la trafila degli annunci e delle chiamate a vuoto.' },
+    { nome: 'Chiara M.', citta: 'Roma', stelle: 5, testo: 'Nessun obbligo e nessuna pressione: ho valutato l’offerta con calma prima di accettare.' }
+  ];
+  var testimonialsTrack = document.getElementById('testimonialsTrack');
+  testimonialsData.forEach(function (t) {
+    var card = document.createElement('div');
+    card.className = 'testimonial-card fade-in';
+    var stars = '★'.repeat(t.stelle) + '☆'.repeat(5 - t.stelle);
+    card.innerHTML =
+      '<div class="testimonial-stars">' + stars + '</div>' +
+      '<p class="testimonial-text">“' + t.testo + '”</p>' +
+      '<div class="testimonial-author">' + t.nome + ' <span>· ' + t.citta + '</span></div>';
+    testimonialsTrack.appendChild(card);
+    observer.observe(card);
+  });
+
+  /* ---------- FAQ accordion ---------- */
+  var faqItems = document.querySelectorAll('.faq-item');
+  faqItems.forEach(function (item) {
+    var btn = item.querySelector('.faq-question');
+    btn.addEventListener('click', function () {
+      var isOpen = item.classList.contains('open');
+      faqItems.forEach(function (i) {
+        i.classList.remove('open');
+        i.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
   /* ---------- Toast helper ---------- */
   var toastEl = document.getElementById('toast');
   var toastTimer;
@@ -1060,6 +1640,8 @@
 
     if (input.type === 'checkbox') {
       isValid = input.checked;
+    } else if (input.type === 'file') {
+      isValid = true;
     } else if (input.hasAttribute('required')) {
       isValid = input.value.trim().length > 0;
     }
@@ -1137,7 +1719,7 @@
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    if (!validateStep(3)) {
+    if (!validateStep(totalSteps)) {
       showToast('Compila correttamente i campi obbligatori.', true);
       return;
     }
@@ -1145,8 +1727,12 @@
     var formData = new FormData(form);
     var payload = {};
     formData.forEach(function (value, key) {
+      if (key === 'foto') return; // le foto vengono gestite a parte: il JSON non può trasportare contenuti binari
       payload[key] = value;
     });
+    var fotoFiles = form.querySelector('input[name="foto"]').files;
+    payload.foto_count = fotoFiles.length;
+    payload.foto_nomi = Array.prototype.map.call(fotoFiles, function (f) { return f.name; });
     payload.termini = form.querySelector('[name="termini"]').checked;
     payload.timestamp = new Date().toISOString();
 
@@ -1163,11 +1749,13 @@
 
     function onError() {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Invia richiesta';
+      submitBtn.textContent = 'Vendi la tua auto';
       showToast('Si è verificato un errore. Riprova.', true);
     }
 
     if (WEBHOOK_URL) {
+      // Nota: per inviare anche le foto, sostituisci il body JSON con `formData`
+      // (multipart/form-data) quando colleghi un endpoint reale in grado di riceverle.
       fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

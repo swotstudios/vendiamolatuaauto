@@ -89,7 +89,7 @@
     padding: 14px 0;
   }
   .logo img {
-    height: 40px;
+    height: 80px;
     width: auto;
   }
   .header-cta {
@@ -283,17 +283,37 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    overflow: hidden;
   }
   .hero-panel-car svg {
     width: 56px;
     height: 56px;
     color: var(--color-primary);
-    animation: car-drive 3.5s ease-in-out infinite;
+    position: relative;
+    z-index: 2;
+    animation: car-hop 2.4s cubic-bezier(.45,0,.55,1) infinite;
   }
-  @keyframes car-drive {
-    0%, 100% { transform: translateX(0) rotate(0deg); }
-    25% { transform: translateX(-3px) rotate(-3deg); }
-    75% { transform: translateX(3px) rotate(3deg); }
+  .hero-panel-car .car-shadow {
+    position: absolute;
+    bottom: 26px;
+    width: 42px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    opacity: 0.18;
+    z-index: 1;
+    animation: car-shadow 2.4s cubic-bezier(.45,0,.55,1) infinite;
+  }
+  @keyframes car-hop {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(-5px, -12px) rotate(-5deg); }
+    50% { transform: translate(0, -16px) rotate(0deg); }
+    75% { transform: translate(5px, -12px) rotate(5deg); }
+  }
+  @keyframes car-shadow {
+    0%, 100% { transform: scale(1); opacity: 0.18; }
+    50% { transform: scale(0.55); opacity: 0.08; }
   }
 
   /* ---------- Trust bar ---------- */
@@ -309,20 +329,6 @@
     align-items: center;
     text-align: center;
   }
-  @media (min-width: 760px) {
-    .trust-bar-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-  }
-  .trust-counter {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  @media (min-width: 760px) { .trust-counter { justify-content: flex-start; } }
-  .trust-counter-prefix { font-size: 17px; font-weight: 500; color: #6b7280; }
-  .trust-counter-number { font-size: 38px; font-weight: 800; color: var(--color-primary); line-height: 1; }
-  .trust-counter-label { font-size: 17px; font-weight: 500; color: var(--color-secondary-text); }
   .trust-badges { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
   .trust-badge {
     display: inline-flex;
@@ -366,66 +372,18 @@
   .value-prop { background: #fff; }
   .value-prop-grid {
     display: flex;
-    flex-direction: column;
-    gap: 40px;
-    align-items: center;
+    justify-content: center;
   }
-  @media (min-width: 900px) {
-    .value-prop-grid { flex-direction: row; align-items: flex-start; gap: 60px; }
+  .value-prop-text {
+    max-width: 760px;
+    width: 100%;
   }
-  .value-prop-text { flex: 1; width: 100%; }
   .value-prop-text .section-title { text-align: left; margin-bottom: 20px; }
   .value-prop-text p {
     font-size: 17px;
     color: #4b5567;
     line-height: 1.7;
     margin-bottom: 16px;
-  }
-  .value-prop-card {
-    flex: 1;
-    width: 100%;
-    max-width: 460px;
-    background: var(--color-card-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: 32px 28px;
-    box-shadow: var(--shadow-card);
-  }
-  .value-prop-card-label {
-    display: block;
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--color-secondary-text);
-    margin-bottom: 18px;
-    line-height: 1.5;
-  }
-  .value-prop-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-bottom: 22px;
-  }
-  .value-prop-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--color-secondary-text);
-  }
-  .value-prop-list svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--color-primary); margin-top: 2px; }
-  .value-prop-note {
-    font-size: 14px;
-    font-style: italic;
-    color: #6b7280;
-    padding-top: 14px;
-    border-top: 1px solid var(--color-border);
-  }
-  .value-prop-note + .value-prop-note {
-    margin-top: 12px;
-    border-top: none;
-    padding-top: 0;
   }
 
   /* ---------- Benefit cards ---------- */
@@ -441,7 +399,7 @@
     .benefit-grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (min-width: 1000px) {
-    .benefit-grid { grid-template-columns: repeat(3, 1fr); }
+    .benefit-grid { grid-template-columns: repeat(4, 1fr); }
   }
   .benefit-card {
     background: #fff;
@@ -618,14 +576,6 @@
     transition: box-shadow 0.3s ease;
   }
 
-  .form-trust-mini {
-    text-align: center;
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--color-secondary-text);
-    margin-bottom: 24px;
-  }
-  .form-trust-mini strong { color: var(--color-primary); font-weight: 800; }
 
   .form-security-note {
     display: flex;
@@ -700,10 +650,10 @@
   .steps-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 14px;
   }
   @media (min-width: 700px) {
-    .steps-grid { grid-template-columns: repeat(2, 1fr); }
+    .steps-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
   }
   @media (min-width: 1100px) {
     .steps-grid { grid-template-columns: repeat(4, 1fr); }
@@ -711,31 +661,74 @@
   .step-card {
     background: var(--color-card-dark);
     border-radius: var(--radius-md);
-    padding: 34px 26px;
+    padding: 18px 20px;
     transition: transform 0.25s ease;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  @media (min-width: 700px) {
+    .step-card {
+      padding: 30px 24px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+    }
   }
   .step-card:hover { transform: translateY(-6px); }
   .step-icon {
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     background: rgba(255,255,255,0.1);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 16px;
+    flex-shrink: 0;
+    position: relative;
     color: var(--color-accent);
   }
-  .step-icon svg { width: 26px; height: 26px; }
+  @media (min-width: 700px) {
+    .step-icon { width: 56px; height: 56px; margin-bottom: 16px; }
+  }
+  .step-icon svg { width: 24px; height: 24px; }
+  @media (min-width: 700px) {
+    .step-icon svg { width: 26px; height: 26px; }
+  }
   .step-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
   .step-number {
-    font-size: 28px;
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
     font-weight: 800;
-    color: var(--color-accent);
-    margin-bottom: 12px;
+    background: var(--color-accent);
+    color: var(--color-primary-dark);
+    border-radius: 50%;
   }
-  .step-card h3 { font-size: 21px; font-weight: 600; margin-bottom: 10px; }
-  .step-card p { font-size: 16px; font-weight: 400; color: rgba(255,255,255,0.8); line-height: 1.55; }
+  @media (min-width: 700px) {
+    .step-number {
+      position: static;
+      width: auto;
+      height: auto;
+      background: none;
+      font-size: 28px;
+      color: var(--color-accent);
+      margin-bottom: 12px;
+    }
+  }
+  .step-card-body { min-width: 0; }
+  .step-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 2px; }
+  .step-card p { font-size: 14px; font-weight: 400; color: rgba(255,255,255,0.8); line-height: 1.5; }
+  @media (min-width: 700px) {
+    .step-card h3 { font-size: 21px; margin-bottom: 10px; }
+    .step-card p { font-size: 16px; line-height: 1.55; }
+  }
 
   /* ---------- Testimonials ---------- */
   .testimonials { background: var(--color-card-bg); }
@@ -848,7 +841,7 @@
     .comparison-grid { flex-direction: row; justify-content: center; flex-wrap: wrap; }
   }
   .comparison-col {
-    flex: 1 1 280px;
+    width: 100%;
     max-width: 380px;
     margin: 0 auto;
     background: #fff;
@@ -858,7 +851,7 @@
     display: flex;
     flex-direction: column;
   }
-  @media (min-width: 860px) { .comparison-col { margin: 0; } }
+  @media (min-width: 860px) { .comparison-col { flex: 1 1 280px; margin: 0; } }
   .comparison-header {
     padding: 22px;
     font-size: 18px;
@@ -1009,21 +1002,21 @@
   <section class="hero">
     <div class="container hero-inner">
       <div class="hero-content">
-        <h1>Vendi la tua auto oggi. Senza annunci, senza sconosciuti, <span>senza rischi</span>.</h1>
-        <p class="hero-lead">Niente foto da postare, niente messaggi da filtrare, niente appuntamenti a vuoto. Ti diciamo subito quanto puoi ottenere e ti mettiamo in contatto con un rivenditore verificato della tua zona, che ti paga in modo sicuro e tracciato.</p>
+        <h1>Vuoi vendere la tua auto? <span>Ti aiutiamo noi</span>.</h1>
+        <p class="hero-lead">Basta perdite di tempo, trattative infinite e il rischio di imbattersi in truffe: compila il form in 2 minuti e un nostro partner selezionato della tua zona ti contatterà gratuitamente per valutare la tua auto. Potrà acquistarla direttamente o aiutarti a venderla nel modo più semplice, veloce e sicuro.</p>
         <p class="hero-lead hero-lead-strong">Gratuitamente, senza vincoli e senza stress.</p>
         <ul class="hero-bullets">
           <li>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            Servizio 100% gratuito
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            Nessun vincolo, decidi sempre tu
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
             Offerta indicativa in pochi minuti
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-            Rivenditore verificato, pagamento garantito
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-            Nessun obbligo di vendere
           </li>
         </ul>
         <a href="#form" class="btn btn-primary">Vendi la tua auto</a>
@@ -1037,6 +1030,7 @@
               <circle cx="7.5" cy="17.5" r="1.5"/>
               <circle cx="16.5" cy="17.5" r="1.5"/>
             </svg>
+            <div class="car-shadow"></div>
           </div>
         </div>
       </div>
@@ -1046,11 +1040,6 @@
   <!-- TRUST BAR -->
   <section class="trust-bar">
     <div class="container trust-bar-inner">
-      <div class="trust-counter fade-in">
-        <span class="trust-counter-prefix">+ di</span>
-        <span class="trust-counter-number" data-count-to="10000">0</span>
-        <span class="trust-counter-label">auto valutate con il nostro servizio</span>
-      </div>
       <div class="trust-badges fade-in">
         <span class="trust-badge">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
@@ -1059,6 +1048,10 @@
         <span class="trust-badge">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
           Risposta entro 24h
+        </span>
+        <span class="trust-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          Ricevi una valutazione gratuita del tuo usato
         </span>
       </div>
     </div>
@@ -1069,27 +1062,9 @@
     <div class="container value-prop-grid">
       <div class="value-prop-text fade-in">
         <h2 class="section-title">Un modo più semplice per vendere la tua auto</h2>
-        <p>Vendere un'auto da privato può significare pubblicare annunci, rispondere a decine di messaggi, incontrare sconosciuti e affrontare trattative che spesso non portano a nulla.</p>
-        <p>Con Vendiamolatuaauto.com parti invece da un'offerta indicativa del tuo usato.</p>
-      </div>
-      <div class="value-prop-card fade-in">
-        <span class="value-prop-card-label">Se desideri procedere, ti mettiamo in contatto con un rivenditore selezionato della tua zona, che approfondirà la valutazione e potrà:</span>
-        <ul class="value-prop-list">
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-            Acquistare direttamente la tua auto
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-            Formularti una proposta concreta
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-            Valutare una soluzione alternativa per aiutarti nella vendita
-          </li>
-        </ul>
-        <p class="value-prop-note">Sarai sempre tu a decidere liberamente se procedere.</p>
-        <p class="value-prop-note">Lavoriamo solo con rivenditori professionali verificati, non con chiunque: controlliamo chi entra in contatto con te.</p>
+        <p>Ogni giorno migliaia di persone provano a vendere la propria auto da sole, ma si scontrano con trattative infinite, tempo perso dietro a messaggi e telefonate, e il rischio concreto di imbattersi in truffe o acquirenti poco seri.</p>
+        <p>Con vendiamolatuaauto.com è tutto più semplice: ti mettiamo in contatto con un partner esperto della tua zona, che valuta la tua auto e ti propone un'offerta. Se per te è la soluzione migliore, può acquistarla direttamente occupandosi anche di tutta la burocrazia. Se invece non è la strada giusta per il tuo caso, può aiutarti comunque a vendere senza le complicazioni del fai da te.</p>
+        <p>È gratis. Senza impegno. E bastano 2 minuti per iniziare.</p>
       </div>
     </div>
   </section>
@@ -1107,10 +1082,12 @@
               <rect x="10" y="6" width="28" height="36" rx="3"/>
               <path d="M17 17h14M17 24h14M17 31h9"/>
             </svg>
+            <div class="step-number">1.</div>
           </div>
-          <div class="step-number">1.</div>
-          <h3>Inserisci i dati della tua auto</h3>
-          <p>Compila il modulo con le principali informazioni sul veicolo. Bastano pochi minuti.</p>
+          <div class="step-card-body">
+            <h3>Inserisci i dati della tua auto</h3>
+            <p>Compila il modulo con le principali informazioni sul veicolo. Bastano pochi minuti.</p>
+          </div>
         </div>
         <div class="step-card fade-in">
           <!-- Icona SVG placeholder: sostituibile con foto reale (es. grafico dell'offerta indicativa) mantenendo il contenitore .step-icon -->
@@ -1120,10 +1097,12 @@
               <path d="M24 34 32 22"/>
               <circle cx="24" cy="34" r="2"/>
             </svg>
+            <div class="step-number">2.</div>
           </div>
-          <div class="step-number">2.</div>
-          <h3>Ricevi un'offerta indicativa</h3>
-          <p>Ricevi subito un'offerta indicativa: il punto di partenza da cui parte la trattativa con il rivenditore, pensata per un acquisto rapido e senza rischi, non per una vendita privata lunga mesi.</p>
+          <div class="step-card-body">
+            <h3>Ricevi un'offerta indicativa</h3>
+            <p>Ricevi un'offerta indicativa in pochi minuti: il punto di partenza per parlare con il nostro partner.</p>
+          </div>
         </div>
         <div class="step-card fade-in">
           <!-- Icona SVG placeholder: sostituibile con foto reale (es. telefonata con il rivenditore) mantenendo il contenitore .step-icon -->
@@ -1131,10 +1110,12 @@
             <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M10 8c0 16 14 30 30 30l4-8-11-4-3 4c-6-3-10-7-13-13l4-3-4-11-7 2z"/>
             </svg>
+            <div class="step-number">3.</div>
           </div>
-          <div class="step-number">3.</div>
-          <h3>Parla con un rivenditore della tua zona</h3>
-          <p>Se l'offerta è in linea con le tue aspettative, la tua richiesta viene affidata a un partner selezionato vicino a te.</p>
+          <div class="step-card-body">
+            <h3>Parla con un rivenditore della tua zona</h3>
+            <p>Se l'offerta è in linea con le tue aspettative, la tua richiesta viene affidata a un partner selezionato vicino a te.</p>
+          </div>
         </div>
         <div class="step-card fade-in">
           <!-- Icona SVG placeholder: sostituibile con foto reale (es. consegna chiavi / firma contratto) mantenendo il contenitore .step-icon -->
@@ -1143,62 +1124,12 @@
               <path d="M24 5l16 7v10c0 10-7 17-16 21C15 39 8 32 8 22V12l16-7z"/>
               <path d="M17 24l5 5 10-11"/>
             </svg>
+            <div class="step-number">4.</div>
           </div>
-          <div class="step-number">4.</div>
-          <h3>Valuta la proposta</h3>
-          <p>Il rivenditore potrà visionare l'auto, proporti l'acquisto diretto oppure indicarti una soluzione alternativa per venderla. Non sei obbligato ad accettare.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- LE TUE GARANZIE -->
-  <section class="benefits">
-    <div class="container">
-      <h2 class="section-title fade-in">Le tue garanzie</h2>
-      <p class="section-subtitle fade-in">Vendere l'auto senza rischi non è uno slogan: ecco come lo garantiamo.</p>
-      <div class="benefit-grid">
-        <div class="benefit-card fade-in">
-          <div class="benefit-icon-wrap">
-            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="4" y="10" width="16" height="10" rx="2"/>
-              <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
-            </svg>
+          <div class="step-card-body">
+            <h3>Valuta la proposta</h3>
+            <p>Il rivenditore potrà visionare l'auto, proporti l'acquisto diretto oppure indicarti una soluzione alternativa per venderla. Non sei obbligato ad accettare.</p>
           </div>
-          <h3>Pagamento sicuro</h3>
-          <p>Pagamento tracciato e sicuro, senza rischio di truffe.</p>
-        </div>
-        <div class="benefit-card fade-in">
-          <div class="benefit-icon-wrap">
-            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="5" y="3" width="14" height="18" rx="2"/>
-              <path d="M8.5 8h7M8.5 12h7M8.5 16h4"/>
-            </svg>
-          </div>
-          <h3>Burocrazia inclusa</h3>
-          <p>Il passaggio di proprietà lo gestisce il rivenditore: non rischi multe post-vendita.</p>
-        </div>
-        <div class="benefit-card fade-in">
-          <div class="benefit-icon-wrap">
-            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="6"/>
-              <path d="M20 20l-4.5-4.5"/>
-              <circle cx="11" cy="9.5" r="1.6"/>
-              <path d="M8 13.2c.6-1 1.7-1.7 3-1.7s2.4.7 3 1.7"/>
-            </svg>
-          </div>
-          <h3>Zero sconosciuti</h3>
-          <p>Parli solo con professionisti verificati, non con privati anonimi da un annuncio.</p>
-        </div>
-        <div class="benefit-card fade-in">
-          <div class="benefit-icon-wrap">
-            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="9"/>
-              <path d="M12 7v5l3.5 2"/>
-            </svg>
-          </div>
-          <h3>Risposta in 24h, decidi tu</h3>
-          <p>Nessun obbligo, nessuna pressione.</p>
         </div>
       </div>
     </div>
@@ -1208,9 +1139,8 @@
   <section class="form-section" id="form">
     <div class="container">
       <div class="form-intro">
-        <h2 class="section-title fade-in">Richiedi la tua offerta indicativa gratuita</h2>
-        <p class="section-subtitle fade-in">Bastano due semplici passaggi.</p>
-        <p class="form-trust-mini fade-in"><strong>+10.000</strong> auto valutate con il nostro servizio</p>
+        <h2 class="section-title fade-in">Vendi ora la tua auto</h2>
+        <p class="section-subtitle fade-in">Ricevi una prima offerta indicativa della tua auto e mettiti in contatto con un partner di zona per vendere la tua auto in totale sicurezza e senza perdite di tempo.</p>
       </div>
 
       <form class="form-card fade-in" id="carForm" novalidate>
@@ -1364,50 +1294,42 @@
         <div class="benefit-card fade-in">
           <div class="benefit-icon-wrap">
             <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="9"/>
-              <path d="M12 7v5l3.5 2"/>
-            </svg>
-          </div>
-          <h3>Meno perdite di tempo</h3>
-          <p>Eviti annunci, messaggi inconcludenti, appuntamenti inutili e lunghe trattative con privati.</p>
-        </div>
-        <div class="benefit-card fade-in">
-          <div class="benefit-icon-wrap">
-            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="8" r="4"/>
               <path d="M4.5 21c0-4.4 3.4-7.5 7.5-7.5s7.5 3.1 7.5 7.5"/>
             </svg>
           </div>
-          <h3>Parli con un professionista</h3>
-          <p>La tua richiesta viene gestita da un rivenditore del settore, non da contatti anonimi o sconosciuti.</p>
-        </div>
-        <div class="benefit-card fade-in">
-          <div class="benefit-icon-wrap">
-            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M13 2 4 14h6l-1 8 9-12h-6z"/>
-            </svg>
-          </div>
-          <h3>Puoi vendere più rapidamente</h3>
-          <p>Se il rivenditore è interessato, può formularti una proposta diretta per acquistare l'auto.</p>
-        </div>
-        <div class="benefit-card fade-in">
-          <div class="benefit-icon-wrap">
-            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 7h13l-3-3M20 17H7l3 3"/>
-            </svg>
-          </div>
-          <h3>Hai anche un'alternativa</h3>
-          <p>Quando l'acquisto diretto non è la soluzione migliore, il partner può valutare altre modalità per aiutarti nella vendita.</p>
+          <h3>Parli con un professionista, non con un privato qualunque</h3>
+          <p>Niente messaggi a vuoto o trattative con sconosciuti su un annuncio: ricevi una proposta concreta da un rivenditore verificato della tua zona.</p>
         </div>
         <div class="benefit-card fade-in">
           <div class="benefit-icon-wrap">
             <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="4" y="10" width="16" height="10" rx="2"/>
-              <path d="M8 10V7a4 4 0 0 1 7.4-2"/>
+              <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
             </svg>
           </div>
-          <h3>Nessun costo e nessun vincolo</h3>
-          <p>La richiesta, l'offerta indicativa e il contatto con il rivenditore sono gratuiti. La decisione finale resta sempre tua.</p>
+          <h3>Vendita sicura, pagamento garantito</h3>
+          <p>Se il nostro partner acquista la tua auto, lo fa con bonifico tracciato: mai contanti, mai rischi.</p>
+        </div>
+        <div class="benefit-card fade-in">
+          <div class="benefit-icon-wrap">
+            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="3" width="14" height="18" rx="2"/>
+              <path d="M8.5 8h7M8.5 12h7M8.5 16h4"/>
+            </svg>
+          </div>
+          <h3>Ci pensa lui alla burocrazia</h3>
+          <p>Passaggio di proprietà e pratiche gestite dal rivenditore: tu non rischi multe o problemi dopo la vendita.</p>
+        </div>
+        <div class="benefit-card fade-in">
+          <div class="benefit-icon-wrap">
+            <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 7v5l3.5 2"/>
+            </svg>
+          </div>
+          <h3>Tempi rapidi, zero attese</h3>
+          <p>Basta aspettare settimane tra un messaggio e l'altro: il nostro partner riceve la tua richiesta e ti risponde entro 24-48 ore.</p>
         </div>
       </div>
     </div>
@@ -1605,34 +1527,6 @@
     });
   }, { threshold: 0.15 });
   fadeEls.forEach(function (el) { observer.observe(el); });
-
-  /* ---------- Count-up trust counter ---------- */
-  function animateCount(el) {
-    var target = parseInt(el.getAttribute('data-count-to'), 10);
-    var duration = 1400;
-    var startTime = null;
-    function step(timestamp) {
-      if (!startTime) startTime = timestamp;
-      var progress = Math.min((timestamp - startTime) / duration, 1);
-      var eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.floor(eased * target).toLocaleString('it-IT');
-      if (progress < 1) {
-        requestAnimationFrame(step);
-      } else {
-        el.textContent = target.toLocaleString('it-IT');
-      }
-    }
-    requestAnimationFrame(step);
-  }
-  var countObserver = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        animateCount(entry.target);
-        countObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.5 });
-  document.querySelectorAll('[data-count-to]').forEach(function (el) { countObserver.observe(el); });
 
   /* ---------- Testimonianze (placeholder — sostituire con recensioni reali) ---------- */
   var testimonialsData = [

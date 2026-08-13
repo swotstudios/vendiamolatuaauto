@@ -152,7 +152,7 @@
     padding: 150px 0 90px;
     position: relative;
     overflow: hidden;
-    background: linear-gradient(180deg, #F7F9FC 0%, #FFFFFF 100%);
+    background: linear-gradient(135deg, #EDF1F7 0%, #FFFFFF 60%);
   }
   .hero::before {
     content: "";
@@ -266,18 +266,40 @@
     .hero-visual { margin: 0; flex-shrink: 0; }
   }
   .hero-panel {
-    background: #fff;
+    background: radial-gradient(circle at 50% 42%, var(--color-primary-soft) 0%, #fff 68%);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    padding: 48px;
+    padding: 40px;
     box-shadow: var(--shadow-card);
     display: flex;
     align-items: center;
     justify-content: center;
   }
+  .hero-panel-car-wrap {
+    position: relative;
+    width: 190px;
+    height: 190px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pulse-ring {
+    position: absolute;
+    width: 190px;
+    height: 190px;
+    border-radius: 50%;
+    border: 2px solid var(--color-primary);
+    opacity: 0;
+    animation: pulse-ring 3s ease-out infinite;
+  }
+  .pulse-ring.ring-2 { animation-delay: 1.5s; }
+  @keyframes pulse-ring {
+    0% { transform: scale(0.72); opacity: 0.35; }
+    100% { transform: scale(1.12); opacity: 0; }
+  }
   .hero-panel-car {
-    width: 110px;
-    height: 110px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     background: var(--color-primary-soft);
     display: flex;
@@ -285,10 +307,12 @@
     justify-content: center;
     position: relative;
     overflow: hidden;
+    z-index: 2;
+    box-shadow: 0 8px 24px rgba(15,45,82,0.12);
   }
   .hero-panel-car svg {
-    width: 56px;
-    height: 56px;
+    width: 76px;
+    height: 76px;
     color: var(--color-primary);
     position: relative;
     z-index: 2;
@@ -296,9 +320,9 @@
   }
   .hero-panel-car .car-shadow {
     position: absolute;
-    bottom: 26px;
-    width: 42px;
-    height: 8px;
+    bottom: 34px;
+    width: 58px;
+    height: 10px;
     border-radius: 50%;
     background: var(--color-primary);
     opacity: 0.18;
@@ -307,13 +331,13 @@
   }
   @keyframes car-hop {
     0%, 100% { transform: translate(0, 0) rotate(0deg); }
-    25% { transform: translate(-5px, -12px) rotate(-5deg); }
-    50% { transform: translate(0, -16px) rotate(0deg); }
-    75% { transform: translate(5px, -12px) rotate(5deg); }
+    25% { transform: translate(-7px, -16px) rotate(-5deg); }
+    50% { transform: translate(0, -22px) rotate(0deg); }
+    75% { transform: translate(7px, -16px) rotate(5deg); }
   }
   @keyframes car-shadow {
     0%, 100% { transform: scale(1); opacity: 0.18; }
-    50% { transform: scale(0.55); opacity: 0.08; }
+    50% { transform: scale(0.5); opacity: 0.08; }
   }
 
   /* ---------- Trust bar ---------- */
@@ -1023,14 +1047,18 @@
       </div>
       <div class="hero-visual">
         <div class="hero-panel fade-in">
-          <div class="hero-panel-car">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11"/>
-              <path d="M3 11h18v5a1 1 0 0 1-1 1h-1a2 2 0 1 1-4 0H9a2 2 0 1 1-4 0H4a1 1 0 0 1-1-1z"/>
-              <circle cx="7.5" cy="17.5" r="1.5"/>
-              <circle cx="16.5" cy="17.5" r="1.5"/>
-            </svg>
-            <div class="car-shadow"></div>
+          <div class="hero-panel-car-wrap">
+            <span class="pulse-ring ring-1"></span>
+            <span class="pulse-ring ring-2"></span>
+            <div class="hero-panel-car">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11"/>
+                <path d="M3 11h18v5a1 1 0 0 1-1 1h-1a2 2 0 1 1-4 0H9a2 2 0 1 1-4 0H4a1 1 0 0 1-1-1z"/>
+                <circle cx="7.5" cy="17.5" r="1.5"/>
+                <circle cx="16.5" cy="17.5" r="1.5"/>
+              </svg>
+              <div class="car-shadow"></div>
+            </div>
           </div>
         </div>
       </div>

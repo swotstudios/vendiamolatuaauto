@@ -519,7 +519,8 @@
   .field .required { color: var(--color-accent); }
   .field .optional { color: rgba(255,255,255,0.5); font-weight: 400; font-size: 12px; }
   .field input,
-  .field select {
+  .field select,
+  .field textarea {
     font-family: var(--font-main);
     font-size: 16px;
     padding: 13px 16px;
@@ -528,9 +529,11 @@
     outline: none;
     background: #fff;
     color: var(--color-secondary-text);
+    resize: vertical;
   }
   .field input:focus,
-  .field select:focus {
+  .field select:focus,
+  .field textarea:focus {
     box-shadow: 0 0 0 3px rgba(201,162,39,0.45);
   }
   .input-suffix-wrap {
@@ -766,9 +769,6 @@
   .wizard-question.invalid .pill { border-color: rgba(255,138,128,0.7); }
 
   .wizard-dependent-field { margin-top: 14px; max-width: 320px; }
-
-  .wizard-toggle-row { display: flex; gap: 10px; margin: 12px 0 14px; }
-  .wizard-toggle-row .pill { flex: 1; justify-content: center; }
 
   .phone-row { display: flex; gap: 10px; }
   .phone-row select {
@@ -1311,12 +1311,11 @@
           <div class="wizard-step" data-wizard-step="1" data-complete="false">
             <button type="button" class="wizard-step-header" data-step-header="1" aria-expanded="true">
               <span class="wizard-step-check" aria-hidden="true"></span>
-              <span class="wizard-step-label"><strong>1 di 3</strong> Informazioni aggiuntive</span>
+              <span class="wizard-step-label"><strong>1 di 3</strong> Il tuo veicolo</span>
               <svg class="wizard-step-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
             </button>
             <div class="wizard-step-panel" data-step-panel="1">
               <div class="wizard-step-panel-inner">
-                <div class="wizard-subheading">Il tuo veicolo</div>
                 <div class="form-grid cols-2">
                   <div class="field" data-field="marca">
                     <label>Marca <span class="required">*</span></label>
@@ -1360,9 +1359,6 @@
                   </div>
                 </div>
 
-                <div class="wizard-subheading">Informazioni aggiuntive</div>
-                <div class="wizard-fields" id="wizardFieldsStep1"></div>
-
                 <div class="wizard-actions">
                   <button type="button" class="btn btn-primary" data-wizard-save="1">Salva e continua →</button>
                 </div>
@@ -1374,7 +1370,7 @@
           <div class="wizard-step" data-wizard-step="2" data-complete="false">
             <button type="button" class="wizard-step-header" data-step-header="2" aria-expanded="false" disabled>
               <span class="wizard-step-check" aria-hidden="true"></span>
-              <span class="wizard-step-label"><strong>2 di 3</strong> Stato</span>
+              <span class="wizard-step-label"><strong>2 di 3</strong> Condizioni e stato</span>
               <svg class="wizard-step-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
             </button>
             <div class="wizard-step-panel" data-step-panel="2" hidden>
@@ -1416,32 +1412,26 @@
                     <input type="email" name="email" placeholder="mario.rossi@email.com" required>
                     <span class="field-error">Inserisci un'email valida</span>
                   </div>
+                  <div class="field" data-field="telefono">
+                    <label>Telefono <span class="required">*</span></label>
+                    <div class="phone-row">
+                      <select name="prefisso" aria-label="Prefisso internazionale">
+                        <option value="+39">🇮🇹 +39</option>
+                        <option value="+33">🇫🇷 +33</option>
+                        <option value="+49">🇩🇪 +49</option>
+                        <option value="+34">🇪🇸 +34</option>
+                        <option value="+41">🇨🇭 +41</option>
+                        <option value="+43">🇦🇹 +43</option>
+                      </select>
+                      <input type="tel" name="telefono" placeholder="333 1234567" required>
+                    </div>
+                    <span class="field-error">Inserisci un numero di telefono valido</span>
+                  </div>
                   <div class="field" data-field="cap">
                     <label>Il tuo CAP <span class="required">*</span></label>
                     <input type="text" name="cap" inputmode="numeric" maxlength="5" placeholder="Indica il tuo codice postale (CAP)" required>
                     <span class="field-hint">Lo usiamo per offrirti il miglior servizio. Non ha alcun impatto sull'offerta reale.</span>
                     <span class="field-error">Inserisci un CAP valido (5 cifre)</span>
-                  </div>
-                </div>
-
-                <div class="wizard-subheading">I tuoi dettagli</div>
-                <div class="field" data-field="canale_contatto">
-                  <label>Vuoi ricevere una copia dell'offerta di vendita sul tuo telefono? <span class="optional">(Opzionale)</span></label>
-                  <span class="field-hint">Scegli tra WhatsApp o SMS. Il tuo numero verrà utilizzato solo per inviarti l'offerta e non verrà condiviso con terze parti.</span>
-                  <div class="wizard-toggle-row" role="group" aria-label="Canale di contatto">
-                    <button type="button" class="pill" data-channel="WhatsApp" aria-pressed="true">WhatsApp</button>
-                    <button type="button" class="pill" data-channel="SMS" aria-pressed="false">SMS</button>
-                  </div>
-                  <div class="phone-row">
-                    <select name="prefisso" aria-label="Prefisso internazionale">
-                      <option value="+39">🇮🇹 +39</option>
-                      <option value="+33">🇫🇷 +33</option>
-                      <option value="+49">🇩🇪 +49</option>
-                      <option value="+34">🇪🇸 +34</option>
-                      <option value="+41">🇨🇭 +41</option>
-                      <option value="+43">🇦🇹 +43</option>
-                    </select>
-                    <input type="tel" name="telefono" placeholder="333 1234567">
                   </div>
                 </div>
 
@@ -1626,7 +1616,7 @@
             <span class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
           </button>
           <div class="faq-answer">
-            <p>Dopo l'invio riceverai un'offerta indicativa. Se deciderai di procedere, verrai messo in contatto con un rivenditore selezionato della tua zona, che ti contatterà entro 24 ore lavorative.</p>
+            <p>Generalmente entro 24 ore dall'invio riceverai un'offerta indicativa. Se deciderai di procedere, verrai messo in contatto con un rivenditore selezionato della tua zona che ti contatterà entro 24-48 ore lavorative.</p>
           </div>
         </div>
         <div class="faq-item">
@@ -1793,49 +1783,33 @@
   var progressFill = document.getElementById('wizardProgressFill');
   var STORAGE_KEY = 'vendiamolatuaauto_wizard_v1';
 
-  var state = { step1: {}, step2: {} };
+  var state = { step2: {} };
 
-  // Config delle domande a scelta singola di step 1 e step 2 (data-driven: una sola
+  // Config delle domande a scelta singola dello step 2 (data-driven: una sola
   // definizione per domanda, il render dei pulsanti a pillola è generato da qui).
+  // Il form resta volutamente breve: chiediamo solo ciò che incide sulla prima
+  // offerta indicativa o sulla fattibilità della vendita (es. leasing in corso);
+  // la valutazione definitiva la fa il rivenditore vedendo l'auto di persona.
   var wizardConfig = {
-    1: [
-      { key: 'chiavi', question: 'Quante chiavi possiedi?', options: ['1', '2+'] },
-      { key: 'secondoSetPneumatici', question: 'Hai a disposizione un secondo set di pneumatici?', options: ['Sì', 'No'] },
+    2: [
       { key: 'librettoManutenzione', question: 'Hai il libretto di manutenzione (o certificato digitale)?', options: ['Sì', 'No'] },
-      { key: 'interventiManutenzione', question: 'Quanti interventi di manutenzione necessari secondo le indicazioni del costruttore sono stati effettuati e documentati?', options: ['Tutti', 'Alcuni', 'Nessuno'] },
       { key: 'revisione', question: 'Hai fatto la revisione dell\'auto negli ultimi 6 mesi?', options: ['Sì', 'No', 'È già scaduta'] },
       { key: 'tipoVenditore', question: 'Vendi come privato?', options: ['Privato', 'Azienda'],
         dependent: { key: 'partitaIva', showWhen: 'Azienda', label: 'Partita IVA (facoltativo)', placeholder: 'Es. IT01234567890' } },
-      { key: 'importata', question: 'L\'auto è stata importata?', options: ['Sì', 'No'] },
-      { key: 'leasing', question: 'È in corso un leasing sulla tua auto?', options: ['Sì', 'No'] },
-      { key: 'coloreEsterno', question: 'Qual è il colore dell\'esterno della tua auto?', colors: true, options: [
+      { key: 'leasing', question: 'È in corso un leasing o finanziamento sulla tua auto?', options: ['Sì', 'No'] },
+      { key: 'incidenti', question: 'L\'auto ha mai subito incidenti?', options: ['Sì', 'No'], info: 'Indica se l\'auto è stata coinvolta in incidenti che hanno richiesto riparazioni strutturali.' },
+      { key: 'guidabile', question: 'L\'auto è in condizione di essere guidata?', options: ['Sì', 'No'] },
+      { key: 'condizioniGenerali', question: 'Come definiresti le condizioni generali dell\'auto?', options: ['In perfette condizioni', 'Utilizzo moderato', 'Utilizzo intenso'] },
+      { key: 'problemiMeccanici', question: 'Sono presenti problemi meccanici o spie di avaria accese?', options: ['Sì', 'No'],
+        dependent: { key: 'descrizioneProblema', type: 'textarea', showWhen: 'Sì', label: 'Descrivi il problema (facoltativo)', placeholder: 'Descrivi brevemente il problema (facoltativo)' } },
+      { key: 'coloreEsterno', question: 'Qual è il colore dell\'esterno della tua auto?', colors: true, required: false, options: [
           { label: 'Grigio', color: '#9CA3AF' }, { label: 'Nero', color: '#1C1C1C' }, { label: 'Bianco', color: '#FFFFFF' },
           { label: 'Blu', color: '#1E3A8A' }, { label: 'Argento', color: '#C9CDD2' }, { label: 'Altro', color: null }
-        ] },
-      { key: 'coloreSedili', question: 'Qual è il colore dei sedili della tua auto?', colors: true, options: [
-          { label: 'Nero', color: '#1C1C1C' }, { label: 'Grigio', color: '#9CA3AF' }, { label: 'Beige', color: '#E8DCC8' },
-          { label: 'Blu', color: '#1E3A8A' }, { label: 'Marrone', color: '#5C4033' }, { label: 'Altro', color: null }
-        ] },
-      { key: 'materialeSedili', question: 'Di che materiale sono i sedili?', options: ['Tessuto', 'Pelle', 'Parzialmente in pelle', 'Materiale sintetico', 'Alcantara', 'Altro'] }
-    ],
-    2: [
-      { key: 'guidabile', question: 'L\'auto è in condizione di essere guidata?', options: ['Sì', 'No'] },
-      { key: 'incidenti', question: 'L\'auto ha mai subito incidenti?', options: ['Sì', 'No'], info: 'Indica se l\'auto è stata coinvolta in incidenti che hanno richiesto riparazioni strutturali.' },
-      { key: 'statoInterni', question: 'Qual è lo stato degli interni dell\'auto?', options: ['In perfette condizioni', 'Utilizzo moderato', 'Utilizzo intenso'], info: 'Valuta l\'usura di sedili, plancia e rivestimenti interni.' },
-      { key: 'statoEsterni', question: 'Qual è lo stato degli esterni dell\'auto?', options: ['In perfette condizioni', 'Utilizzo moderato', 'Utilizzo intenso'], info: 'Valuta graffi, ammaccature e stato della carrozzeria.' },
-      { key: 'spieAccese', question: 'Ci sono spie luminose accese permanenti sul cruscotto della tua auto?', options: ['Sì', 'No'] },
-      { key: 'danniUsura', question: 'Danni e segni di usura', options: ['Sì', 'No'] },
-      { key: 'motore', question: 'Il motore è in perfette condizioni?', options: ['Sì', 'No'], info: 'Nessuna spia accesa, rumore anomalo o perdita di liquidi.' },
-      { key: 'cambio', question: 'Il cambio è in perfette condizioni?', options: ['Sì', 'No'], info: 'Cambiate marce fluide, senza scatti o rumori sospetti.' },
-      { key: 'sterzo', question: 'Lo sterzo è in perfette condizioni?', options: ['Sì', 'No'] },
-      { key: 'sospensioni', question: 'Le sospensioni sono in perfette condizioni?', options: ['Sì', 'No'] },
-      { key: 'freni', question: 'I freni sono in perfette condizioni?', options: ['Sì', 'No'] },
-      { key: 'climatizzazione', question: 'Il sistema di climatizzazione è in perfette condizioni?', options: ['Sì', 'No', 'Inesistente'] }
+        ] }
     ]
   };
 
   var fieldsContainers = {
-    1: document.getElementById('wizardFieldsStep1'),
     2: document.getElementById('wizardFieldsStep2')
   };
 
@@ -1873,12 +1847,15 @@
 
     var dependentWrap = null;
     if (field.dependent) {
+      var isTextarea = field.dependent.type === 'textarea';
       dependentWrap = document.createElement('div');
       dependentWrap.className = 'field wizard-dependent-field';
       dependentWrap.hidden = true;
       dependentWrap.innerHTML =
         '<label>' + field.dependent.label + '</label>' +
-        '<input type="text" placeholder="' + field.dependent.placeholder + '">';
+        (isTextarea
+          ? '<textarea rows="3" placeholder="' + field.dependent.placeholder + '"></textarea>'
+          : '<input type="text" placeholder="' + field.dependent.placeholder + '">');
     }
 
     field.options.forEach(function (opt) {
@@ -1916,7 +1893,7 @@
     wrap.appendChild(group);
     if (dependentWrap) {
       wrap.appendChild(dependentWrap);
-      dependentWrap.querySelector('input').addEventListener('input', function () {
+      dependentWrap.querySelector('input, textarea').addEventListener('input', function () {
         state['step' + stepNum][field.dependent.key] = this.value;
         saveState();
       });
@@ -1925,9 +1902,7 @@
     fieldsContainers[stepNum].appendChild(wrap);
   }
 
-  [1, 2].forEach(function (stepNum) {
-    wizardConfig[stepNum].forEach(function (field) { renderQuestion(field, stepNum); });
-  });
+  wizardConfig[2].forEach(function (field) { renderQuestion(field, 2); });
 
   /* ---------- Accordion: navigazione tra step ---------- */
   var stepEls = Array.prototype.slice.call(form.querySelectorAll('.wizard-step'));
@@ -1967,7 +1942,9 @@
 
   /* ---------- Validazione ---------- */
   function validateNativeField(fieldEl) {
-    var input = fieldEl.querySelector('input, select');
+    // Alcuni campi (es. telefono) contengono più di un controllo (select prefisso +
+    // input numero): diamo priorità a quello effettivamente obbligatorio.
+    var input = fieldEl.querySelector('[required]') || fieldEl.querySelector('input, select');
     if (!input) return true;
     var isValid = true;
 
@@ -1979,6 +1956,9 @@
 
     if (isValid && input.name === 'email' && input.value.trim()) {
       isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim());
+    }
+    if (isValid && input.name === 'telefono' && input.value.trim()) {
+      isValid = /^[+\d][\d\s]{7,}$/.test(input.value.trim());
     }
     if (isValid && input.name === 'cap' && input.value.trim()) {
       isValid = /^\d{5}$/.test(input.value.trim());
@@ -1994,6 +1974,7 @@
   function validatePillQuestions(stepNum) {
     var allValid = true;
     wizardConfig[stepNum].forEach(function (field) {
+      if (field.required === false) return; // domanda facoltativa (es. colore esterno)
       var wrap = form.querySelector('.wizard-question[data-field="' + field.key + '"]');
       var answered = !!state['step' + stepNum][field.key];
       wrap.classList.toggle('invalid', !answered);
@@ -2007,8 +1988,7 @@
     form.querySelectorAll('[data-wizard-step="1"] .form-grid [data-field]').forEach(function (fieldEl) {
       if (!validateNativeField(fieldEl)) vehicleValid = false;
     });
-    var questionsValid = validatePillQuestions(1);
-    return vehicleValid && questionsValid;
+    return vehicleValid;
   }
 
   function validateStep2() {
@@ -2018,7 +1998,7 @@
   function validateStep3() {
     var allValid = true;
     form.querySelectorAll('[data-wizard-step="3"] [data-field]').forEach(function (fieldEl) {
-      var input = fieldEl.querySelector('input, select');
+      var input = fieldEl.querySelector('[required]') || fieldEl.querySelector('input, select');
       if (!input) return;
       if (input.type !== 'checkbox' && !input.hasAttribute('required')) return;
       if (!validateNativeField(fieldEl)) allValid = false;
@@ -2048,18 +2028,6 @@
     saveState();
   });
 
-  /* ---------- Toggle canale WhatsApp / SMS ---------- */
-  var channelButtons = form.querySelectorAll('[data-channel]');
-  var selectedChannel = 'WhatsApp';
-  channelButtons.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      channelButtons.forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
-      btn.setAttribute('aria-pressed', 'true');
-      selectedChannel = btn.dataset.channel;
-      saveState();
-    });
-  });
-
   // Chilometraggio e prezzo desiderato: consenti solo cifre durante la digitazione
   ['km', 'prezzo_desiderato'].forEach(function (fieldName) {
     var input = form.querySelector('input[name="' + fieldName + '"]');
@@ -2069,24 +2037,25 @@
     });
   });
 
-  // Live-clear invalid state as user types
+  // Live-clear invalid state as user types (alcuni campi, es. telefono, hanno più
+  // di un controllo: select prefisso + input numero, li agganciamo entrambi)
   form.querySelectorAll('[data-field]').forEach(function (fieldEl) {
-    var input = fieldEl.querySelector('input, select');
-    if (!input) return;
-    input.addEventListener('input', function () {
-      if (fieldEl.classList.contains('invalid')) validateNativeField(fieldEl);
-      saveState();
-    });
-    input.addEventListener('change', function () {
-      if (fieldEl.classList.contains('invalid')) validateNativeField(fieldEl);
-      saveState();
+    fieldEl.querySelectorAll('input, select').forEach(function (input) {
+      input.addEventListener('input', function () {
+        if (fieldEl.classList.contains('invalid')) validateNativeField(fieldEl);
+        saveState();
+      });
+      input.addEventListener('change', function () {
+        if (fieldEl.classList.contains('invalid')) validateNativeField(fieldEl);
+        saveState();
+      });
     });
   });
 
   /* ---------- Persistenza in localStorage ---------- */
   function saveState() {
     try {
-      var snapshot = { step1: state.step1, step2: state.step2, channel: selectedChannel, native: {} };
+      var snapshot = { step2: state.step2, native: {} };
       form.querySelectorAll('input, select').forEach(function (el) {
         if (!el.name) return;
         snapshot.native[el.name] = el.type === 'checkbox' ? el.checked : el.value;
@@ -2113,34 +2082,25 @@
       });
     }
 
-    [1, 2].forEach(function (stepNum) {
-      var stepData = snapshot['step' + stepNum] || {};
-      state['step' + stepNum] = stepData;
-      wizardConfig[stepNum].forEach(function (field) {
-        var answer = stepData[field.key];
-        if (!answer) return;
-        var wrap = form.querySelector('.wizard-question[data-field="' + field.key + '"]');
-        if (!wrap) return;
-        Array.prototype.forEach.call(wrap.querySelectorAll('.pill'), function (btn) {
-          var text = btn.querySelector('span:last-child').textContent;
-          btn.setAttribute('aria-pressed', text === answer ? 'true' : 'false');
-        });
-        if (field.dependent && answer === field.dependent.showWhen) {
-          var dep = wrap.querySelector('.wizard-dependent-field');
-          if (dep) {
-            dep.hidden = false;
-            if (stepData[field.dependent.key]) dep.querySelector('input').value = stepData[field.dependent.key];
-          }
+    var stepData = snapshot.step2 || {};
+    state.step2 = stepData;
+    wizardConfig[2].forEach(function (field) {
+      var answer = stepData[field.key];
+      if (!answer) return;
+      var wrap = form.querySelector('.wizard-question[data-field="' + field.key + '"]');
+      if (!wrap) return;
+      Array.prototype.forEach.call(wrap.querySelectorAll('.pill'), function (btn) {
+        var text = btn.querySelector('span:last-child').textContent;
+        btn.setAttribute('aria-pressed', text === answer ? 'true' : 'false');
+      });
+      if (field.dependent && answer === field.dependent.showWhen) {
+        var dep = wrap.querySelector('.wizard-dependent-field');
+        if (dep) {
+          dep.hidden = false;
+          if (stepData[field.dependent.key]) dep.querySelector('input, textarea').value = stepData[field.dependent.key];
         }
-      });
+      }
     });
-
-    if (snapshot.channel) {
-      selectedChannel = snapshot.channel;
-      channelButtons.forEach(function (b) {
-        b.setAttribute('aria-pressed', b.dataset.channel === selectedChannel ? 'true' : 'false');
-      });
-    }
 
     // Sblocca/apre lo step più avanzato raggiunto in precedenza, senza mostrare
     // subito gli avvisi di errore sui campi ancora vuoti.
@@ -2183,19 +2143,34 @@
     });
 
     var payload = {
-      veicolo: { marca: nativeData.marca, modello: nativeData.modello, anno: nativeData.anno, km: nativeData.km },
-      step1: state.step1,
-      step2: state.step2,
+      step1: {
+        marca: nativeData.marca || null,
+        modello: nativeData.modello || null,
+        anno: nativeData.anno || null,
+        km: nativeData.km || null
+      },
+      step2: {
+        librettoManutenzione: state.step2.librettoManutenzione || null,
+        revisione: state.step2.revisione || null,
+        tipoVenditore: state.step2.tipoVenditore ? state.step2.tipoVenditore.toLowerCase() : null,
+        partitaIva: state.step2.partitaIva || null,
+        leasing: state.step2.leasing || null,
+        incidenti: state.step2.incidenti || null,
+        guidabile: state.step2.guidabile || null,
+        condizioniGenerali: state.step2.condizioniGenerali || null,
+        problemiMeccanici: state.step2.problemiMeccanici || null,
+        descrizioneProblema: state.step2.descrizioneProblema || null,
+        coloreEsterno: state.step2.coloreEsterno || null
+      },
       step3: {
-        targa: nativeData.targa,
-        nome: nativeData.nome,
-        email: nativeData.email,
-        cap: nativeData.cap,
-        canaleContatto: selectedChannel,
-        prefisso: nativeData.prefisso,
-        telefono: nativeData.telefono,
-        prezzoDesiderato: nativeData.prezzo_desiderato,
-        termini: nativeData.termini
+        targa: nativeData.targa || null,
+        nomeCognome: nativeData.nome || null,
+        email: nativeData.email || null,
+        cap: nativeData.cap || null,
+        prefisso: nativeData.prefisso || null,
+        telefono: nativeData.telefono || null,
+        prezzoDesiderato: nativeData.prezzo_desiderato || null,
+        accettaTermini: !!nativeData.termini
       },
       timestamp: new Date().toISOString()
     };

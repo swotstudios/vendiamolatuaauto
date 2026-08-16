@@ -561,6 +561,38 @@
   .field select:focus {
     box-shadow: 0 0 0 3px rgba(201,162,39,0.45);
   }
+  .input-suffix-wrap {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: var(--radius-sm);
+    padding: 0 16px;
+  }
+  .input-suffix-wrap input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 13px 0;
+    font-family: var(--font-main);
+    font-size: 16px;
+    color: var(--color-secondary-text);
+    box-shadow: none;
+  }
+  .input-suffix-wrap:focus-within {
+    box-shadow: 0 0 0 3px rgba(201,162,39,0.45);
+  }
+  .input-suffix {
+    font-size: 14px;
+    font-weight: 600;
+    color: #6b7280;
+    padding-left: 8px;
+    flex-shrink: 0;
+  }
+  .field.invalid .input-suffix-wrap {
+    box-shadow: 0 0 0 3px rgba(179,38,30,0.55);
+  }
   .field input[type="file"] {
     padding: 10px 12px;
     cursor: pointer;
@@ -1128,8 +1160,8 @@
             <div class="step-number">2.</div>
           </div>
           <div class="step-card-body">
-            <h3>Ricevi un'offerta indicativa</h3>
-            <p>Ricevi un'offerta indicativa in pochi minuti: il punto di partenza per parlare con il nostro partner.</p>
+            <h3>Ricevi una prima stima indicativa</h3>
+            <p>Ti contattiamo e ti comunichiamo una prima stima indicativa: il punto di partenza per iniziare a vendere la tua auto.</p>
           </div>
         </div>
         <div class="step-card fade-in">
@@ -1221,22 +1253,24 @@
             </div>
             <div class="field" data-field="km">
               <label>Chilometraggio <span class="required">*</span></label>
-              <select name="km" required>
-                <option value="">Seleziona fascia km</option>
-                <option value="0-20000">0 - 20.000 km</option>
-                <option value="20000-50000">20.000 - 50.000 km</option>
-                <option value="50000-100000">50.000 - 100.000 km</option>
-                <option value="100000-150000">100.000 - 150.000 km</option>
-                <option value="150000-200000">150.000 - 200.000 km</option>
-                <option value="200000-250000">200.000 - 250.000 km</option>
-                <option value="250000+">Oltre 250.000 km</option>
-              </select>
-              <span class="field-error">Seleziona la fascia di chilometraggio</span>
+              <div class="input-suffix-wrap">
+                <input type="text" inputmode="numeric" name="km" placeholder="Es. 85000" required>
+                <span class="input-suffix">KM</span>
+              </div>
+              <span class="field-error">Inserisci il chilometraggio in numeri</span>
             </div>
             <div class="field" data-field="targa">
               <label>Targa <span class="optional">(facoltativo)</span></label>
               <input type="text" name="targa" placeholder="Es. AB123CD" maxlength="10">
               <span class="field-error"></span>
+            </div>
+            <div class="field" data-field="prezzo_desiderato">
+              <label>Quanto vorresti ottenere dalla vendita? <span class="optional">(facoltativo)</span></label>
+              <div class="input-suffix-wrap">
+                <input type="text" inputmode="numeric" name="prezzo_desiderato" placeholder="Es. 8000">
+                <span class="input-suffix">€</span>
+              </div>
+              <span class="field-hint">Questo importo non influisce sulla valutazione: ci serve solo per capire le tue aspettative.</span>
             </div>
             <div class="field" data-field="foto">
               <label>Foto dell'auto <span class="optional">(facoltativo, consigliato)</span></label>
@@ -1642,6 +1676,9 @@
     if (isValid && input.name === 'cap' && input.value.trim()) {
       isValid = /^\d{5}$/.test(input.value.trim());
     }
+    if (isValid && input.name === 'km' && input.value.trim()) {
+      isValid = /^\d+$/.test(input.value.trim());
+    }
 
     fieldEl.classList.toggle('invalid', !isValid);
     return isValid;
@@ -1684,6 +1721,15 @@
   form.querySelectorAll('[data-prev]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       if (currentStep > 1) goToStep(currentStep - 1);
+    });
+  });
+
+  // Chilometraggio e prezzo desiderato: consenti solo cifre durante la digitazione
+  ['km', 'prezzo_desiderato'].forEach(function (fieldName) {
+    var input = form.querySelector('input[name="' + fieldName + '"]');
+    if (!input) return;
+    input.addEventListener('input', function () {
+      this.value = this.value.replace(/\D/g, '');
     });
   });
 

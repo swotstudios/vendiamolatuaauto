@@ -477,53 +477,25 @@
     .form-card { padding: 44px 50px; }
   }
 
-  .progress-wrap {
-    margin-bottom: 30px;
+  @keyframes stepIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
-  .progress-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 13px;
-    font-weight: 500;
-    margin-bottom: 10px;
-    color: rgba(255,255,255,0.7);
-  }
-  .progress-labels .active { color: var(--color-accent); font-weight: 700; }
+
   .progress-bar-track {
     width: 100%;
     height: 8px;
     background: rgba(255,255,255,0.2);
     border-radius: 50px;
     overflow: hidden;
+    margin-bottom: 8px;
   }
   .progress-bar-fill {
     height: 100%;
-    width: 33.33%;
+    width: 0%;
     background: var(--color-accent);
     border-radius: 50px;
     transition: width 0.4s ease;
-  }
-
-  .form-step-intro {
-    background: rgba(255,255,255,0.08);
-    border-left: 3px solid var(--color-accent);
-    padding: 14px 18px;
-    border-radius: var(--radius-sm);
-    margin-bottom: 26px;
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 1.5;
-    color: rgba(255,255,255,0.9);
-  }
-
-  .form-step { display: none; }
-  .form-step.active {
-    display: block;
-    animation: stepIn 0.4s ease;
-  }
-  @keyframes stepIn {
-    from { opacity: 0; transform: translateX(16px); }
-    to { opacity: 1; transform: translateX(0); }
   }
 
   .form-grid {
@@ -587,7 +559,7 @@
     font-size: 14px;
     font-weight: 600;
     color: #6b7280;
-    padding-left: 8px;
+    padding: 0 4px;
     flex-shrink: 0;
   }
   .field.invalid .input-suffix-wrap {
@@ -626,12 +598,6 @@
     box-shadow: 0 0 0 3px rgba(179,38,30,0.55);
   }
   .field.invalid .field-error { display: block; }
-  .field.prefilled-highlight input,
-  .field.prefilled-highlight select {
-    box-shadow: 0 0 0 3px var(--color-accent);
-    transition: box-shadow 0.3s ease;
-  }
-
 
   .form-security-note {
     display: flex;
@@ -665,24 +631,11 @@
     line-height: 1.4;
   }
   .checkbox-field a { color: var(--color-accent); }
-
-  .form-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 32px;
-    gap: 14px;
+  .field.invalid .checkbox-field {
+    outline: 2px solid rgba(179,38,30,0.55);
+    outline-offset: 4px;
+    border-radius: 6px;
   }
-  .form-nav .btn-outline {
-    background: transparent;
-    color: #fff;
-    border: 1.5px solid rgba(255,255,255,0.4);
-  }
-  .form-nav .btn-outline:hover {
-    background: rgba(255,255,255,0.1);
-    border-color: #fff;
-  }
-  .form-nav .spacer { flex: 1; }
 
   .form-success {
     display: none;
@@ -693,6 +646,149 @@
   .form-success-icon { width: 56px; height: 56px; color: var(--color-accent); margin: 0 auto 16px; }
   .form-success h3 { font-size: 25px; margin-bottom: 10px; }
   .form-success p { font-size: 16px; color: rgba(255,255,255,0.8); }
+
+  /* ---------- Wizard: accordion multi-step ---------- */
+  .wizard-subheading {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin: 26px 0 14px;
+  }
+  .wizard-subheading:first-child { margin-top: 0; }
+
+  .wizard-step { border-bottom: 1px solid rgba(255,255,255,0.12); }
+  .wizard-step:last-of-type { border-bottom: none; }
+  .wizard-step-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: none;
+    border: none;
+    padding: 20px 0;
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--font-main);
+    color: #fff;
+  }
+  .wizard-step-header:disabled { cursor: not-allowed; opacity: 0.4; }
+  .wizard-step-check {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .wizard-step[data-complete="true"] .wizard-step-check {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-primary-dark);
+  }
+  .wizard-step-label { font-size: 15px; font-weight: 500; }
+  @media (min-width: 480px) { .wizard-step-label { font-size: 16px; } }
+  .wizard-step-label strong { color: var(--color-accent); font-weight: 700; margin-right: 6px; }
+  .wizard-step-chevron { margin-left: auto; width: 18px; height: 18px; flex-shrink: 0; transition: transform 0.25s ease; }
+  .wizard-step-header[aria-expanded="true"] .wizard-step-chevron { transform: rotate(180deg); }
+  .wizard-step-panel-inner { padding: 4px 0 28px; animation: stepIn 0.35s ease; }
+
+  .wizard-fields { display: flex; flex-direction: column; gap: 24px; }
+  .wizard-question-text {
+    display: block;
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .wizard-question.invalid .wizard-question-text { color: #ffd9d4; }
+  .wizard-info-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-left: 8px;
+    padding: 0;
+  }
+  .wizard-info-panel {
+    display: none;
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.06);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    margin: -2px 0 12px;
+  }
+  .wizard-info-panel.open { display: block; }
+
+  .pill-group { display: flex; flex-wrap: wrap; gap: 10px; }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.85);
+    font-family: var(--font-main);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+  }
+  .pill:hover { border-color: rgba(255,255,255,0.5); }
+  .pill[aria-pressed="true"] {
+    border-color: var(--color-accent);
+    border-width: 2px;
+    background: rgba(201,162,39,0.14);
+    color: #fff;
+    font-weight: 700;
+  }
+  .pill-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1px solid rgba(255,255,255,0.35);
+  }
+  .wizard-question.invalid .pill { border-color: rgba(255,138,128,0.7); }
+
+  .wizard-dependent-field { margin-top: 14px; max-width: 320px; }
+
+  .wizard-toggle-row { display: flex; gap: 10px; margin: 12px 0 14px; }
+  .wizard-toggle-row .pill { flex: 1; justify-content: center; }
+
+  .phone-row { display: flex; gap: 10px; }
+  .phone-row select {
+    flex: 0 0 100px;
+    font-family: var(--font-main);
+    font-size: 15px;
+    padding: 13px 8px;
+    border-radius: var(--radius-sm);
+    border: none;
+    outline: none;
+    background: #fff;
+    color: var(--color-secondary-text);
+  }
+  .phone-row input { flex: 1; min-width: 0; }
+
+  .wizard-actions { display: flex; justify-content: flex-end; margin-top: 30px; }
+  .wizard-actions .btn { width: 100%; justify-content: center; }
+  @media (min-width: 480px) {
+    .wizard-actions .btn { width: auto; }
+  }
 
   /* ---------- How it works ---------- */
   .how-it-works {
@@ -1205,133 +1301,180 @@
 
       <form class="form-card fade-in" id="carForm" novalidate>
 
-        <div class="progress-wrap">
-          <div class="progress-labels">
-            <span data-step-label="1" class="active">1. La tua auto</span>
-            <span data-step-label="2">2. I tuoi contatti</span>
-          </div>
-          <div class="progress-bar-track">
-            <div class="progress-bar-fill" id="progressFill"></div>
-          </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="wizardProgressFill"></div>
         </div>
 
-        <!-- STEP 1 -->
-        <div class="form-step active" data-step="1">
-          <div class="form-step-intro">Facci sapere che auto vorresti vendere. Se vuoi, allega anche qualche foto: aiuta a rendere l'offerta indicativa più precisa.</div>
-          <div class="form-grid cols-2">
-            <div class="field" data-field="marca">
-              <label>Marca <span class="required">*</span></label>
-              <select name="marca" required>
-                <option value="">Seleziona marca</option>
-                <option>Abarth</option><option>Alfa Romeo</option><option>Audi</option>
-                <option>BMW</option><option>Chevrolet</option><option>Citroën</option>
-                <option>Cupra</option><option>Dacia</option><option>DS</option>
-                <option>Fiat</option><option>Ford</option><option>Honda</option>
-                <option>Hyundai</option><option>Jaguar</option><option>Jeep</option>
-                <option>Kia</option><option>Lancia</option><option>Land Rover</option>
-                <option>Lexus</option><option>Mazda</option><option>Mercedes-Benz</option>
-                <option>Mini</option><option>Mitsubishi</option><option>Nissan</option>
-                <option>Opel</option><option>Peugeot</option><option>Porsche</option>
-                <option>Renault</option><option>Seat</option><option>Škoda</option>
-                <option>Smart</option><option>Subaru</option><option>Suzuki</option>
-                <option>Tesla</option><option>Toyota</option><option>Volkswagen</option>
-                <option>Volvo</option><option>Altro</option>
-              </select>
-              <span class="field-error">Seleziona la marca dell'auto</span>
-            </div>
-            <div class="field" data-field="modello">
-              <label>Modello <span class="required">*</span></label>
-              <input type="text" name="modello" placeholder="Es. Panda, Golf, 500..." required>
-              <span class="field-error">Inserisci il modello dell'auto</span>
-            </div>
-            <div class="field" data-field="anno">
-              <label>Anno di immatricolazione <span class="required">*</span></label>
-              <select name="anno" required>
-                <option value="">Seleziona anno</option>
-              </select>
-              <span class="field-error">Seleziona l'anno di immatricolazione</span>
-            </div>
-            <div class="field" data-field="km">
-              <label>Chilometraggio <span class="required">*</span></label>
-              <div class="input-suffix-wrap">
-                <input type="text" inputmode="numeric" name="km" placeholder="Es. 85000" required>
-                <span class="input-suffix">KM</span>
-              </div>
-              <span class="field-error">Inserisci il chilometraggio in numeri</span>
-            </div>
-            <div class="field" data-field="targa">
-              <label>Targa <span class="optional">(facoltativo)</span></label>
-              <input type="text" name="targa" placeholder="Es. AB123CD" maxlength="10">
-              <span class="field-error"></span>
-            </div>
-            <div class="field" data-field="prezzo_desiderato">
-              <label>Quanto vorresti ottenere dalla vendita? <span class="optional">(facoltativo)</span></label>
-              <div class="input-suffix-wrap">
-                <input type="text" inputmode="numeric" name="prezzo_desiderato" placeholder="Es. 8000">
-                <span class="input-suffix">€</span>
-              </div>
-              <span class="field-hint">Questo importo non influisce sulla valutazione: ci serve solo per capire le tue aspettative.</span>
-            </div>
-            <div class="field" data-field="foto">
-              <label>Foto dell'auto <span class="optional">(facoltativo, consigliato)</span></label>
-              <input type="file" name="foto" accept="image/*" multiple>
-              <span class="field-hint">Carica una o più foto per un'offerta più accurata.</span>
-            </div>
-          </div>
-          <div class="form-nav">
-            <span class="spacer"></span>
-            <button type="button" class="btn btn-primary" data-next>Avanti</button>
-          </div>
-        </div>
+        <div class="wizard" id="wizard">
 
-        <!-- STEP 2 -->
-        <div class="form-step" data-step="2">
-          <div class="form-step-intro">Ultimo passo: come possiamo contattarti?</div>
-          <div class="form-grid cols-2">
-            <div class="field" data-field="nome">
-              <label>Nome e Cognome <span class="required">*</span></label>
-              <input type="text" name="nome" placeholder="Mario Rossi" required>
-              <span class="field-error">Inserisci nome e cognome</span>
-            </div>
-            <div class="field" data-field="email">
-              <label>Email <span class="required">*</span></label>
-              <input type="email" name="email" placeholder="mario.rossi@email.com" required>
-              <span class="field-error">Inserisci un'email valida</span>
-            </div>
-            <div class="field" data-field="telefono">
-              <label>Telefono <span class="required">*</span></label>
-              <input type="tel" name="telefono" placeholder="333 1234567" required>
-              <span class="field-error">Inserisci un numero di telefono valido</span>
-            </div>
-            <div class="field" data-field="provincia">
-              <label>Provincia <span class="required">*</span></label>
-              <input type="text" name="provincia" placeholder="Es. Milano" required>
-              <span class="field-error">Inserisci la provincia</span>
-            </div>
-            <div class="field" data-field="cap">
-              <label>CAP <span class="required">*</span></label>
-              <input type="text" name="cap" placeholder="Es. 20100" maxlength="5" inputmode="numeric" required>
-              <span class="field-error">Inserisci un CAP valido (5 cifre)</span>
+          <!-- STEP 1 -->
+          <div class="wizard-step" data-wizard-step="1" data-complete="false">
+            <button type="button" class="wizard-step-header" data-step-header="1" aria-expanded="true">
+              <span class="wizard-step-check" aria-hidden="true"></span>
+              <span class="wizard-step-label"><strong>1 di 3</strong> Informazioni aggiuntive</span>
+              <svg class="wizard-step-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="wizard-step-panel" data-step-panel="1">
+              <div class="wizard-step-panel-inner">
+                <div class="wizard-subheading">Il tuo veicolo</div>
+                <div class="form-grid cols-2">
+                  <div class="field" data-field="marca">
+                    <label>Marca <span class="required">*</span></label>
+                    <select name="marca" required>
+                      <option value="">Seleziona marca</option>
+                      <option>Abarth</option><option>Alfa Romeo</option><option>Audi</option>
+                      <option>BMW</option><option>Chevrolet</option><option>Citroën</option>
+                      <option>Cupra</option><option>Dacia</option><option>DS</option>
+                      <option>Fiat</option><option>Ford</option><option>Honda</option>
+                      <option>Hyundai</option><option>Jaguar</option><option>Jeep</option>
+                      <option>Kia</option><option>Lancia</option><option>Land Rover</option>
+                      <option>Lexus</option><option>Mazda</option><option>Mercedes-Benz</option>
+                      <option>Mini</option><option>Mitsubishi</option><option>Nissan</option>
+                      <option>Opel</option><option>Peugeot</option><option>Porsche</option>
+                      <option>Renault</option><option>Seat</option><option>Škoda</option>
+                      <option>Smart</option><option>Subaru</option><option>Suzuki</option>
+                      <option>Tesla</option><option>Toyota</option><option>Volkswagen</option>
+                      <option>Volvo</option><option>Altro</option>
+                    </select>
+                    <span class="field-error">Seleziona la marca dell'auto</span>
+                  </div>
+                  <div class="field" data-field="modello">
+                    <label>Modello <span class="required">*</span></label>
+                    <input type="text" name="modello" placeholder="Es. Panda, Golf, 500..." required>
+                    <span class="field-error">Inserisci il modello dell'auto</span>
+                  </div>
+                  <div class="field" data-field="anno">
+                    <label>Anno di immatricolazione <span class="required">*</span></label>
+                    <select name="anno" required>
+                      <option value="">Seleziona anno</option>
+                    </select>
+                    <span class="field-error">Seleziona l'anno di immatricolazione</span>
+                  </div>
+                  <div class="field" data-field="km">
+                    <label>Chilometraggio <span class="required">*</span></label>
+                    <div class="input-suffix-wrap">
+                      <input type="text" inputmode="numeric" name="km" placeholder="Es. 85000" required>
+                      <span class="input-suffix">KM</span>
+                    </div>
+                    <span class="field-error">Inserisci il chilometraggio in numeri</span>
+                  </div>
+                </div>
+
+                <div class="wizard-subheading">Informazioni aggiuntive</div>
+                <div class="wizard-fields" id="wizardFieldsStep1"></div>
+
+                <div class="wizard-actions">
+                  <button type="button" class="btn btn-primary" data-wizard-save="1">Salva e continua →</button>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="field" data-field="termini">
-            <div class="checkbox-field">
-              <input type="checkbox" name="termini" id="termini" required>
-              <label for="termini">Accetto i <a href="termini.html" target="_blank">termini e condizioni</a> e l'informativa sulla <a href="privacy.html" target="_blank">privacy</a> <span class="required">*</span></label>
+
+          <!-- STEP 2 -->
+          <div class="wizard-step" data-wizard-step="2" data-complete="false">
+            <button type="button" class="wizard-step-header" data-step-header="2" aria-expanded="false" disabled>
+              <span class="wizard-step-check" aria-hidden="true"></span>
+              <span class="wizard-step-label"><strong>2 di 3</strong> Stato</span>
+              <svg class="wizard-step-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="wizard-step-panel" data-step-panel="2" hidden>
+              <div class="wizard-step-panel-inner">
+                <div class="wizard-fields" id="wizardFieldsStep2"></div>
+                <div class="wizard-actions">
+                  <button type="button" class="btn btn-primary" data-wizard-save="2">Salva e continua →</button>
+                </div>
+              </div>
             </div>
-            <span class="field-error">Devi accettare i termini per procedere</span>
           </div>
-          <div class="form-nav">
-            <button type="button" class="btn btn-outline" data-prev>Indietro</button>
-            <span class="spacer"></span>
-            <button type="submit" class="btn btn-primary">Vendi la tua auto</button>
+
+          <!-- STEP 3 -->
+          <div class="wizard-step" data-wizard-step="3" data-complete="false">
+            <button type="button" class="wizard-step-header" data-step-header="3" aria-expanded="false" disabled>
+              <span class="wizard-step-check" aria-hidden="true"></span>
+              <span class="wizard-step-label"><strong>3 di 3</strong> Ultimi dettagli</span>
+              <svg class="wizard-step-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="wizard-step-panel" data-step-panel="3" hidden>
+              <div class="wizard-step-panel-inner">
+
+                <div class="wizard-subheading">Identificazione di allestimento e optional</div>
+                <div class="field" data-field="targa">
+                  <label>La tua targa <span class="optional">(facoltativo)</span></label>
+                  <input type="text" name="targa" placeholder="Inserisci il tuo numero di targa" maxlength="10">
+                  <span class="field-hint">Ti preghiamo di assicurarti che sia inserita correttamente in modo tale da determinare la tua offerta reale accuratamente.</span>
+                </div>
+
+                <div class="wizard-subheading">I tuoi contatti</div>
+                <div class="form-grid cols-2">
+                  <div class="field" data-field="nome">
+                    <label>Nome e Cognome <span class="required">*</span></label>
+                    <input type="text" name="nome" placeholder="Mario Rossi" required>
+                    <span class="field-error">Inserisci nome e cognome</span>
+                  </div>
+                  <div class="field" data-field="email">
+                    <label>Email <span class="required">*</span></label>
+                    <input type="email" name="email" placeholder="mario.rossi@email.com" required>
+                    <span class="field-error">Inserisci un'email valida</span>
+                  </div>
+                  <div class="field" data-field="cap">
+                    <label>Il tuo CAP <span class="required">*</span></label>
+                    <input type="text" name="cap" inputmode="numeric" maxlength="5" placeholder="Indica il tuo codice postale (CAP)" required>
+                    <span class="field-hint">Lo usiamo per offrirti il miglior servizio. Non ha alcun impatto sull'offerta reale.</span>
+                    <span class="field-error">Inserisci un CAP valido (5 cifre)</span>
+                  </div>
+                </div>
+
+                <div class="wizard-subheading">I tuoi dettagli</div>
+                <div class="field" data-field="canale_contatto">
+                  <label>Vuoi ricevere una copia dell'offerta di vendita sul tuo telefono? <span class="optional">(Opzionale)</span></label>
+                  <span class="field-hint">Scegli tra WhatsApp o SMS. Il tuo numero verrà utilizzato solo per inviarti l'offerta e non verrà condiviso con terze parti.</span>
+                  <div class="wizard-toggle-row" role="group" aria-label="Canale di contatto">
+                    <button type="button" class="pill" data-channel="WhatsApp" aria-pressed="true">WhatsApp</button>
+                    <button type="button" class="pill" data-channel="SMS" aria-pressed="false">SMS</button>
+                  </div>
+                  <div class="phone-row">
+                    <select name="prefisso" aria-label="Prefisso internazionale">
+                      <option value="+39">🇮🇹 +39</option>
+                      <option value="+33">🇫🇷 +33</option>
+                      <option value="+49">🇩🇪 +49</option>
+                      <option value="+34">🇪🇸 +34</option>
+                      <option value="+41">🇨🇭 +41</option>
+                      <option value="+43">🇦🇹 +43</option>
+                    </select>
+                    <input type="tel" name="telefono" placeholder="333 1234567">
+                  </div>
+                </div>
+
+                <div class="field" data-field="prezzo_desiderato">
+                  <label>Che prezzo di vendita hai in mente per la tua auto? <span class="optional">(facoltativo)</span></label>
+                  <div class="input-suffix-wrap">
+                    <span class="input-suffix">€</span>
+                    <input type="text" inputmode="numeric" name="prezzo_desiderato" placeholder="Offerta desiderata">
+                  </div>
+                  <span class="field-hint">Questo non influisce sulla nostra offerta reale.</span>
+                </div>
+
+                <div class="field" data-field="termini">
+                  <div class="checkbox-field">
+                    <input type="checkbox" name="termini" id="termini" required>
+                    <label for="termini">Accetto i <a href="termini.html" target="_blank">termini e condizioni</a> e l'informativa sulla <a href="privacy.html" target="_blank">privacy</a> <span class="required">*</span></label>
+                  </div>
+                  <span class="field-error">Devi accettare i termini per procedere</span>
+                </div>
+
+                <div class="wizard-actions">
+                  <button type="submit" class="btn btn-primary">Richiedi la tua offerta reale →</button>
+                </div>
+                <div class="form-security-note">
+                  <svg class="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+                  </svg>
+                  <span>I tuoi dati sono trattati in sicurezza. Consulta la <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="form-security-note">
-            <svg class="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>
-            </svg>
-            <span>I tuoi dati sono trattati in sicurezza. Consulta la <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.</span>
-          </div>
+
         </div>
 
         <!-- SUCCESS -->
@@ -1339,8 +1482,8 @@
           <svg class="form-success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/>
           </svg>
-          <h3>Richiesta inviata!</h3>
-          <p>Grazie! Riceverai a breve un'offerta indicativa. Se sarà in linea con le tue aspettative, ti metteremo in contatto con un rivenditore selezionato della tua zona.</p>
+          <h3>Dettagli dell'auto ricevuti!</h3>
+          <p>Stiamo determinando la tua offerta di vendita finale e, una volta pronta, te la invieremo via email e WhatsApp.</p>
         </div>
 
       </form>
@@ -1644,34 +1787,198 @@
     }, 3200);
   }
 
-  /* ---------- Multi-step form ---------- */
+  /* ---------- Wizard "Vendi ora la tua auto" ---------- */
   var form = document.getElementById('carForm');
-  var steps = Array.prototype.slice.call(form.querySelectorAll('.form-step'));
-  var totalSteps = steps.length;
-  var currentStep = 1;
-  var progressFill = document.getElementById('progressFill');
-  var progressLabels = document.querySelectorAll('[data-step-label]');
   var successBox = document.getElementById('formSuccess');
+  var progressFill = document.getElementById('wizardProgressFill');
+  var STORAGE_KEY = 'vendiamolatuaauto_wizard_v1';
 
-  function validateField(fieldEl) {
+  var state = { step1: {}, step2: {} };
+
+  // Config delle domande a scelta singola di step 1 e step 2 (data-driven: una sola
+  // definizione per domanda, il render dei pulsanti a pillola è generato da qui).
+  var wizardConfig = {
+    1: [
+      { key: 'chiavi', question: 'Quante chiavi possiedi?', options: ['1', '2+'] },
+      { key: 'secondoSetPneumatici', question: 'Hai a disposizione un secondo set di pneumatici?', options: ['Sì', 'No'] },
+      { key: 'librettoManutenzione', question: 'Hai il libretto di manutenzione (o certificato digitale)?', options: ['Sì', 'No'] },
+      { key: 'interventiManutenzione', question: 'Quanti interventi di manutenzione necessari secondo le indicazioni del costruttore sono stati effettuati e documentati?', options: ['Tutti', 'Alcuni', 'Nessuno'] },
+      { key: 'revisione', question: 'Hai fatto la revisione dell\'auto negli ultimi 6 mesi?', options: ['Sì', 'No', 'È già scaduta'] },
+      { key: 'tipoVenditore', question: 'Vendi come privato?', options: ['Privato', 'Azienda'],
+        dependent: { key: 'partitaIva', showWhen: 'Azienda', label: 'Partita IVA (facoltativo)', placeholder: 'Es. IT01234567890' } },
+      { key: 'importata', question: 'L\'auto è stata importata?', options: ['Sì', 'No'] },
+      { key: 'leasing', question: 'È in corso un leasing sulla tua auto?', options: ['Sì', 'No'] },
+      { key: 'coloreEsterno', question: 'Qual è il colore dell\'esterno della tua auto?', colors: true, options: [
+          { label: 'Grigio', color: '#9CA3AF' }, { label: 'Nero', color: '#1C1C1C' }, { label: 'Bianco', color: '#FFFFFF' },
+          { label: 'Blu', color: '#1E3A8A' }, { label: 'Argento', color: '#C9CDD2' }, { label: 'Altro', color: null }
+        ] },
+      { key: 'coloreSedili', question: 'Qual è il colore dei sedili della tua auto?', colors: true, options: [
+          { label: 'Nero', color: '#1C1C1C' }, { label: 'Grigio', color: '#9CA3AF' }, { label: 'Beige', color: '#E8DCC8' },
+          { label: 'Blu', color: '#1E3A8A' }, { label: 'Marrone', color: '#5C4033' }, { label: 'Altro', color: null }
+        ] },
+      { key: 'materialeSedili', question: 'Di che materiale sono i sedili?', options: ['Tessuto', 'Pelle', 'Parzialmente in pelle', 'Materiale sintetico', 'Alcantara', 'Altro'] }
+    ],
+    2: [
+      { key: 'guidabile', question: 'L\'auto è in condizione di essere guidata?', options: ['Sì', 'No'] },
+      { key: 'incidenti', question: 'L\'auto ha mai subito incidenti?', options: ['Sì', 'No'], info: 'Indica se l\'auto è stata coinvolta in incidenti che hanno richiesto riparazioni strutturali.' },
+      { key: 'statoInterni', question: 'Qual è lo stato degli interni dell\'auto?', options: ['In perfette condizioni', 'Utilizzo moderato', 'Utilizzo intenso'], info: 'Valuta l\'usura di sedili, plancia e rivestimenti interni.' },
+      { key: 'statoEsterni', question: 'Qual è lo stato degli esterni dell\'auto?', options: ['In perfette condizioni', 'Utilizzo moderato', 'Utilizzo intenso'], info: 'Valuta graffi, ammaccature e stato della carrozzeria.' },
+      { key: 'spieAccese', question: 'Ci sono spie luminose accese permanenti sul cruscotto della tua auto?', options: ['Sì', 'No'] },
+      { key: 'danniUsura', question: 'Danni e segni di usura', options: ['Sì', 'No'] },
+      { key: 'motore', question: 'Il motore è in perfette condizioni?', options: ['Sì', 'No'], info: 'Nessuna spia accesa, rumore anomalo o perdita di liquidi.' },
+      { key: 'cambio', question: 'Il cambio è in perfette condizioni?', options: ['Sì', 'No'], info: 'Cambiate marce fluide, senza scatti o rumori sospetti.' },
+      { key: 'sterzo', question: 'Lo sterzo è in perfette condizioni?', options: ['Sì', 'No'] },
+      { key: 'sospensioni', question: 'Le sospensioni sono in perfette condizioni?', options: ['Sì', 'No'] },
+      { key: 'freni', question: 'I freni sono in perfette condizioni?', options: ['Sì', 'No'] },
+      { key: 'climatizzazione', question: 'Il sistema di climatizzazione è in perfette condizioni?', options: ['Sì', 'No', 'Inesistente'] }
+    ]
+  };
+
+  var fieldsContainers = {
+    1: document.getElementById('wizardFieldsStep1'),
+    2: document.getElementById('wizardFieldsStep2')
+  };
+
+  function renderQuestion(field, stepNum) {
+    var wrap = document.createElement('div');
+    wrap.className = 'wizard-question';
+    wrap.dataset.field = field.key;
+
+    var textEl = document.createElement('span');
+    textEl.className = 'wizard-question-text';
+    textEl.textContent = field.question;
+    wrap.appendChild(textEl);
+
+    if (field.info) {
+      var infoBtn = document.createElement('button');
+      infoBtn.type = 'button';
+      infoBtn.className = 'wizard-info-toggle';
+      infoBtn.textContent = 'ⓘ Maggiori informazioni';
+      infoBtn.setAttribute('aria-expanded', 'false');
+      var infoPanel = document.createElement('div');
+      infoPanel.className = 'wizard-info-panel';
+      infoPanel.textContent = field.info;
+      infoBtn.addEventListener('click', function () {
+        var open = infoPanel.classList.toggle('open');
+        infoBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      wrap.appendChild(infoBtn);
+      wrap.appendChild(infoPanel);
+    }
+
+    var group = document.createElement('div');
+    group.className = 'pill-group';
+    group.setAttribute('role', 'group');
+    group.setAttribute('aria-label', field.question);
+
+    var dependentWrap = null;
+    if (field.dependent) {
+      dependentWrap = document.createElement('div');
+      dependentWrap.className = 'field wizard-dependent-field';
+      dependentWrap.hidden = true;
+      dependentWrap.innerHTML =
+        '<label>' + field.dependent.label + '</label>' +
+        '<input type="text" placeholder="' + field.dependent.placeholder + '">';
+    }
+
+    field.options.forEach(function (opt) {
+      var label = field.colors ? opt.label : opt;
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'pill';
+      btn.setAttribute('aria-pressed', 'false');
+      if (field.colors && opt.color) {
+        var swatch = document.createElement('span');
+        swatch.className = 'pill-swatch';
+        swatch.style.background = opt.color;
+        btn.appendChild(swatch);
+      }
+      var textSpan = document.createElement('span');
+      textSpan.textContent = label;
+      btn.appendChild(textSpan);
+
+      btn.addEventListener('click', function () {
+        Array.prototype.forEach.call(group.querySelectorAll('.pill'), function (p) {
+          p.setAttribute('aria-pressed', 'false');
+        });
+        btn.setAttribute('aria-pressed', 'true');
+        state['step' + stepNum][field.key] = label;
+        wrap.classList.remove('invalid');
+        if (field.dependent && dependentWrap) {
+          dependentWrap.hidden = label !== field.dependent.showWhen;
+        }
+        saveState();
+      });
+
+      group.appendChild(btn);
+    });
+
+    wrap.appendChild(group);
+    if (dependentWrap) {
+      wrap.appendChild(dependentWrap);
+      dependentWrap.querySelector('input').addEventListener('input', function () {
+        state['step' + stepNum][field.dependent.key] = this.value;
+        saveState();
+      });
+    }
+
+    fieldsContainers[stepNum].appendChild(wrap);
+  }
+
+  [1, 2].forEach(function (stepNum) {
+    wizardConfig[stepNum].forEach(function (field) { renderQuestion(field, stepNum); });
+  });
+
+  /* ---------- Accordion: navigazione tra step ---------- */
+  var stepEls = Array.prototype.slice.call(form.querySelectorAll('.wizard-step'));
+
+  function setStepComplete(stepNum, complete) {
+    var stepEl = form.querySelector('.wizard-step[data-wizard-step="' + stepNum + '"]');
+    stepEl.dataset.complete = complete ? 'true' : 'false';
+    stepEl.querySelector('.wizard-step-check').textContent = complete ? '✓' : '';
+  }
+
+  function unlockStep(stepNum) {
+    var header = form.querySelector('[data-step-header="' + stepNum + '"]');
+    if (header) header.disabled = false;
+  }
+
+  function openStep(stepNum) {
+    stepEls.forEach(function (stepEl) {
+      var n = parseInt(stepEl.dataset.wizardStep, 10);
+      var header = stepEl.querySelector('.wizard-step-header');
+      var panel = stepEl.querySelector('.wizard-step-panel');
+      var isTarget = n === stepNum;
+      panel.hidden = !isTarget;
+      header.setAttribute('aria-expanded', isTarget ? 'true' : 'false');
+    });
+    progressFill.style.width = (stepNum / 3 * 100) + '%';
+    var target = form.querySelector('.wizard-step[data-wizard-step="' + stepNum + '"]');
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  stepEls.forEach(function (stepEl) {
+    var n = parseInt(stepEl.dataset.wizardStep, 10);
+    var header = stepEl.querySelector('.wizard-step-header');
+    header.addEventListener('click', function () {
+      if (!header.disabled) openStep(n);
+    });
+  });
+
+  /* ---------- Validazione ---------- */
+  function validateNativeField(fieldEl) {
     var input = fieldEl.querySelector('input, select');
     if (!input) return true;
     var isValid = true;
 
     if (input.type === 'checkbox') {
       isValid = input.checked;
-    } else if (input.type === 'file') {
-      isValid = true;
     } else if (input.hasAttribute('required')) {
       isValid = input.value.trim().length > 0;
     }
 
-    // Extra validation
     if (isValid && input.name === 'email' && input.value.trim()) {
       isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim());
-    }
-    if (isValid && input.name === 'telefono' && input.value.trim()) {
-      isValid = /^[+\d][\d\s]{7,}$/.test(input.value.trim());
     }
     if (isValid && input.name === 'cap' && input.value.trim()) {
       isValid = /^\d{5}$/.test(input.value.trim());
@@ -1684,43 +1991,72 @@
     return isValid;
   }
 
-  function validateStep(stepNumber) {
-    var stepEl = steps[stepNumber - 1];
-    var fields = stepEl.querySelectorAll('[data-field]');
+  function validatePillQuestions(stepNum) {
     var allValid = true;
-    fields.forEach(function (fieldEl) {
-      var fieldValid = validateField(fieldEl);
-      if (!fieldValid) allValid = false;
+    wizardConfig[stepNum].forEach(function (field) {
+      var wrap = form.querySelector('.wizard-question[data-field="' + field.key + '"]');
+      var answered = !!state['step' + stepNum][field.key];
+      wrap.classList.toggle('invalid', !answered);
+      if (!answered) allValid = false;
     });
     return allValid;
   }
 
-  function goToStep(stepNumber) {
-    steps.forEach(function (stepEl) {
-      stepEl.classList.toggle('active', parseInt(stepEl.dataset.step, 10) === stepNumber);
+  function validateStep1() {
+    var vehicleValid = true;
+    form.querySelectorAll('[data-wizard-step="1"] .form-grid [data-field]').forEach(function (fieldEl) {
+      if (!validateNativeField(fieldEl)) vehicleValid = false;
     });
-    progressLabels.forEach(function (label) {
-      var labelStep = parseInt(label.dataset.stepLabel, 10);
-      label.classList.toggle('active', labelStep === stepNumber);
-    });
-    progressFill.style.width = ((stepNumber - 1) / (totalSteps - 1) * 66.66 + 33.33) + '%';
-    currentStep = stepNumber;
-    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    var questionsValid = validatePillQuestions(1);
+    return vehicleValid && questionsValid;
   }
 
-  form.querySelectorAll('[data-next]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      if (validateStep(currentStep)) {
-        if (currentStep < totalSteps) goToStep(currentStep + 1);
-      } else {
-        showToast('Compila correttamente i campi obbligatori.', true);
-      }
+  function validateStep2() {
+    return validatePillQuestions(2);
+  }
+
+  function validateStep3() {
+    var allValid = true;
+    form.querySelectorAll('[data-wizard-step="3"] [data-field]').forEach(function (fieldEl) {
+      var input = fieldEl.querySelector('input, select');
+      if (!input) return;
+      if (input.type !== 'checkbox' && !input.hasAttribute('required')) return;
+      if (!validateNativeField(fieldEl)) allValid = false;
     });
+    return allValid;
+  }
+
+  form.querySelector('[data-wizard-save="1"]').addEventListener('click', function () {
+    if (!validateStep1()) {
+      showToast('Rispondi a tutte le domande per continuare.', true);
+      return;
+    }
+    setStepComplete(1, true);
+    unlockStep(2);
+    openStep(2);
+    saveState();
   });
 
-  form.querySelectorAll('[data-prev]').forEach(function (btn) {
+  form.querySelector('[data-wizard-save="2"]').addEventListener('click', function () {
+    if (!validateStep2()) {
+      showToast('Rispondi a tutte le domande per continuare.', true);
+      return;
+    }
+    setStepComplete(2, true);
+    unlockStep(3);
+    openStep(3);
+    saveState();
+  });
+
+  /* ---------- Toggle canale WhatsApp / SMS ---------- */
+  var channelButtons = form.querySelectorAll('[data-channel]');
+  var selectedChannel = 'WhatsApp';
+  channelButtons.forEach(function (btn) {
     btn.addEventListener('click', function () {
-      if (currentStep > 1) goToStep(currentStep - 1);
+      channelButtons.forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+      btn.setAttribute('aria-pressed', 'true');
+      selectedChannel = btn.dataset.channel;
+      saveState();
     });
   });
 
@@ -1738,12 +2074,96 @@
     var input = fieldEl.querySelector('input, select');
     if (!input) return;
     input.addEventListener('input', function () {
-      if (fieldEl.classList.contains('invalid')) validateField(fieldEl);
+      if (fieldEl.classList.contains('invalid')) validateNativeField(fieldEl);
+      saveState();
     });
     input.addEventListener('change', function () {
-      if (fieldEl.classList.contains('invalid')) validateField(fieldEl);
+      if (fieldEl.classList.contains('invalid')) validateNativeField(fieldEl);
+      saveState();
     });
   });
+
+  /* ---------- Persistenza in localStorage ---------- */
+  function saveState() {
+    try {
+      var snapshot = { step1: state.step1, step2: state.step2, channel: selectedChannel, native: {} };
+      form.querySelectorAll('input, select').forEach(function (el) {
+        if (!el.name) return;
+        snapshot.native[el.name] = el.type === 'checkbox' ? el.checked : el.value;
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot));
+    } catch (e) {
+      // localStorage non disponibile (es. modalità privata): si prosegue senza persistenza
+    }
+  }
+
+  function restoreState() {
+    var raw;
+    try { raw = localStorage.getItem(STORAGE_KEY); } catch (e) { return; }
+    if (!raw) return;
+    var snapshot;
+    try { snapshot = JSON.parse(raw); } catch (e) { return; }
+
+    if (snapshot.native) {
+      Object.keys(snapshot.native).forEach(function (name) {
+        var el = form.querySelector('[name="' + name + '"]');
+        if (!el) return;
+        if (el.type === 'checkbox') el.checked = snapshot.native[name];
+        else el.value = snapshot.native[name];
+      });
+    }
+
+    [1, 2].forEach(function (stepNum) {
+      var stepData = snapshot['step' + stepNum] || {};
+      state['step' + stepNum] = stepData;
+      wizardConfig[stepNum].forEach(function (field) {
+        var answer = stepData[field.key];
+        if (!answer) return;
+        var wrap = form.querySelector('.wizard-question[data-field="' + field.key + '"]');
+        if (!wrap) return;
+        Array.prototype.forEach.call(wrap.querySelectorAll('.pill'), function (btn) {
+          var text = btn.querySelector('span:last-child').textContent;
+          btn.setAttribute('aria-pressed', text === answer ? 'true' : 'false');
+        });
+        if (field.dependent && answer === field.dependent.showWhen) {
+          var dep = wrap.querySelector('.wizard-dependent-field');
+          if (dep) {
+            dep.hidden = false;
+            if (stepData[field.dependent.key]) dep.querySelector('input').value = stepData[field.dependent.key];
+          }
+        }
+      });
+    });
+
+    if (snapshot.channel) {
+      selectedChannel = snapshot.channel;
+      channelButtons.forEach(function (b) {
+        b.setAttribute('aria-pressed', b.dataset.channel === selectedChannel ? 'true' : 'false');
+      });
+    }
+
+    // Sblocca/apre lo step più avanzato raggiunto in precedenza, senza mostrare
+    // subito gli avvisi di errore sui campi ancora vuoti.
+    if (validateStep1()) {
+      form.querySelectorAll('.wizard-question, [data-field]').forEach(function (el) { el.classList.remove('invalid'); });
+      setStepComplete(1, true);
+      unlockStep(2);
+      if (validateStep2()) {
+        form.querySelectorAll('.wizard-question, [data-field]').forEach(function (el) { el.classList.remove('invalid'); });
+        setStepComplete(2, true);
+        unlockStep(3);
+        openStep(3);
+      } else {
+        form.querySelectorAll('.wizard-question, [data-field]').forEach(function (el) { el.classList.remove('invalid'); });
+        openStep(2);
+      }
+    } else {
+      form.querySelectorAll('.wizard-question, [data-field]').forEach(function (el) { el.classList.remove('invalid'); });
+    }
+  }
+
+  openStep(1);
+  restoreState();
 
   /* ---------- Submit ---------- */
   // Configura qui l'endpoint/webhook (es. Activepieces, Zapier, Make, Supabase Edge Function)
@@ -1751,43 +2171,54 @@
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    if (!validateStep(totalSteps)) {
-      showToast('Compila correttamente i campi obbligatori.', true);
+    if (!validateStep3()) {
+      showToast('Compila i campi obbligatori per continuare.', true);
       return;
     }
 
-    var formData = new FormData(form);
-    var payload = {};
-    formData.forEach(function (value, key) {
-      if (key === 'foto') return; // le foto vengono gestite a parte: il JSON non può trasportare contenuti binari
-      payload[key] = value;
+    var nativeData = {};
+    form.querySelectorAll('input, select').forEach(function (el) {
+      if (!el.name) return;
+      nativeData[el.name] = el.type === 'checkbox' ? el.checked : el.value;
     });
-    var fotoFiles = form.querySelector('input[name="foto"]').files;
-    payload.foto_count = fotoFiles.length;
-    payload.foto_nomi = Array.prototype.map.call(fotoFiles, function (f) { return f.name; });
-    payload.termini = form.querySelector('[name="termini"]').checked;
-    payload.timestamp = new Date().toISOString();
+
+    var payload = {
+      veicolo: { marca: nativeData.marca, modello: nativeData.modello, anno: nativeData.anno, km: nativeData.km },
+      step1: state.step1,
+      step2: state.step2,
+      step3: {
+        targa: nativeData.targa,
+        nome: nativeData.nome,
+        email: nativeData.email,
+        cap: nativeData.cap,
+        canaleContatto: selectedChannel,
+        prefisso: nativeData.prefisso,
+        telefono: nativeData.telefono,
+        prezzoDesiderato: nativeData.prezzo_desiderato,
+        termini: nativeData.termini
+      },
+      timestamp: new Date().toISOString()
+    };
 
     var submitBtn = form.querySelector('button[type="submit"]');
     submitBtn.disabled = true;
     submitBtn.textContent = 'Invio in corso...';
 
     function onSuccess() {
-      steps.forEach(function (s) { s.classList.remove('active'); });
-      document.querySelector('.progress-wrap').style.display = 'none';
+      try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+      document.getElementById('wizard').hidden = true;
+      form.querySelector('.progress-bar-track').hidden = true;
       successBox.classList.add('active');
       showToast('Richiesta inviata con successo!');
     }
 
     function onError() {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Vendi la tua auto';
+      submitBtn.textContent = 'Richiedi la tua offerta reale →';
       showToast('Si è verificato un errore. Riprova.', true);
     }
 
     if (WEBHOOK_URL) {
-      // Nota: per inviare anche le foto, sostituisci il body JSON con `formData`
-      // (multipart/form-data) quando colleghi un endpoint reale in grado di riceverle.
       fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1800,7 +2231,7 @@
         .catch(onError);
     } else {
       // Nessun webhook configurato: simulazione invio per demo/sviluppo
-      console.log('Lead raccolto (nessun WEBHOOK_URL configurato):', payload);
+      console.log('Lead raccolto (nessun WEBHOOK_URL configurato):', JSON.stringify(payload, null, 2));
       setTimeout(onSuccess, 600);
     }
   });

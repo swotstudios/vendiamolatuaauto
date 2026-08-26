@@ -1296,7 +1296,7 @@
     <div class="container">
       <div class="form-intro">
         <h2 class="section-title fade-in">Vendi ora la tua auto</h2>
-        <p class="section-subtitle fade-in">Ricevi una prima offerta indicativa della tua auto e mettiti in contatto con un partner di zona per vendere la tua auto in totale sicurezza e senza perdite di tempo.</p>
+        <p class="section-subtitle fade-in">Ricevi una prima fascia di valutazione indicativa della tua auto: sarai tu a decidere se richiedere poi un'offerta concreta da un nostro partner.</p>
       </div>
 
       <form class="form-card fade-in" id="carForm" novalidate>
@@ -1397,7 +1397,7 @@
                 <div class="field" data-field="targa">
                   <label>La tua targa <span class="optional">(facoltativo)</span></label>
                   <input type="text" name="targa" placeholder="Inserisci il tuo numero di targa" maxlength="10">
-                  <span class="field-hint">Ti preghiamo di assicurarti che sia inserita correttamente in modo tale da determinare la tua offerta reale accuratamente.</span>
+                  <span class="field-hint">Ti preghiamo di assicurarti che sia inserita correttamente in modo tale da determinare la tua valutazione in modo accurato.</span>
                 </div>
 
                 <div class="wizard-subheading">I tuoi contatti</div>
@@ -1430,18 +1430,19 @@
                   <div class="field" data-field="cap">
                     <label>Il tuo CAP <span class="required">*</span></label>
                     <input type="text" name="cap" inputmode="numeric" maxlength="5" placeholder="Indica il tuo codice postale (CAP)" required>
-                    <span class="field-hint">Lo usiamo per offrirti il miglior servizio. Non ha alcun impatto sull'offerta reale.</span>
+                    <span class="field-hint">Lo usiamo per offrirti il miglior servizio. Non ha alcun impatto sulla valutazione.</span>
                     <span class="field-error">Inserisci un CAP valido (5 cifre)</span>
                   </div>
                 </div>
 
                 <div class="field" data-field="prezzo_desiderato">
-                  <label>Che prezzo di vendita hai in mente per la tua auto? <span class="optional">(facoltativo)</span></label>
+                  <label>Quanto vorresti realizzare dalla vendita della tua auto? <span class="required">*</span></label>
                   <div class="input-suffix-wrap">
                     <span class="input-suffix">€</span>
-                    <input type="text" inputmode="numeric" name="prezzo_desiderato" placeholder="Offerta desiderata">
+                    <input type="text" inputmode="numeric" name="prezzo_desiderato" placeholder="Es. 8000" required>
                   </div>
-                  <span class="field-hint">Questo non influisce sulla nostra offerta reale.</span>
+                  <span class="field-hint">Ci aiuta a capire le tue aspettative. Non influenza la nostra valutazione.</span>
+                  <span class="field-error">Inserisci l'importo che vorresti realizzare dalla vendita</span>
                 </div>
 
                 <div class="field" data-field="termini">
@@ -1453,7 +1454,7 @@
                 </div>
 
                 <div class="wizard-actions">
-                  <button type="submit" class="btn btn-primary">Richiedi la tua offerta reale →</button>
+                  <button type="submit" class="btn btn-primary">Richiedi la tua valutazione →</button>
                 </div>
                 <div class="form-security-note">
                   <svg class="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1472,8 +1473,8 @@
           <svg class="form-success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/>
           </svg>
-          <h3>Dettagli dell'auto ricevuti!</h3>
-          <p>Stiamo determinando la tua offerta di vendita finale e, una volta pronta, te la invieremo via email e WhatsApp.</p>
+          <h3>Richiesta ricevuta!</h3>
+          <p>Abbiamo ricevuto i dati della tua auto. Analizzeremo le informazioni che ci hai fornito per preparare una prima fascia di valutazione indicativa. Appena pronta, riceverai una comunicazione con la tua stima e potrai decidere se vuoi essere ricontattato per ricevere un'offerta concreta da un nostro partner.</p>
         </div>
 
       </form>
@@ -1966,6 +1967,9 @@
     if (isValid && input.name === 'km' && input.value.trim()) {
       isValid = /^\d+$/.test(input.value.trim());
     }
+    if (isValid && input.name === 'prezzo_desiderato' && input.value.trim()) {
+      isValid = /^\d+$/.test(input.value.trim());
+    }
 
     fieldEl.classList.toggle('invalid', !isValid);
     return isValid;
@@ -2189,7 +2193,7 @@
 
     function onError() {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Richiedi la tua offerta reale →';
+      submitBtn.textContent = 'Richiedi la tua valutazione →';
       showToast('Si è verificato un errore. Riprova.', true);
     }
 

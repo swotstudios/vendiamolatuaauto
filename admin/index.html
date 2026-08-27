@@ -164,6 +164,17 @@
     font-size: 13px;
   }
 
+  .stats-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    padding: 10px 24px 14px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .stats-bar b { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .stats-bar .sep { color: var(--border-strong); }
+
   /* ---------- Tabella ---------- */
   .table-wrap { padding: 0 24px 64px; overflow-x: auto; }
   table {
@@ -326,6 +337,41 @@
     background: #f2f9f3;
   }
   .consent-box strong { color: #2c6e35; }
+
+  .email-card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+  .email-card + .email-card { margin-top: 10px; }
+  .email-card-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .email-subject { font-weight: 500; }
+  .email-steps { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .step {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    background: var(--bg-subtle);
+    color: var(--text-faint);
+    white-space: nowrap;
+  }
+  .step.done  { background: #dbeddb; color: #2c6e35; }
+  .step.warn  { background: #fbe4e4; color: #b3261e; }
+  .email-detail {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 8px;
+    font-size: 13px;
+    padding: 2px 0;
+  }
+  .email-detail span:first-child { color: var(--text-muted); }
+  .email-note { font-size: 12px; color: var(--text-faint); margin: 10px 0 0; }
   .consent-box div { color: var(--text-muted); font-size: 13px; margin-top: 2px; }
 
   /* ---------- Timeline ---------- */
@@ -423,6 +469,8 @@
     <button class="btn" type="button" id="refreshBtn">Aggiorna</button>
     <span class="count" id="leadCount"></span>
   </div>
+
+  <div class="stats-bar" id="statsBar" hidden></div>
 
   <div class="table-wrap">
     <table>
@@ -754,6 +802,40 @@ function renderTable() {
   setTableState(leads.length ? '' : 'Nessuna lead trovata.');
 }
 
+/** Riepilogo essenziale: conteggi, non percentuali interpretabili male. */
+function renderStats(stats) {
+  const bar = document.getElementById('statsBar');
+  if (!stats || !stats.inviate) { bar.hidden = true; return; }
+
+  bar.textContent = '';
+  const voci = [
+    ['Email inviate', stats.inviate],
+    ['Consegnate', stats.consegnate],
+    ['Aperte', stats.aperte],
+    ['Cliccate', stats.cliccate],
+    ['CTA accettate', stats.ctaAccettate],
+  ];
+
+  voci.forEach(([label, value], i) => {
+    if (i) {
+      const sep = document.createElement('span');
+      sep.className = 'sep';
+      sep.textContent = '·';
+      bar.appendChild(sep);
+    }
+    const item = document.createElement('span');
+    item.textContent = label + ' ';
+    const strong = document.createElement('b');
+    strong.textContent = String(value ?? 0);
+    item.appendChild(strong);
+    bar.appendChild(item);
+  });
+
+  bar.title = 'Le aperture sono un dato indicativo: alcuni client di posta caricano '
+            + 'le immagini da soli, altri le bloccano.';
+  bar.hidden = false;
+}
+
 async function loadLeads() {
   const params = new URLSearchParams();
   const q = searchInput.value.trim();
@@ -767,6 +849,7 @@ async function loadLeads() {
     if (token !== loadToken) return; // una richiesta più recente ha già risposto
     leads = data.leads || [];
     renderTable();
+    renderStats(data.stats);
   } catch (error) {
     if (token !== loadToken) return;
     if (error.message === 'SESSION_EXPIRED') return showLogin('Sessione scaduta, accedi di nuovo.');
@@ -1033,7 +1116,8 @@ function renderValuationSection(lead) {
       const index = leads.findIndex((l) => l.id === lead.id);
       if (index !== -1) leads[index] = { ...leads[index], ...data.lead };
       renderTable();
-      renderDrawer(data.lead, data.events);
+      // Ricarichiamo il dettaglio per mostrare anche la nuova email inviata.
+      openDrawer(lead.id);
       showToast(`Valutazione inviata a ${data.emailSentTo}.`);
     } catch (error) {
       if (error.message === 'SESSION_EXPIRED') return showLogin('Sessione scaduta, accedi di nuovo.');
@@ -1051,6 +1135,85 @@ function renderValuationSection(lead) {
 
   if (lead.valuation_sent_at) {
     s.appendChild(propRow('Ultimo invio', asDateTime(lead.valuation_sent_at)));
+  }
+
+  return s;
+}
+
+/** Stato di consegna delle email inviate alla lead. */
+function renderEmailSection(messages) {
+  if (!messages || !messages.length) return null;
+
+  const s = section('Email');
+
+  for (const m of messages) {
+    const card = document.createElement('div');
+    card.className = 'email-card';
+
+    const head = document.createElement('div');
+    head.className = 'email-card-head';
+    const subject = document.createElement('span');
+    subject.className = 'email-subject';
+    subject.textContent = m.subject || 'Email';
+    const when = document.createElement('span');
+    when.className = 'cell-muted';
+    when.style.fontSize = '12px';
+    when.textContent = asDate(m.sent_at || m.created_at) || '';
+    head.append(subject, when);
+    card.appendChild(head);
+
+    // Avanzamento: verde per le tappe raggiunte, rosso per bounce e reclami.
+    const steps = document.createElement('div');
+    steps.className = 'email-steps';
+    const tappe = [
+      ['Inviata', !!m.sent_at, false],
+      ['Consegnata', !!m.delivered_at, false],
+      ['Aperta', !!m.opened_at, false],
+      ['Cliccata', !!m.clicked_at, false],
+    ];
+    if (m.bounced_at) tappe.push(['Bounce', true, true]);
+    if (m.complained_at) tappe.push(['Segnalata come spam', true, true]);
+
+    for (const [label, done, warn] of tappe) {
+      const el = document.createElement('span');
+      el.className = 'step' + (done ? (warn ? ' warn' : ' done') : '');
+      el.textContent = label;
+      steps.appendChild(el);
+    }
+    card.appendChild(steps);
+
+    const righe = [
+      ['Inviata il', asDateTime(m.sent_at)],
+      ['Consegnata il', asDateTime(m.delivered_at)],
+      ['Prima apertura', asDateTime(m.opened_at)],
+      ['Ultima apertura', m.open_count > 1 ? asDateTime(m.last_opened_at) : null],
+      ['Aperture', m.open_count ? String(m.open_count) : null],
+      ['Primo click', asDateTime(m.clicked_at)],
+      ['Click', m.click_count ? String(m.click_count) : null],
+      ['Bounce', asDateTime(m.bounced_at)],
+      ['Segnalata come spam', asDateTime(m.complained_at)],
+    ].filter(([, value]) => value);
+
+    for (const [label, value] of righe) {
+      const row = document.createElement('div');
+      row.className = 'email-detail';
+      const k = document.createElement('span');
+      k.textContent = label;
+      const v = document.createElement('span');
+      v.textContent = value;
+      row.append(k, v);
+      card.appendChild(row);
+    }
+
+    if (m.opened_at) {
+      const note = document.createElement('p');
+      note.className = 'email-note';
+      note.textContent = "Le aperture sono un dato indicativo: alcuni client di posta caricano "
+        + "le immagini da soli, altri le bloccano. Vale come consenso solo il click sulla CTA.";
+      card.appendChild(note);
+    }
+
+    s.appendChild(card);
   }
 
   return s;
@@ -1118,7 +1281,7 @@ function renderOtherSection(lead) {
   return s;
 }
 
-function renderDrawer(lead, events) {
+function renderDrawer(lead, events, messages) {
   drawerTitle.textContent = fullName(lead);
   const parts = [vehicleLabel(lead), lead.vehicle_km !== null ? `${new Intl.NumberFormat('it-IT').format(lead.vehicle_km)} km` : null];
   drawerSubtitle.textContent = parts.filter(Boolean).join(' · ');
@@ -1128,8 +1291,10 @@ function renderDrawer(lead, events) {
     renderValuationSection(lead),
     renderContactSection(lead),
     renderVehicleSection(lead),
-    renderTimelineSection(events),
   );
+  const emails = renderEmailSection(messages);
+  if (emails) drawerBody.appendChild(emails);
+  drawerBody.appendChild(renderTimelineSection(events));
   const other = renderOtherSection(lead);
   if (other) drawerBody.appendChild(other);
   drawerBody.scrollTop = 0;
@@ -1148,7 +1313,7 @@ async function openDrawer(id) {
 
   try {
     const data = await apiFetch(`/api/admin/lead?id=${encodeURIComponent(id)}`);
-    renderDrawer(data.lead, data.events);
+    renderDrawer(data.lead, data.events, data.messages);
   } catch (error) {
     if (error.message === 'SESSION_EXPIRED') return showLogin('Sessione scaduta, accedi di nuovo.');
     drawerTitle.textContent = 'Errore';

@@ -6,7 +6,7 @@
  *   status  filtro per stato (cold | warm | hot | assigned | purchased | lost)
  */
 
-import { db, sanitizeFilterValue } from '../_lib/supabase.js';
+import { db, count, sanitizeFilterValue } from '../_lib/supabase.js';
 import { requireAdmin } from '../_lib/auth.js';
 import { sendJson, sendError, requireMethod } from '../_lib/http.js';
 
@@ -17,6 +17,21 @@ const COLUMNS = [
   'vehicle_make', 'vehicle_model', 'vehicle_version', 'vehicle_year', 'vehicle_plate',
   'status', 'valuation_amount', 'created_at', 'last_activity_at',
 ].join(',');
+
+/**
+ * Numeri di base per delivery, open e click rate. Il calcolo dei rate resta
+ * alla vista: qui produciamo solo i conteggi grezzi.
+ */
+async function emailStats() {
+  const [inviate, consegnate, aperte, cliccate, hot] = await Promise.all([
+    count('messages?status=neq.failed'),
+    count('messages?delivered_at=not.is.null'),
+    count('messages?opened_at=not.is.null'),
+    count('messages?clicked_at=not.is.null'),
+    count('leads?hot_at=not.is.null'),
+  ]);
+  return { inviate, consegnate, aperte, cliccate, ctaAccettate: hot };
+}
 
 export default async function handler(req, res) {
   if (!requireMethod(req, res, 'GET')) return;
@@ -45,7 +60,13 @@ export default async function handler(req, res) {
     }
 
     const leads = await db(`leads?${params.join('&')}`);
-    return sendJson(res, 200, { leads });
+
+    // Riepilogo su tutte le email, indipendente dai filtri della tabella.
+    // I conteggi arrivano dagli header Content-Range di PostgREST, così non
+    // trasportiamo righe che non servono.
+    const stats = await emailStats();
+
+    return sendJson(res, 200, { leads, stats });
   } catch (error) {
     return sendError(res, error);
   }

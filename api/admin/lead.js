@@ -1,6 +1,6 @@
 /**
- * GET /api/admin/lead?id=<uuid> — dettaglio completo di una lead più la sua
- * timeline, per il drawer laterale della dashboard.
+ * GET /api/admin/lead?id=<uuid> — dettaglio completo di una lead, la sua
+ * timeline e lo stato delle email inviate, per il drawer della dashboard.
  */
 
 import { db, HttpError } from '../_lib/supabase.js';
@@ -26,7 +26,17 @@ export default async function handler(req, res) {
       `lead_events?lead_id=eq.${id}&select=id,type,title,description,metadata,created_at&order=created_at.asc`,
     );
 
-    return sendJson(res, 200, { lead, events });
+    // Stato di consegna delle email: il corpo del messaggio non serve al
+    // drawer, quindi non lo trasportiamo.
+    const messages = await db(
+      `messages?lead_id=eq.${id}` +
+      `&select=id,channel,template_key,subject,status,provider_status,sent_at,delivered_at,` +
+      `opened_at,last_opened_at,open_count,clicked_at,last_clicked_at,click_count,` +
+      `bounced_at,complained_at,created_at` +
+      `&order=created_at.desc`,
+    );
+
+    return sendJson(res, 200, { lead, events, messages });
   } catch (error) {
     return sendError(res, error);
   }

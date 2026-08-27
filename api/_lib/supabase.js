@@ -68,6 +68,30 @@ export async function db(path, { method = 'GET', body, prefer } = {}) {
 }
 
 /**
+ * Conta le righe che soddisfano un filtro, senza trasportarle.
+ * PostgREST restituisce il totale nell'header Content-Range con
+ * `Prefer: count=exact`.
+ */
+export async function count(path) {
+  assertServerEnv();
+
+  const separator = path.includes('?') ? '&' : '?';
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}${separator}select=id&limit=1`, {
+    headers: {
+      apikey: SERVICE_ROLE_KEY,
+      Authorization: `Bearer ${SERVICE_ROLE_KEY}`,
+      Prefer: 'count=exact',
+      Range: '0-0',
+    },
+  });
+
+  if (!res.ok) return 0;
+  const range = res.headers.get('content-range') || '';
+  const total = Number(range.split('/')[1]);
+  return Number.isFinite(total) ? total : 0;
+}
+
+/**
  * Escape del testo usato dentro un filtro PostgREST.
  * Virgole e parentesi sono separatori nella sintassi `or=(...)`: se arrivassero
  * grezze dalla query dell'utente romperebbero (o altererebbero) il filtro.

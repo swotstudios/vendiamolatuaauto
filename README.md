@@ -9,6 +9,7 @@ index.html                 Landing (statica, nessun build step)
 admin/index.html           Dashboard interna /admin
 api/lead.js                POST pubblico: salva la lead dal form
 api/lead-confirm.js        CTA pubblica: consenso al contatto, warm → hot
+api/webhooks/resend.js     Webhook Resend: consegne, aperture, click, bounce
 api/admin/config.js        Configurazione pubblica per la pagina admin
 api/admin/leads.js         GET elenco lead (protetto)
 api/admin/lead.js          GET dettaglio lead + timeline (protetto)
@@ -50,6 +51,7 @@ Vedi `.env.example`. Servono in locale (`.env.local`) e su Vercel
 | `RESEND_API_KEY` | Invio email, **solo server** |
 | `RESEND_FROM_EMAIL` | Mittente; il dominio va verificato su Resend |
 | `PUBLIC_SITE_URL` | Dominio pubblico, per il link assoluto della CTA |
+| `RESEND_WEBHOOK_SECRET` | Verifica della firma dei webhook Resend |
 
 ## Flusso delle lead
 
@@ -97,3 +99,29 @@ Il passaggio avviene solo da `warm`, e l'UPDATE filtra a sua volta su
 `status=eq.warm`: due click simultanei non possono produrre eventi doppi.
 Gli stati `assigned` e `purchased` esistono a schema ma non sono ancora
 gestiti dall'interfaccia.
+
+## Tracciamento delle email
+
+`/api/webhooks/resend` riceve gli eventi di Resend (consegna, apertura, click,
+bounce, reclamo) e aggiorna le colonne di tracciamento di `messages`.
+
+La firma Svix viene verificata sul **body grezzo**: per questo la funzione
+disattiva il body parser di Vercel con `export const config`. Rileggere il
+corpo da un oggetto già deserializzato produrrebbe byte diversi e ogni verifica
+fallirebbe.
+
+L'idempotenza è garantita dal database: ogni consegna porta un `svix-id`
+univoco che viene inserito in `email_events` sotto vincolo `UNIQUE`, quindi un
+retry viene respinto prima di toccare i contatori.
+
+**Nessun evento email cambia lo stato di una lead.** Aperture e click sono
+segnali di interesse, non consensi:
+
+- l'open rate è inaffidabile in due direzioni: Apple Mail Privacy Protection
+  precarica il pixel generando aperture mai avvenute, mentre i client che
+  bloccano le immagini non ne registrano nessuna anche a email letta;
+- Resend traccia i click riscrivendo i link, quindi anche gli scanner
+  antispam che li seguono generano `email.clicked`.
+
+L'unico segnale qualificante resta il click sulla CTA, protetto dal doppio
+passaggio di `/api/lead-confirm`.

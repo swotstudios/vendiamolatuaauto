@@ -1445,6 +1445,13 @@
                   <span class="field-error">Inserisci l'importo che vorresti realizzare dalla vendita</span>
                 </div>
 
+                <!-- Honeypot anti-bot: invisibile e fuori dal tab order. Se viene
+                     compilato, la richiesta viene scartata lato server. -->
+                <div aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden">
+                  <label for="website">Non compilare questo campo</label>
+                  <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
+                </div>
+
                 <div class="field" data-field="termini">
                   <div class="checkbox-field">
                     <input type="checkbox" name="termini" id="termini" required>
@@ -2130,8 +2137,25 @@
   restoreState();
 
   /* ---------- Submit ---------- */
-  // Configura qui l'endpoint/webhook (es. Activepieces, Zapier, Make, Supabase Edge Function)
-  var WEBHOOK_URL = ''; // <-- inserisci l'URL del webhook
+  // Le lead vengono salvate su Supabase dalla funzione serverless /api/lead.
+  // La landing non parla mai direttamente col database e non conosce nessuna
+  // chiave: tutto passa dal server.
+  var LEAD_ENDPOINT = '/api/lead';
+
+  // Parametri di campagna presenti nell'URL di atterraggio, se ci sono.
+  function readTracking() {
+    var tracking = {};
+    try {
+      var params = new URLSearchParams(window.location.search);
+      ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach(function (key) {
+        var value = params.get(key);
+        if (value) tracking[key] = value;
+      });
+    } catch (e) {
+      // URLSearchParams non disponibile: si prosegue senza tracciamento
+    }
+    return tracking;
+  }
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -2176,6 +2200,8 @@
         prezzoDesiderato: nativeData.prezzo_desiderato || null,
         accettaTermini: !!nativeData.termini
       },
+      tracking: readTracking(),
+      website: nativeData.website || '',
       timestamp: new Date().toISOString()
     };
 
@@ -2197,22 +2223,21 @@
       showToast('Si è verificato un errore. Riprova.', true);
     }
 
-    if (WEBHOOK_URL) {
-      fetch(WEBHOOK_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-        .then(function (res) {
-          if (!res.ok) throw new Error('Network error');
+    fetch(LEAD_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (data) {
+          if (!res.ok) throw new Error(data.error || 'Network error');
           onSuccess();
-        })
-        .catch(onError);
-    } else {
-      // Nessun webhook configurato: simulazione invio per demo/sviluppo
-      console.log('Lead raccolto (nessun WEBHOOK_URL configurato):', JSON.stringify(payload, null, 2));
-      setTimeout(onSuccess, 600);
-    }
+        });
+      })
+      .catch(function (error) {
+        console.error('Invio lead non riuscito:', error);
+        onError();
+      });
   });
 
   /* ---------- Area riservata partner (placeholder) ---------- */

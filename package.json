@@ -1,0 +1,7 @@
+{
+  "name": "vendiamolatuaauto",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Landing Vendiamolatuaauto + API serverless per la gestione lead (Supabase)."
+}

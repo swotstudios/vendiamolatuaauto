@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Lead · Vendiamolatuaauto</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-subtle: #f7f7f5;
+    --text: #37352f;
+    --text-muted: #787774;
+    --text-faint: #9b9a97;
+    --border: #e9e9e7;
+    --border-strong: #dcdcda;
+    --accent: #2383e2;
+    --danger: #d9453f;
+    --radius: 4px;
+  }
+
+  * { box-sizing: border-box; }
+
+  /* Le regole con classe hanno più specificità dell'attributo `hidden` dello
+     user-agent stylesheet: senza questa riga un elemento con `display` esplicito
+     (es. .login-screen) resterebbe visibile anche da nascosto. */
+  [hidden] { display: none !important; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button { font: inherit; cursor: pointer; }
+  input, textarea, select { font: inherit; color: inherit; }
+
+  /* ---------- Login ---------- */
+  .login-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .login-card {
+    width: 100%;
+    max-width: 340px;
+  }
+  .login-card h1 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+  }
+  .login-card p.sub {
+    color: var(--text-muted);
+    margin: 0 0 24px;
+    font-size: 13px;
+  }
+  .field-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .input {
+    width: 100%;
+    padding: 7px 10px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--bg);
+    outline: none;
+    transition: border-color .12s, box-shadow .12s;
+  }
+  .input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(35, 131, 226, .18);
+  }
+  .stack > * + * { margin-top: 14px; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 7px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--text);
+    font-weight: 500;
+    transition: background .12s, border-color .12s, opacity .12s;
+  }
+  .btn:hover:not(:disabled) { background: var(--bg-subtle); }
+  .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover:not(:disabled) { background: #1a72c9; border-color: #1a72c9; }
+  .btn:disabled { opacity: .55; cursor: not-allowed; }
+  .btn-block { width: 100%; }
+
+  .alert {
+    padding: 8px 10px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    background: #fdf0ef;
+    color: var(--danger);
+    border: 1px solid #f5d5d3;
+  }
+
+  /* ---------- Layout app ---------- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .topbar h1 {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .link-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--text-muted);
+    text-decoration: underline;
+    font-size: 13px;
+  }
+  .link-btn:hover { color: var(--text); }
+
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    flex-wrap: wrap;
+  }
+  .toolbar .input { width: 280px; }
+  .toolbar select.input { width: auto; padding-right: 28px; }
+  .toolbar .count {
+    margin-left: auto;
+    color: var(--text-faint);
+    font-size: 13px;
+  }
+
+  /* ---------- Tabella ---------- */
+  .table-wrap { padding: 0 24px 64px; overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 860px;
+  }
+  th {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    padding: 8px 12px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  tbody tr:hover { background: var(--bg-subtle); }
+  tbody tr.is-open { background: #f0f6fc; }
+  .cell-primary { font-weight: 500; }
+  .cell-sub {
+    display: block;
+    color: var(--text-faint);
+    font-size: 12px;
+  }
+  .cell-muted { color: var(--text-muted); white-space: nowrap; }
+  .cell-empty { color: var(--text-faint); }
+  .num { font-variant-numeric: tabular-nums; }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .badge-cold      { background: #e7f0f8; color: #38618c; }
+  .badge-warm      { background: #faecdd; color: #9a6316; }
+  .badge-hot       { background: #fbe4e4; color: #b3261e; }
+  .badge-assigned  { background: #eee0f7; color: #6c4396; }
+  .badge-purchased { background: #dbeddb; color: #2c6e35; }
+  .badge-lost      { background: #ebeced; color: #5f6368; }
+
+  .state-msg {
+    padding: 40px 12px;
+    text-align: center;
+    color: var(--text-faint);
+  }
+
+  /* ---------- Drawer ---------- */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 15, 15, .28);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .18s ease;
+    z-index: 40;
+  }
+  .overlay.open { opacity: 1; pointer-events: auto; }
+
+  .drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: min(620px, 100vw);
+    background: var(--bg);
+    border-left: 1px solid var(--border);
+    box-shadow: -8px 0 24px rgba(15, 15, 15, .08);
+    transform: translateX(100%);
+    transition: transform .22s cubic-bezier(.32, .72, 0, 1);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+  }
+  .drawer.open { transform: translateX(0); }
+
+  .drawer-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 24px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .drawer-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+  }
+  .drawer-subtitle { color: var(--text-muted); font-size: 13px; }
+  .icon-btn {
+    border: none;
+    background: none;
+    color: var(--text-muted);
+    font-size: 20px;
+    line-height: 1;
+    padding: 4px 8px;
+    border-radius: var(--radius);
+  }
+  .icon-btn:hover { background: var(--bg-subtle); color: var(--text); }
+
+  .drawer-body { flex: 1; overflow-y: auto; padding: 20px 24px 48px; }
+
+  .section + .section { margin-top: 28px; }
+  .section-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin: 0 0 10px;
+  }
+
+  .prop {
+    display: grid;
+    grid-template-columns: 190px 1fr;
+    gap: 12px;
+    padding: 5px 0;
+    align-items: baseline;
+  }
+  .prop-key { color: var(--text-muted); font-size: 13px; }
+  .prop-val { font-size: 14px; word-break: break-word; }
+  .prop-val a { color: var(--accent); text-decoration: none; }
+  .prop-val a:hover { text-decoration: underline; }
+  .prop-val.empty { color: var(--text-faint); }
+
+  .valuation-box {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    background: var(--bg-subtle);
+  }
+  .euro-wrap { position: relative; display: block; }
+  .euro-wrap .euro-sign {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+  }
+  .euro-wrap .input { padding-left: 24px; font-variant-numeric: tabular-nums; }
+  textarea.input { resize: vertical; min-height: 64px; }
+  .hint { font-size: 12px; color: var(--text-faint); margin-top: 8px; }
+
+  /* ---------- Timeline ---------- */
+  .timeline { list-style: none; margin: 0; padding: 0; }
+  .timeline li {
+    position: relative;
+    padding: 0 0 16px 20px;
+    border-left: 1px solid var(--border-strong);
+  }
+  .timeline li:last-child { border-left-color: transparent; padding-bottom: 0; }
+  .timeline li::before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: 6px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--border-strong);
+  }
+  .timeline li.is-latest::before { background: var(--accent); }
+  .timeline-time {
+    font-size: 12px;
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums;
+  }
+  .timeline-title { font-size: 14px; }
+  .timeline-desc { font-size: 13px; color: var(--text-muted); }
+
+  /* ---------- Toast ---------- */
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translate(-50%, 12px);
+    background: #2f2f2c;
+    color: #fff;
+    padding: 9px 16px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .16s, transform .16s;
+    z-index: 60;
+    max-width: 90vw;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .toast.error { background: var(--danger); }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen" hidden>
+  <form class="login-card stack" id="loginForm">
+    <div>
+      <h1>Dashboard lead</h1>
+      <p class="sub">Accesso riservato · Vendiamolatuaauto</p>
+    </div>
+    <div class="alert" id="loginError" hidden></div>
+    <div>
+      <label class="field-label" for="loginEmail">Email</label>
+      <input class="input" type="email" id="loginEmail" autocomplete="username" required>
+    </div>
+    <div>
+      <label class="field-label" for="loginPassword">Password</label>
+      <input class="input" type="password" id="loginPassword" autocomplete="current-password" required>
+    </div>
+    <button class="btn btn-primary btn-block" type="submit" id="loginSubmit">Accedi</button>
+  </form>
+</div>
+
+<!-- APP -->
+<div id="app" hidden>
+  <div class="topbar">
+    <h1>Lead</h1>
+    <div class="topbar-right">
+      <span id="currentUser"></span>
+      <button class="link-btn" type="button" id="logoutBtn">Esci</button>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <input class="input" type="search" id="searchInput"
+           placeholder="Cerca nome, email, telefono, targa, modello…" autocomplete="off">
+    <select class="input" id="statusFilter">
+      <option value="">Tutti gli stati</option>
+      <option value="cold">Cold</option>
+      <option value="warm">Warm</option>
+      <option value="hot">Hot</option>
+      <option value="assigned">Assegnata</option>
+      <option value="purchased">Acquistata</option>
+      <option value="lost">Persa</option>
+    </select>
+    <button class="btn" type="button" id="refreshBtn">Aggiorna</button>
+    <span class="count" id="leadCount"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 24%">Lead</th>
+          <th style="width: 26%">Auto</th>
+          <th style="width: 10%">Stato</th>
+          <th style="width: 14%">Stima</th>
+          <th style="width: 16%">Arrivata il</th>
+          <th style="width: 10%"></th>
+        </tr>
+      </thead>
+      <tbody id="leadRows"></tbody>
+    </table>
+    <div class="state-msg" id="tableState">Caricamento…</div>
+  </div>
+</div>
+
+<!-- DRAWER -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" aria-hidden="true" aria-label="Dettaglio lead">
+  <div class="drawer-head">
+    <div>
+      <h2 class="drawer-title" id="drawerTitle">—</h2>
+      <div class="drawer-subtitle" id="drawerSubtitle"></div>
+    </div>
+    <button class="icon-btn" type="button" id="drawerClose" aria-label="Chiudi">×</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+"use strict";
+
+/* =========================================================================
+   Client Supabase Auth minimale.
+   Login e refresh passano dalla chiave pubblica; tutti i dati delle lead
+   arrivano invece dalle route /api/admin/*, che verificano il token lato
+   server prima di toccare il database.
+   ========================================================================= */
+
+const SESSION_KEY = 'vlta_admin_session';
+let config = null;
+
+async function loadConfig() {
+  if (config) return config;
+  const res = await fetch('/api/admin/config');
+  if (!res.ok) throw new Error('Configurazione del server non disponibile');
+  config = await res.json();
+  return config;
+}
+
+function readSession() {
+  try {
+    const raw = localStorage.getItem(SESSION_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+
+function writeSession(session) {
+  try { localStorage.setItem(SESSION_KEY, JSON.stringify(session)); } catch {}
+}
+
+function clearSession() {
+  try { localStorage.removeItem(SESSION_KEY); } catch {}
+}
+
+async function authRequest(path, body) {
+  const { supabaseUrl, anonKey } = await loadConfig();
+  const res = await fetch(`${supabaseUrl}/auth/v1/${path}`, {
+    method: 'POST',
+    headers: { apikey: anonKey, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error(data.error_description || data.msg || data.error || 'Accesso non riuscito');
+  }
+  return data;
+}
+
+async function signIn(email, password) {
+  const data = await authRequest('token?grant_type=password', { email, password });
+  writeSession({
+    access_token: data.access_token,
+    refresh_token: data.refresh_token,
+    email: data.user?.email || email,
+  });
+  return data;
+}
+
+async function refreshSession() {
+  const session = readSession();
+  if (!session?.refresh_token) return null;
+  try {
+    const data = await authRequest('token?grant_type=refresh_token', {
+      refresh_token: session.refresh_token,
+    });
+    const next = {
+      access_token: data.access_token,
+      refresh_token: data.refresh_token,
+      email: data.user?.email || session.email,
+    };
+    writeSession(next);
+    return next;
+  } catch {
+    clearSession();
+    return null;
+  }
+}
+
+/** Chiamata autenticata alle route admin, con un solo retry dopo il refresh. */
+async function apiFetch(path, options = {}, isRetry = false) {
+  const session = readSession();
+  if (!session?.access_token) throw new Error('SESSION_EXPIRED');
+
+  const res = await fetch(path, {
+    ...options,
+    headers: {
+      ...(options.headers || {}),
+      Authorization: `Bearer ${session.access_token}`,
+      ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+    },
+  });
+
+  if (res.status === 401 && !isRetry) {
+    const refreshed = await refreshSession();
+    if (refreshed) return apiFetch(path, options, true);
+    throw new Error('SESSION_EXPIRED');
+  }
+
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Richiesta non riuscita');
+  return data;
+}
+
+/* =========================================================================
+   Formattazione
+   ========================================================================= */
+
+const STATUS_LABELS = {
+  cold: 'Cold', warm: 'Warm', hot: 'Hot',
+  assigned: 'Assegnata', purchased: 'Acquistata', lost: 'Persa',
+};
+
+const euroFmt = new Intl.NumberFormat('it-IT', {
+  style: 'currency', currency: 'EUR', maximumFractionDigits: 0,
+});
+const dateFmt = new Intl.DateTimeFormat('it-IT', {
+  day: '2-digit', month: '2-digit', year: 'numeric',
+});
+const dateTimeFmt = new Intl.DateTimeFormat('it-IT', {
+  day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit',
+});
+const fullDateTimeFmt = new Intl.DateTimeFormat('it-IT', {
+  day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit',
+});
+
+const money = (v) => (v === null || v === undefined || v === '' ? null : euroFmt.format(Number(v)));
+const asDate = (v) => (v ? dateFmt.format(new Date(v)) : null);
+const asDateTime = (v) => (v ? fullDateTimeFmt.format(new Date(v)) : null);
+
+function fullName(lead) {
+  return [lead.first_name, lead.last_name].filter(Boolean).join(' ') || 'Senza nome';
+}
+
+function vehicleLabel(lead) {
+  return [lead.vehicle_make, lead.vehicle_model, lead.vehicle_version, lead.vehicle_year]
+    .filter(Boolean).join(' ');
+}
+
+function statusBadge(status) {
+  const el = document.createElement('span');
+  el.className = `badge badge-${status}`;
+  el.textContent = STATUS_LABELS[status] || status;
+  return el;
+}
+
+/* =========================================================================
+   Toast
+   ========================================================================= */
+
+const toastEl = document.getElementById('toast');
+let toastTimer;
+function showToast(message, isError) {
+  clearTimeout(toastTimer);
+  toastEl.textContent = message;
+  toastEl.classList.toggle('error', !!isError);
+  toastEl.classList.add('show');
+  toastTimer = setTimeout(() => toastEl.classList.remove('show'), 3200);
+}
+
+/* =========================================================================
+   Login
+   ========================================================================= */
+
+const loginScreen = document.getElementById('loginScreen');
+const loginForm = document.getElementById('loginForm');
+const loginError = document.getElementById('loginError');
+const loginSubmit = document.getElementById('loginSubmit');
+const appEl = document.getElementById('app');
+
+function showLogin(message) {
+  appEl.hidden = true;
+  loginScreen.hidden = false;
+  loginError.hidden = !message;
+  if (message) loginError.textContent = message;
+}
+
+function showApp(email) {
+  loginScreen.hidden = true;
+  appEl.hidden = false;
+  document.getElementById('currentUser').textContent = email || '';
+}
+
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  loginError.hidden = true;
+  loginSubmit.disabled = true;
+  loginSubmit.textContent = 'Accesso…';
+  try {
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    await signIn(email, password);
+    await startApp();
+  } catch (error) {
+    loginError.textContent = error.message === 'Invalid login credentials'
+      ? 'Email o password non corretti.'
+      : error.message;
+    loginError.hidden = false;
+  } finally {
+    loginSubmit.disabled = false;
+    loginSubmit.textContent = 'Accedi';
+    document.getElementById('loginPassword').value = '';
+  }
+});
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  clearSession();
+  closeDrawer();
+  showLogin();
+});
+
+/* =========================================================================
+   Tabella
+   ========================================================================= */
+
+const rowsEl = document.getElementById('leadRows');
+const tableState = document.getElementById('tableState');
+const countEl = document.getElementById('leadCount');
+const searchInput = document.getElementById('searchInput');
+const statusFilter = document.getElementById('statusFilter');
+
+let leads = [];
+let openLeadId = null;
+// Identifica l'ultima richiesta partita: digitando in fretta possono essere in
+// volo più fetch e una risposta lenta non deve sovrascrivere una più recente.
+let loadToken = 0;
+
+function setTableState(message) {
+  tableState.textContent = message || '';
+  tableState.hidden = !message;
+}
+
+function renderTable() {
+  rowsEl.textContent = '';
+
+  for (const lead of leads) {
+    const tr = document.createElement('tr');
+    tr.dataset.id = lead.id;
+    if (lead.id === openLeadId) tr.classList.add('is-open');
+
+    // Lead: nome + contatto
+    const tdLead = document.createElement('td');
+    const name = document.createElement('span');
+    name.className = 'cell-primary';
+    name.textContent = fullName(lead);
+    const contact = document.createElement('span');
+    contact.className = 'cell-sub';
+    contact.textContent = lead.email || lead.phone || '';
+    tdLead.append(name, contact);
+
+    // Auto
+    const tdCar = document.createElement('td');
+    const car = vehicleLabel(lead);
+    tdCar.textContent = car || '—';
+    if (!car) tdCar.className = 'cell-empty';
+    if (lead.vehicle_plate) {
+      const plate = document.createElement('span');
+      plate.className = 'cell-sub';
+      plate.textContent = lead.vehicle_plate;
+      tdCar.appendChild(plate);
+    }
+
+    // Stato
+    const tdStatus = document.createElement('td');
+    tdStatus.appendChild(statusBadge(lead.status));
+
+    // Stima
+    const tdValuation = document.createElement('td');
+    const amount = money(lead.valuation_amount);
+    tdValuation.textContent = amount || '—';
+    tdValuation.className = amount ? 'num' : 'cell-empty';
+
+    // Arrivata il
+    const tdCreated = document.createElement('td');
+    tdCreated.className = 'cell-muted num';
+    tdCreated.textContent = asDate(lead.created_at) || '—';
+
+    // Apri
+    const tdOpen = document.createElement('td');
+    const openBtn = document.createElement('button');
+    openBtn.className = 'link-btn';
+    openBtn.type = 'button';
+    openBtn.textContent = 'Apri';
+    openBtn.addEventListener('click', () => openDrawer(lead.id));
+    tdOpen.appendChild(openBtn);
+
+    tr.append(tdLead, tdCar, tdStatus, tdValuation, tdCreated, tdOpen);
+    rowsEl.appendChild(tr);
+  }
+
+  countEl.textContent = leads.length
+    ? `${leads.length} lead${leads.length === 1 ? '' : ''}`
+    : '';
+  setTableState(leads.length ? '' : 'Nessuna lead trovata.');
+}
+
+async function loadLeads() {
+  const params = new URLSearchParams();
+  const q = searchInput.value.trim();
+  if (q) params.set('q', q);
+  if (statusFilter.value) params.set('status', statusFilter.value);
+
+  const token = ++loadToken;
+  try {
+    setTableState(leads.length ? '' : 'Caricamento…');
+    const data = await apiFetch(`/api/admin/leads?${params.toString()}`);
+    if (token !== loadToken) return; // una richiesta più recente ha già risposto
+    leads = data.leads || [];
+    renderTable();
+  } catch (error) {
+    if (token !== loadToken) return;
+    if (error.message === 'SESSION_EXPIRED') return showLogin('Sessione scaduta, accedi di nuovo.');
+    setTableState(error.message);
+  }
+}
+
+let searchTimer;
+searchInput.addEventListener('input', () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(loadLeads, 220);
+});
+statusFilter.addEventListener('change', loadLeads);
+document.getElementById('refreshBtn').addEventListener('click', loadLeads);
+
+/* =========================================================================
+   Drawer
+   ========================================================================= */
+
+const overlay = document.getElementById('overlay');
+const drawer = document.getElementById('drawer');
+const drawerBody = document.getElementById('drawerBody');
+const drawerTitle = document.getElementById('drawerTitle');
+const drawerSubtitle = document.getElementById('drawerSubtitle');
+
+// Etichette delle domande dello step 2, salvate in leads.form_answers.
+const FORM_ANSWER_LABELS = {
+  librettoManutenzione: 'Libretto di manutenzione',
+  revisione: 'Revisione ultimi 6 mesi',
+  tipoVenditore: 'Tipo venditore',
+  partitaIva: 'Partita IVA',
+  leasing: 'Leasing / finanziamento in corso',
+  incidenti: 'Incidenti subiti',
+  guidabile: 'Auto guidabile',
+  condizioniGenerali: 'Condizioni generali',
+  problemiMeccanici: 'Problemi meccanici o spie accese',
+  descrizioneProblema: 'Descrizione del problema',
+  coloreEsterno: 'Colore esterno',
+};
+
+// Colonne mostrate nelle sezioni dedicate: servono a capire cosa resta da
+// mostrare nella sezione "Altri dati", così nessun campo valorizzato sparisce.
+const HANDLED_COLUMNS = new Set([
+  'id', 'first_name', 'last_name', 'email', 'phone', 'city', 'province', 'postal_code',
+  'created_at', 'source', 'campaign', 'utm_source', 'utm_medium', 'utm_campaign',
+  'utm_content', 'utm_term', 'adset', 'ad',
+  'vehicle_make', 'vehicle_model', 'vehicle_version', 'vehicle_year', 'vehicle_km',
+  'vehicle_fuel', 'vehicle_transmission', 'vehicle_plate', 'vehicle_condition',
+  'vehicle_notes', 'desired_price', 'form_answers',
+  'status', 'valuation_amount', 'valuation_note', 'valuation_saved_at', 'valuation_sent_at',
+  'updated_at', 'last_activity_at', 'terms_accepted_at',
+]);
+
+const COLUMN_LABELS = {
+  minimum_price: 'Prezzo minimo', sale_timing: 'Tempistica di vendita',
+  willing_to_negotiate: 'Disponibile a trattare', dealer_contact_consent: 'Consenso contatto dealer',
+  hot_at: 'Passata a hot il', assigned_dealer_id: 'Dealer assegnato (ID)',
+  assigned_at: 'Assegnata il', dealer_contacted_at: 'Dealer contattato il',
+  offer_amount: 'Offerta dealer', offer_at: 'Offerta del', appointment_at: 'Appuntamento',
+  vehicle_viewed_at: 'Auto visionata il', purchased_at: 'Acquistata il',
+  purchase_price: 'Prezzo di acquisto', dealer_estimated_margin: 'Margine stimato dealer',
+  lost_reason: 'Motivo perdita', lost_at: 'Persa il', internal_notes: 'Note interne',
+};
+
+function propRow(key, value, options = {}) {
+  const row = document.createElement('div');
+  row.className = 'prop';
+
+  const k = document.createElement('div');
+  k.className = 'prop-key';
+  k.textContent = key;
+
+  const v = document.createElement('div');
+  v.className = 'prop-val';
+
+  if (value === null || value === undefined || value === '') {
+    v.classList.add('empty');
+    v.textContent = '—';
+  } else if (options.href) {
+    const a = document.createElement('a');
+    a.href = options.href;
+    a.textContent = value;
+    v.appendChild(a);
+  } else {
+    v.textContent = value;
+  }
+
+  row.append(k, v);
+  return row;
+}
+
+function section(title) {
+  const wrap = document.createElement('div');
+  wrap.className = 'section';
+  const h = document.createElement('h3');
+  h.className = 'section-title';
+  h.textContent = title;
+  wrap.appendChild(h);
+  return wrap;
+}
+
+function renderContactSection(lead) {
+  const s = section('Contatto');
+  s.append(
+    propRow('Nome', lead.first_name),
+    propRow('Cognome', lead.last_name),
+    propRow('Email', lead.email, lead.email ? { href: `mailto:${lead.email}` } : {}),
+    propRow('Telefono', lead.phone, lead.phone ? { href: `tel:${lead.phone.replace(/\s/g, '')}` } : {}),
+    propRow('Città', lead.city),
+    propRow('Provincia', lead.province),
+    propRow('CAP', lead.postal_code),
+    propRow('Data arrivo', asDateTime(lead.created_at)),
+    propRow('Consenso privacy', asDateTime(lead.terms_accepted_at)),
+    propRow('Fonte', lead.source),
+  );
+
+  const utm = [
+    ['Campagna', lead.campaign || lead.utm_campaign],
+    ['UTM source', lead.utm_source],
+    ['UTM medium', lead.utm_medium],
+    ['UTM content', lead.utm_content],
+    ['UTM term', lead.utm_term],
+    ['Adset', lead.adset],
+    ['Ad', lead.ad],
+  ].filter(([, value]) => value);
+
+  for (const [label, value] of utm) s.appendChild(propRow(label, value));
+  return s;
+}
+
+function renderVehicleSection(lead) {
+  const s = section('Auto');
+  s.append(
+    propRow('Marca', lead.vehicle_make),
+    propRow('Modello', lead.vehicle_model),
+    propRow('Versione', lead.vehicle_version),
+    propRow('Anno', lead.vehicle_year),
+    propRow('Chilometraggio', lead.vehicle_km === null ? null : `${new Intl.NumberFormat('it-IT').format(lead.vehicle_km)} km`),
+    propRow('Alimentazione', lead.vehicle_fuel),
+    propRow('Cambio', lead.vehicle_transmission),
+    propRow('Targa', lead.vehicle_plate),
+    propRow('Condizioni', lead.vehicle_condition),
+    propRow('Note veicolo', lead.vehicle_notes),
+    propRow('Prezzo desiderato', money(lead.desired_price)),
+  );
+
+  // Risposte dello step 2 del wizard (colonna form_answers).
+  const answers = lead.form_answers || {};
+  const keys = Object.keys(answers);
+  if (keys.length) {
+    const sub = document.createElement('h3');
+    sub.className = 'section-title';
+    sub.style.marginTop = '18px';
+    sub.textContent = 'Risposte del questionario';
+    s.appendChild(sub);
+    for (const key of keys) {
+      // condizioniGenerali è già mostrata sopra come "Condizioni".
+      if (key === 'condizioniGenerali') continue;
+      s.appendChild(propRow(FORM_ANSWER_LABELS[key] || key, answers[key]));
+    }
+  }
+
+  return s;
+}
+
+function renderValuationSection(lead) {
+  const s = section('Valutazione');
+
+  const box = document.createElement('div');
+  box.className = 'valuation-box stack';
+
+  const amountWrap = document.createElement('div');
+  const amountLabel = document.createElement('label');
+  amountLabel.className = 'field-label';
+  amountLabel.setAttribute('for', 'valuationAmount');
+  amountLabel.textContent = 'Stima Vendiamolatuaauto';
+  const euroWrap = document.createElement('div');
+  euroWrap.className = 'euro-wrap';
+  const euroSign = document.createElement('span');
+  euroSign.className = 'euro-sign';
+  euroSign.textContent = '€';
+  const amountInput = document.createElement('input');
+  amountInput.className = 'input';
+  amountInput.id = 'valuationAmount';
+  amountInput.type = 'text';
+  amountInput.inputMode = 'numeric';
+  amountInput.placeholder = 'Es. 18500';
+  amountInput.value = lead.valuation_amount === null ? '' : String(Math.round(Number(lead.valuation_amount)));
+  amountInput.addEventListener('input', () => {
+    amountInput.value = amountInput.value.replace(/\D/g, '');
+  });
+  euroWrap.append(euroSign, amountInput);
+  amountWrap.append(amountLabel, euroWrap);
+
+  const noteWrap = document.createElement('div');
+  const noteLabel = document.createElement('label');
+  noteLabel.className = 'field-label';
+  noteLabel.setAttribute('for', 'valuationNote');
+  noteLabel.textContent = 'Nota interna (facoltativa)';
+  const noteInput = document.createElement('textarea');
+  noteInput.className = 'input';
+  noteInput.id = 'valuationNote';
+  noteInput.rows = 3;
+  noteInput.placeholder = 'Annotazioni sulla valutazione, visibili solo internamente';
+  noteInput.value = lead.valuation_note || '';
+  noteWrap.append(noteLabel, noteInput);
+
+  const submitBtn = document.createElement('button');
+  submitBtn.className = 'btn btn-primary';
+  submitBtn.type = 'button';
+  submitBtn.textContent = lead.valuation_amount ? 'Aggiorna valutazione' : 'Invia valutazione';
+
+  const hint = document.createElement('p');
+  hint.className = 'hint';
+  hint.textContent = lead.email
+    ? (lead.status === 'cold'
+        ? `L'email con la stima verrà inviata a ${lead.email} e la lead passerà da Cold a Warm.`
+        : `L'email con la stima verrà inviata a ${lead.email}. La lead è in stato ${STATUS_LABELS[lead.status]} e lo stato non verrà modificato.`)
+    : 'Questa lead non ha un indirizzo email: la valutazione non può essere inviata.';
+  if (!lead.email) submitBtn.disabled = true;
+
+  submitBtn.addEventListener('click', async () => {
+    const amount = Number(amountInput.value);
+    if (!amount || amount <= 0) {
+      showToast('Inserisci una stima valida.', true);
+      amountInput.focus();
+      return;
+    }
+
+    // L'invio è irreversibile: il cliente riceve davvero l'email.
+    const confirmed = window.confirm(
+      `Inviare la valutazione di ${euroFmt.format(amount)} a ${lead.email}?\n\n` +
+      'Il cliente riceverà subito una email con questa stima.');
+    if (!confirmed) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Invio in corso…';
+    try {
+      const data = await apiFetch('/api/admin/valuation', {
+        method: 'POST',
+        body: JSON.stringify({ id: lead.id, amount, note: noteInput.value }),
+      });
+
+      // Aggiorna la riga in tabella senza ricaricare tutto l'elenco.
+      const index = leads.findIndex((l) => l.id === lead.id);
+      if (index !== -1) leads[index] = { ...leads[index], ...data.lead };
+      renderTable();
+      renderDrawer(data.lead, data.events);
+      showToast(`Valutazione inviata a ${data.emailSentTo}.`);
+    } catch (error) {
+      if (error.message === 'SESSION_EXPIRED') return showLogin('Sessione scaduta, accedi di nuovo.');
+      showToast(error.message, true);
+      submitBtn.disabled = false;
+      // Se l'invio è fallito la stima è comunque stata salvata: ricaricando il
+      // dettaglio l'operatore vede lo stato reale e l'evento di errore, e il
+      // pannello si ridisegna già con l'etichetta giusta sul pulsante.
+      openDrawer(lead.id);
+    }
+  });
+
+  box.append(amountWrap, noteWrap, submitBtn, hint);
+  s.appendChild(box);
+
+  if (lead.valuation_sent_at) {
+    s.appendChild(propRow('Ultimo invio', asDateTime(lead.valuation_sent_at)));
+  }
+
+  return s;
+}
+
+function renderTimelineSection(events) {
+  const s = section('Storico');
+
+  if (!events || !events.length) {
+    const empty = document.createElement('p');
+    empty.className = 'prop-val empty';
+    empty.textContent = 'Nessun evento registrato.';
+    s.appendChild(empty);
+    return s;
+  }
+
+  const list = document.createElement('ul');
+  list.className = 'timeline';
+
+  events.forEach((event, index) => {
+    const li = document.createElement('li');
+    if (index === events.length - 1) li.classList.add('is-latest');
+
+    const time = document.createElement('div');
+    time.className = 'timeline-time';
+    time.textContent = dateTimeFmt.format(new Date(event.created_at));
+
+    const title = document.createElement('div');
+    title.className = 'timeline-title';
+    title.textContent = event.title;
+
+    li.append(time, title);
+
+    if (event.description) {
+      const desc = document.createElement('div');
+      desc.className = 'timeline-desc';
+      desc.textContent = event.description;
+      li.appendChild(desc);
+    }
+
+    list.appendChild(li);
+  });
+
+  s.appendChild(list);
+  return s;
+}
+
+/** Mostra qualunque colonna valorizzata non già presente nelle sezioni sopra. */
+function renderOtherSection(lead) {
+  const extras = Object.entries(lead).filter(([key, value]) =>
+    !HANDLED_COLUMNS.has(key) && value !== null && value !== undefined && value !== '');
+
+  if (!extras.length) return null;
+
+  const s = section('Altri dati');
+  for (const [key, value] of extras) {
+    const label = COLUMN_LABELS[key] || key.replace(/_/g, ' ');
+    let display = value;
+    if (typeof value === 'boolean') display = value ? 'Sì' : 'No';
+    else if (typeof value === 'object') display = JSON.stringify(value);
+    else if (/_at$/.test(key)) display = asDateTime(value);
+    else if (/price|amount|margin/.test(key)) display = money(value);
+    s.appendChild(propRow(label, display));
+  }
+  return s;
+}
+
+function renderDrawer(lead, events) {
+  drawerTitle.textContent = fullName(lead);
+  const parts = [vehicleLabel(lead), lead.vehicle_km !== null ? `${new Intl.NumberFormat('it-IT').format(lead.vehicle_km)} km` : null];
+  drawerSubtitle.textContent = parts.filter(Boolean).join(' · ');
+
+  drawerBody.textContent = '';
+  drawerBody.append(
+    renderValuationSection(lead),
+    renderContactSection(lead),
+    renderVehicleSection(lead),
+    renderTimelineSection(events),
+  );
+  const other = renderOtherSection(lead);
+  if (other) drawerBody.appendChild(other);
+  drawerBody.scrollTop = 0;
+}
+
+async function openDrawer(id) {
+  openLeadId = id;
+  renderTable();
+  overlay.classList.add('open');
+  drawer.classList.add('open');
+  drawer.setAttribute('aria-hidden', 'false');
+
+  drawerTitle.textContent = 'Caricamento…';
+  drawerSubtitle.textContent = '';
+  drawerBody.textContent = '';
+
+  try {
+    const data = await apiFetch(`/api/admin/lead?id=${encodeURIComponent(id)}`);
+    renderDrawer(data.lead, data.events);
+  } catch (error) {
+    if (error.message === 'SESSION_EXPIRED') return showLogin('Sessione scaduta, accedi di nuovo.');
+    drawerTitle.textContent = 'Errore';
+    drawerBody.textContent = error.message;
+  }
+}
+
+function closeDrawer() {
+  overlay.classList.remove('open');
+  drawer.classList.remove('open');
+  drawer.setAttribute('aria-hidden', 'true');
+  openLeadId = null;
+  renderTable();
+}
+
+overlay.addEventListener('click', closeDrawer);
+document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && drawer.classList.contains('open')) closeDrawer();
+});
+
+/* =========================================================================
+   Avvio
+   ========================================================================= */
+
+async function startApp() {
+  const session = readSession();
+  if (!session?.access_token) return showLogin();
+  showApp(session.email);
+  await loadLeads();
+}
+
+(async function init() {
+  try {
+    await loadConfig();
+  } catch (error) {
+    showLogin(error.message);
+    return;
+  }
+  await startApp();
+})();
+</script>
+
+</body>
+</html>

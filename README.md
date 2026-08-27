@@ -29,6 +29,12 @@ Supabase. Vercel serve i file statici ed esegue `/api` come funzioni Node.
 - `/admin` usa Supabase Auth (email + password). Ogni route admin verifica il
   token e controlla che l'email sia in `ADMIN_EMAILS` prima di toccare i dati.
 
+Attenzione ai privilegi di tabella: `service_role` bypassa RLS ma **non** i
+GRANT. Su questo database l'`ALTER DEFAULT PRIVILEGES` non concede i DML alle
+nuove tabelle, quindi ogni tabella aggiunta in futuro va accompagnata da un
+GRANT esplicito a `service_role`, altrimenti le funzioni rispondono 502 con
+errore Postgres 42501.
+
 ## Variabili d'ambiente
 
 Vedi `.env.example`. Servono in locale (`.env.local`) e su Vercel

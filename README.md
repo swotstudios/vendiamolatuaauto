@@ -8,6 +8,7 @@ Landing statica + API serverless per la raccolta e la gestione delle lead.
 index.html                 Landing (statica, nessun build step)
 admin/index.html           Dashboard interna /admin
 api/lead.js                POST pubblico: salva la lead dal form
+api/lead-confirm.js        CTA pubblica: consenso al contatto, warm → hot
 api/admin/config.js        Configurazione pubblica per la pagina admin
 api/admin/leads.js         GET elenco lead (protetto)
 api/admin/lead.js          GET dettaglio lead + timeline (protetto)
@@ -48,6 +49,7 @@ Vedi `.env.example`. Servono in locale (`.env.local`) e su Vercel
 | `ADMIN_EMAILS` | Email autorizzate a `/admin`, separate da virgola |
 | `RESEND_API_KEY` | Invio email, **solo server** |
 | `RESEND_FROM_EMAIL` | Mittente; il dominio va verificato su Resend |
+| `PUBLIC_SITE_URL` | Dominio pubblico, per il link assoluto della CTA |
 
 ## Flusso delle lead
 
@@ -69,5 +71,29 @@ Lo stato `warm` significa "il cliente ha ricevuto la stima": non viene
 impostato se l'email non è partita. La stima però resta salvata, così l'invio
 si può ritentare senza reinserire nulla.
 
-Gli stati successivi (`hot`, `assigned`, `purchased`, `lost`) esistono già a
-schema ma non sono ancora gestiti dall'interfaccia.
+Poi, dall'email:
+
+```
+CTA "Sì, voglio essere contattato" → /api/lead-confirm?token=…
+                                     ↓
+                    GET: mostra la pagina, non scrive nulla
+                                     ↓
+                    POST (dal JavaScript della pagina)
+                                     ↓
+              solo se warm → hot, hot_at, dealer_contact_consent
+              + eventi cta_clicked e lead_became_hot
+```
+
+Il token è casuale (32 byte) e nel database ne resta solo lo SHA-256; viene
+rigenerato a ogni invio di valutazione e scade dopo 30 giorni.
+
+**Perché la GET non modifica nulla**: i client di posta e i filtri antispam
+aprono da soli i link contenuti nelle email. Se la GET cambiasse stato, quegli
+accessi automatici produrrebbero lead `hot` che nessuno ha mai cliccato. La
+conferma parte quindi da una POST inviata dal JavaScript della pagina, che gli
+scanner non eseguono; con JavaScript disattivato resta il pulsante `<noscript>`.
+
+Il passaggio avviene solo da `warm`, e l'UPDATE filtra a sua volta su
+`status=eq.warm`: due click simultanei non possono produrre eventi doppi.
+Gli stati `assigned` e `purchased` esistono a schema ma non sono ancora
+gestiti dall'interfaccia.

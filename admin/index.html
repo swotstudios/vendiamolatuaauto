@@ -317,6 +317,17 @@
   textarea.input { resize: vertical; min-height: 64px; }
   .hint { font-size: 12px; color: var(--text-faint); margin-top: 8px; }
 
+  .consent-box {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border: 1px solid #cfe3d4;
+    border-left: 3px solid #2c6e35;
+    border-radius: var(--radius);
+    background: #f2f9f3;
+  }
+  .consent-box strong { color: #2c6e35; }
+  .consent-box div { color: var(--text-muted); font-size: 13px; margin-top: 2px; }
+
   /* ---------- Timeline ---------- */
   .timeline { list-style: none; margin: 0; padding: 0; }
   .timeline li {
@@ -807,6 +818,10 @@ const HANDLED_COLUMNS = new Set([
   'vehicle_notes', 'desired_price', 'form_answers',
   'status', 'valuation_amount', 'valuation_note', 'valuation_saved_at', 'valuation_sent_at',
   'updated_at', 'last_activity_at', 'terms_accepted_at',
+  // Consenso al contatto: mostrato nella sezione Valutazione.
+  'hot_at', 'dealer_contact_consent',
+  // Dati del token della CTA: non servono all'operatore e non vanno esposti.
+  'confirmation_token_hash', 'confirmation_token_expires_at',
 ]);
 
 const COLUMN_LABELS = {
@@ -923,6 +938,21 @@ function renderVehicleSection(lead) {
 
 function renderValuationSection(lead) {
   const s = section('Valutazione');
+
+  // Consenso arrivato dalla CTA dell'email: è l'informazione più importante
+  // della sezione, quindi sta in cima.
+  if (lead.hot_at || lead.dealer_contact_consent) {
+    const consent = document.createElement('div');
+    consent.className = 'consent-box';
+    const headline = document.createElement('strong');
+    headline.textContent = 'Il cliente ha chiesto di essere contattato';
+    const when = document.createElement('div');
+    when.textContent = lead.hot_at
+      ? `Consenso ricevuto il ${asDateTime(lead.hot_at)}`
+      : 'Consenso registrato';
+    consent.append(headline, when);
+    s.appendChild(consent);
+  }
 
   const box = document.createElement('div');
   box.className = 'valuation-box stack';

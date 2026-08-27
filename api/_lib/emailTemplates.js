@@ -36,7 +36,7 @@ function vehicleLabel(lead) {
  * Il testo resta allineato a quanto promette la landing: una prima fascia
  * indicativa, senza vincoli, con il passo successivo lasciato al cliente.
  */
-export function valuationEmail(lead) {
+export function valuationEmail(lead, confirmUrl) {
   const firstName = lead.first_name ? escapeHtml(lead.first_name) : 'Ciao';
   const vehicle = escapeHtml(vehicleLabel(lead));
   const amount = euro(Number(lead.valuation_amount));
@@ -123,12 +123,41 @@ export function valuationEmail(lead) {
                 impegno da parte tua. Il valore definitivo può variare dopo che un
                 nostro partner ha visto l'auto di persona.
               </p>
-              <p style="margin:0 0 14px;color:${TEXT};font-size:15px;line-height:1.6;">
-                <strong>Ti interessa un'offerta concreta?</strong> Rispondi a questa email
-                e ti metteremo in contatto con un rivenditore verificato della tua zona.
-              </p>
             </td>
           </tr>
+
+          ${confirmUrl ? `
+          <tr>
+            <td style="padding:8px 28px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+                     style="border-top:1px solid ${BORDER};">
+                <tr><td style="height:22px;"></td></tr>
+                <tr>
+                  <td style="color:${TEXT};font-size:15px;line-height:1.6;">
+                    Se questa valutazione è compatibile con le tue aspettative e vuoi
+                    procedere, puoi richiedere gratuitamente il contatto con un nostro
+                    partner della tua zona.
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center" style="padding:20px 0 12px;">
+                    <a href="${escapeHtml(confirmUrl)}"
+                       style="display:inline-block;background:${GOLD};color:${NAVY};
+                              text-decoration:none;font-size:16px;font-weight:600;
+                              padding:14px 30px;border-radius:50px;">
+                      Sì, voglio essere contattato
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="color:${MUTED};font-size:13px;line-height:1.6;">
+                    Nessun obbligo di vendita. Il partner potrà valutare direttamente
+                    la tua auto e formulare un'eventuale proposta.
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>` : ''}
 
           <tr>
             <td style="padding:22px 28px 28px;">
@@ -168,9 +197,17 @@ export function valuationEmail(lead) {
     "da parte tua. Il valore definitivo può variare dopo che un nostro partner ha",
     "visto l'auto di persona.",
     '',
-    "Ti interessa un'offerta concreta? Rispondi a questa email e ti metteremo in",
-    'contatto con un rivenditore verificato della tua zona.',
-    '',
+    ...(confirmUrl ? [
+      'Se questa valutazione è compatibile con le tue aspettative e vuoi procedere,',
+      'puoi richiedere gratuitamente il contatto con un nostro partner della tua zona:',
+      '',
+      '  Sì, voglio essere contattato:',
+      `  ${confirmUrl}`,
+      '',
+      "Nessun obbligo di vendita. Il partner potrà valutare direttamente la tua auto",
+      "e formulare un'eventuale proposta.",
+      '',
+    ] : []),
     'A presto,',
     'Il team di Vendiamolatuaauto.com',
   ].join('\n');

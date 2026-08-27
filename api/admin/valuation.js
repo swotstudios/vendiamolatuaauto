@@ -11,12 +11,17 @@
  * Se l'invio fallisce, l'operatore vede l'errore ma la stima resta salvata e
  * può ritentare: lo stato `warm` significa "il cliente ha ricevuto la stima",
  * quindi non va impostato se l'email non è partita.
+ *
+ * L'email contiene la CTA "Sì, voglio essere contattato", che porta a
+ * /api/lead-confirm e fa passare la lead da warm a hot. Il token viene
+ * rigenerato a ogni invio: vale sempre e solo il link dell'ultima email.
  */
 
 import { db, HttpError } from '../_lib/supabase.js';
 import { requireAdmin } from '../_lib/auth.js';
 import { sendEmail, isEmailConfigured } from '../_lib/resend.js';
 import { valuationEmail } from '../_lib/emailTemplates.js';
+import { createConfirmationToken, confirmationUrl } from '../_lib/tokens.js';
 import { sendJson, sendError, readJsonBody, requireMethod } from '../_lib/http.js';
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -87,16 +92,26 @@ export default async function handler(req, res) {
       throw new HttpError(400, 'Questa lead non ha un indirizzo email: impossibile inviare la valutazione');
     }
 
+    if (!process.env.PUBLIC_SITE_URL) {
+      throw new HttpError(500, 'PUBLIC_SITE_URL non configurata: impossibile costruire il link della CTA');
+    }
+
     const now = new Date().toISOString();
     const previousAmount = current.valuation_amount === null ? null : Number(current.valuation_amount);
 
-    // 1. La stima viene salvata subito: se l'invio fallirà, il lavoro resta.
+    // Nuovo token a ogni invio: nel database va solo l'hash, il valore in
+    // chiaro esiste unicamente nel link dell'email che stiamo per mandare.
+    const confirmation = createConfirmationToken();
+
+    // 1. Stima e token vengono salvati subito: se l'invio fallirà, il lavoro resta.
     await db(`leads?id=eq.${id}`, {
       method: 'PATCH',
       body: {
         valuation_amount: value,
         valuation_note: (note ?? '').trim() || null,
         valuation_saved_at: now,
+        confirmation_token_hash: confirmation.hash,
+        confirmation_token_expires_at: confirmation.expiresAt,
         last_activity_at: now,
         updated_at: now,
       },
@@ -112,7 +127,10 @@ export default async function handler(req, res) {
     }]);
 
     // 2. Invio dell'email al cliente.
-    const message = valuationEmail({ ...current, valuation_amount: value });
+    const message = valuationEmail(
+      { ...current, valuation_amount: value },
+      confirmationUrl(confirmation.token),
+    );
     let sent;
     try {
       sent = await sendEmail({

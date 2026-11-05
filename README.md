@@ -53,6 +53,22 @@ Vedi `.env.example`. Servono in locale (`.env.local`) e su Vercel
 | `PUBLIC_SITE_URL` | Dominio pubblico, per il link assoluto della CTA |
 | `RESEND_WEBHOOK_SECRET` | Verifica della firma dei webhook Resend |
 
+## Accesso a /admin
+
+Il login usa Supabase Auth via REST. Chi dimentica la password può richiedere
+un link dalla stessa schermata: la pagina chiama `POST /auth/v1/recover` con
+`redirect_to` verso `<PUBLIC_SITE_URL>/admin` e mostra **sempre lo stesso
+messaggio**, che l'indirizzo esista o meno, per non rivelare quali email sono
+registrate.
+
+Aprendo il link, Supabase riporta su `/admin` con `access_token` e
+`type=recovery` nel frammento dell'URL: la pagina mostra allora il form della
+nuova password, la salva con `PUT /auth/v1/user` e ripulisce subito il
+frammento. Quel token non viene mai messo in `localStorage`.
+
+Perché il link funzioni, `https://www.vendiamolatuaauto.com/admin` deve essere
+fra i **Redirect URLs** in Supabase → Authentication → URL Configuration.
+
 ## Flusso delle lead
 
 ```

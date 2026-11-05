@@ -85,6 +85,15 @@
   }
   .stack > * + * { margin-top: 14px; }
 
+  /* Riga sotto al pulsante di accesso, per il recupero password. */
+  .login-aside {
+    margin: 14px 0 0;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .login-aside .link-btn { font-size: 13px; }
+
   .btn {
     display: inline-flex;
     align-items: center;
@@ -115,6 +124,16 @@
     background: #fdf0ef;
     color: var(--danger);
     border: 1px solid #f5d5d3;
+  }
+  .alert-ok {
+    background: #f2f9f3;
+    color: #2c6e35;
+    border-color: #cfe3d4;
+  }
+  .alert-info {
+    background: var(--bg-subtle);
+    color: var(--text);
+    border-color: var(--border-strong);
   }
 
   /* ---------- Layout app ---------- */
@@ -441,6 +460,44 @@
       <input class="input" type="password" id="loginPassword" autocomplete="current-password" required>
     </div>
     <button class="btn btn-primary btn-block" type="submit" id="loginSubmit">Accedi</button>
+    <p class="login-aside">
+      <button class="link-btn" type="button" id="forgotLink">Password dimenticata?</button>
+    </p>
+  </form>
+
+  <!-- Richiesta del link di reimpostazione -->
+  <form class="login-card stack" id="recoverForm" hidden>
+    <div>
+      <h1>Reimposta la password</h1>
+      <p class="sub">Ti inviamo un link per scegliere una nuova password.</p>
+    </div>
+    <div class="alert" id="recoverMessage" hidden></div>
+    <div>
+      <label class="field-label" for="recoverEmail">Email</label>
+      <input class="input" type="email" id="recoverEmail" autocomplete="username" required>
+    </div>
+    <button class="btn btn-primary btn-block" type="submit" id="recoverSubmit">Invia il link</button>
+    <p class="login-aside">
+      <button class="link-btn" type="button" id="backToLogin">Torna all'accesso</button>
+    </p>
+  </form>
+
+  <!-- Scelta della nuova password, aperta dal link ricevuto via email -->
+  <form class="login-card stack" id="resetForm" hidden>
+    <div>
+      <h1>Nuova password</h1>
+      <p class="sub">Scegli una password di almeno 8 caratteri.</p>
+    </div>
+    <div class="alert" id="resetError" hidden></div>
+    <div>
+      <label class="field-label" for="newPassword">Nuova password</label>
+      <input class="input" type="password" id="newPassword" autocomplete="new-password" minlength="8" required>
+    </div>
+    <div>
+      <label class="field-label" for="confirmPassword">Conferma password</label>
+      <input class="input" type="password" id="confirmPassword" autocomplete="new-password" minlength="8" required>
+    </div>
+    <button class="btn btn-primary btn-block" type="submit" id="resetSubmit">Salva la password</button>
   </form>
 </div>
 
@@ -565,6 +622,57 @@ async function signIn(email, password) {
   return data;
 }
 
+/**
+ * Chiede a Supabase l'email con il link di reimpostazione.
+ *
+ * `redirect_to` deve essere fra i Redirect URLs consentiti nelle impostazioni
+ * di Supabase Auth, altrimenti il link rimanda al Site URL predefinito.
+ */
+async function requestPasswordRecovery(email) {
+  const { supabaseUrl, anonKey, siteUrl } = await loadConfig();
+  const base = (siteUrl || window.location.origin).replace(/\/+$/, '');
+  const redirectTo = encodeURIComponent(`${base}/admin`);
+
+  const res = await fetch(`${supabaseUrl}/auth/v1/recover?redirect_to=${redirectTo}`, {
+    method: 'POST',
+    headers: { apikey: anonKey, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  });
+
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    const error = new Error(data.error_description || data.msg || data.error || 'Richiesta non riuscita');
+    error.status = res.status;
+    throw error;
+  }
+}
+
+/**
+ * Imposta la nuova password usando il token arrivato nel link dell'email.
+ * Quel token vale come sessione, ma non viene salvato: dopo il cambio
+ * l'operatore rientra dal form di accesso.
+ */
+async function updatePassword(accessToken, password) {
+  const { supabaseUrl, anonKey } = await loadConfig();
+  const res = await fetch(`${supabaseUrl}/auth/v1/user`, {
+    method: 'PUT',
+    headers: {
+      apikey: anonKey,
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ password }),
+  });
+
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const error = new Error(data.error_description || data.msg || data.error || 'Salvataggio non riuscito');
+    error.status = res.status;
+    throw error;
+  }
+  return data;
+}
+
 async function refreshSession() {
   const session = readSession();
   if (!session?.refresh_token) return null;
@@ -676,17 +784,174 @@ const loginError = document.getElementById('loginError');
 const loginSubmit = document.getElementById('loginSubmit');
 const appEl = document.getElementById('app');
 
-function showLogin(message) {
+const recoverForm = document.getElementById('recoverForm');
+const recoverMessage = document.getElementById('recoverMessage');
+const recoverSubmit = document.getElementById('recoverSubmit');
+const resetForm = document.getElementById('resetForm');
+const resetError = document.getElementById('resetError');
+const resetSubmit = document.getElementById('resetSubmit');
+
+/** Token della mail di recupero: vale come sessione, quindi resta solo qui. */
+let recoveryToken = null;
+
+/** Mostra una delle tre schermate di accesso: login, recupero, nuova password. */
+function showAuthView(view) {
   appEl.hidden = true;
   loginScreen.hidden = false;
+  loginForm.hidden = view !== 'login';
+  recoverForm.hidden = view !== 'recover';
+  resetForm.hidden = view !== 'reset';
+}
+
+/**
+ * @param {string} [message]  testo da mostrare sopra il form
+ * @param {'error'|'ok'|'info'} [tone]  stile del messaggio
+ */
+function showLogin(message, tone = 'error') {
+  showAuthView('login');
+  loginError.className = 'alert' + (tone === 'ok' ? ' alert-ok' : tone === 'info' ? ' alert-info' : '');
   loginError.hidden = !message;
   if (message) loginError.textContent = message;
+}
+
+function showRecover(message, tone = 'info') {
+  showAuthView('recover');
+  recoverMessage.className = 'alert' + (tone === 'ok' ? ' alert-ok' : tone === 'info' ? ' alert-info' : '');
+  recoverMessage.hidden = !message;
+  if (message) recoverMessage.textContent = message;
+  document.getElementById('recoverEmail').value = document.getElementById('loginEmail').value.trim();
 }
 
 function showApp(email) {
   loginScreen.hidden = true;
   appEl.hidden = false;
   document.getElementById('currentUser').textContent = email || '';
+}
+
+/* ---------- Recupero password ---------- */
+
+// Messaggio unico: non deve far capire se l'indirizzo esiste o meno.
+const RECOVERY_SENT = "Se l'indirizzo è associato a un account, riceverai a breve "
+  + "un'email con il link per reimpostare la password. Controlla anche lo spam.";
+
+document.getElementById('forgotLink').addEventListener('click', () => showRecover());
+document.getElementById('backToLogin').addEventListener('click', () => showLogin());
+
+recoverForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('recoverEmail').value.trim();
+  if (!email) return;
+
+  recoverSubmit.disabled = true;
+  recoverSubmit.textContent = 'Invio…';
+  try {
+    await requestPasswordRecovery(email);
+    showRecover(RECOVERY_SENT, 'ok');
+  } catch (error) {
+    // Un limite di frequenza va detto, altrimenti l'operatore riprova a vuoto.
+    if (error.status === 429 || /rate|limit|secondi|seconds/i.test(error.message)) {
+      showRecover('Troppe richieste ravvicinate. Attendi qualche minuto e riprova.', 'error');
+    } else {
+      // Per ogni altro esito rispondiamo come se fosse andata a buon fine:
+      // distinguere i casi rivelerebbe quali indirizzi sono registrati.
+      showRecover(RECOVERY_SENT, 'ok');
+    }
+  } finally {
+    recoverSubmit.disabled = false;
+    recoverSubmit.textContent = 'Invia il link';
+  }
+});
+
+resetForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const password = document.getElementById('newPassword').value;
+  const confirm = document.getElementById('confirmPassword').value;
+
+  const fail = (message) => {
+    resetError.className = 'alert';
+    resetError.textContent = message;
+    resetError.hidden = false;
+  };
+
+  if (password.length < 8) return fail('La password deve avere almeno 8 caratteri.');
+  if (password !== confirm) return fail('Le due password non coincidono.');
+  if (!recoveryToken) {
+    return showRecover('Il link non è più valido. Richiedine uno nuovo.', 'error');
+  }
+
+  resetError.hidden = true;
+  resetSubmit.disabled = true;
+  resetSubmit.textContent = 'Salvataggio…';
+  try {
+    await updatePassword(recoveryToken, password);
+    recoveryToken = null;
+    clearRecoveryHash();
+    resetForm.reset();
+    showLogin('Password aggiornata. Accedi con le nuove credenziali.', 'ok');
+  } catch (error) {
+    if (error.status === 401 || error.status === 403) {
+      recoveryToken = null;
+      clearRecoveryHash();
+      showRecover('Il link è scaduto o è già stato usato. Richiedine uno nuovo.', 'error');
+    } else if (/different from the old password/i.test(error.message)) {
+      fail('La nuova password deve essere diversa da quella precedente.');
+    } else if (/at least|should be/i.test(error.message)) {
+      fail('La password non rispetta i requisiti minimi richiesti.');
+    } else {
+      fail(error.message);
+    }
+  } finally {
+    resetSubmit.disabled = false;
+    resetSubmit.textContent = 'Salva la password';
+  }
+});
+
+/** Toglie il token dalla barra degli indirizzi senza ricaricare la pagina. */
+function clearRecoveryHash() {
+  try {
+    window.history.replaceState(null, '', window.location.pathname + window.location.search);
+  } catch {
+    window.location.hash = '';
+  }
+}
+
+/**
+ * Legge il frammento dell'URL su cui atterra il link dell'email.
+ * Supabase vi mette access_token e type=recovery, oppure error/error_description
+ * quando il link è scaduto o già usato.
+ *
+ * @returns {'reset'|'error'|null} cosa è stato trovato
+ */
+function consumeRecoveryHash() {
+  const raw = window.location.hash.startsWith('#') ? window.location.hash.slice(1) : '';
+  if (!raw) return null;
+
+  let params;
+  try { params = new URLSearchParams(raw); } catch { return null; }
+
+  const error = params.get('error') || params.get('error_code');
+  if (error) {
+    const description = params.get('error_description') || '';
+    clearRecoveryHash();
+    const scaduto = /expired|invalid/i.test(error + ' ' + description);
+    showRecover(
+      scaduto
+        ? 'Il link è scaduto o non è più valido. Richiedine uno nuovo qui sotto.'
+        : 'Non è stato possibile aprire il link. Richiedine uno nuovo qui sotto.',
+      'error',
+    );
+    return 'error';
+  }
+
+  if (params.get('type') === 'recovery' && params.get('access_token')) {
+    recoveryToken = params.get('access_token');
+    clearRecoveryHash();
+    showAuthView('reset');
+    resetError.hidden = true;
+    return 'reset';
+  }
+
+  return null;
 }
 
 loginForm.addEventListener('submit', async (e) => {
@@ -1353,8 +1618,16 @@ async function startApp() {
     showLogin(error.message);
     return;
   }
+  // Il link di recupero ha la precedenza: va gestito anche se nel browser
+  // è rimasta una sessione valida.
+  if (consumeRecoveryHash()) return;
   await startApp();
 })();
+
+// Se /admin è già aperto in questa scheda, aprire il link dell'email cambia
+// solo il frammento e il browser non ricarica la pagina: senza questo ascolto
+// il form della nuova password non comparirebbe.
+window.addEventListener('hashchange', () => { consumeRecoveryHash(); });
 </script>
 
 </body>

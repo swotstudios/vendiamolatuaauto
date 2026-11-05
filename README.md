@@ -10,6 +10,7 @@ admin/index.html           Dashboard interna /admin
 api/lead.js                POST pubblico: salva la lead dal form
 api/lead-confirm.js        CTA pubblica: consenso al contatto, warm → hot
 api/webhooks/resend.js     Webhook Resend: consegne, aperture, click, bounce
+api/cron/keepalive.js      Cron giornaliero: evita la pausa di Supabase
 api/admin/config.js        Configurazione pubblica per la pagina admin
 api/admin/leads.js         GET elenco lead (protetto)
 api/admin/lead.js          GET dettaglio lead + timeline (protetto)
@@ -52,6 +53,7 @@ Vedi `.env.example`. Servono in locale (`.env.local`) e su Vercel
 | `RESEND_FROM_EMAIL` | Mittente; il dominio va verificato su Resend |
 | `PUBLIC_SITE_URL` | Dominio pubblico, per il link assoluto della CTA |
 | `RESEND_WEBHOOK_SECRET` | Verifica della firma dei webhook Resend |
+| `CRON_SECRET` | Protegge il cron di keepalive; Vercel lo invia da sé |
 
 ## Accesso a /admin
 
@@ -68,6 +70,18 @@ frammento. Quel token non viene mai messo in `localStorage`.
 
 Perché il link funzioni, `https://www.vendiamolatuaauto.com/admin` deve essere
 fra i **Redirect URLs** in Supabase → Authentication → URL Configuration.
+
+## Mantenere sveglio il database
+
+Sul piano gratuito Supabase mette in pausa il progetto dopo alcuni giorni di
+inattività, e al risveglio form e dashboard vanno in errore. `vercel.json`
+pianifica una chiamata giornaliera a `/api/cron/keepalive`, che esegue una
+query minima sul database.
+
+La rotta accetta solo richieste con `Authorization: Bearer <CRON_SECRET>`:
+Vercel lo invia da sé alle esecuzioni pianificate quando la variabile è
+definita sul progetto. Il piano Hobby consente un'esecuzione al giorno e non
+garantisce l'orario esatto.
 
 ## Flusso delle lead
 

@@ -78,20 +78,27 @@
     left: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(255,255,255,0.95);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--color-border);
+    background: var(--color-primary);
+    border-bottom: 3px solid var(--color-accent);
   }
   .header-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 0;
+    padding: 10px 0;
   }
   .logo img {
-    height: 80px;
+    height: 64px;
     width: auto;
   }
+  @media (min-width: 768px) {
+    .logo img { height: 72px; }
+  }
+  .site-header .btn-primary {
+    background: var(--color-accent);
+    color: var(--color-primary-dark);
+  }
+  .site-header .btn-primary:hover { background: var(--color-accent-dark); color: #fff; }
   .header-cta {
     display: none;
   }
@@ -265,6 +272,23 @@
   @media (min-width: 960px) {
     .hero-visual { margin: 0; flex-shrink: 0; }
   }
+  .hero-video-title {
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: center;
+    color: var(--color-primary);
+    margin-bottom: 16px;
+  }
+  .hero-video-title::after {
+    content: "";
+    display: block;
+    width: 44px;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--color-accent);
+    margin: 10px auto 0;
+  }
   .hero-video-card {
     background: #fff;
     border: 1px solid var(--color-border);
@@ -278,7 +302,7 @@
     aspect-ratio: 9 / 16;
     object-fit: cover;
     border-radius: calc(var(--radius-lg) - 8px);
-    background: var(--color-primary-soft);
+    background: var(--color-primary);
   }
 
   /* ---------- Trust bar ---------- */
@@ -1132,7 +1156,7 @@
 <header class="site-header">
   <div class="container header-inner">
     <a href="#" class="logo" aria-label="Vendiamolatuaauto.com">
-      <img src="assets/logo_main.png" alt="Vendiamolatuaauto.com">
+      <img src="assets/logo_header.png" alt="Vendiamolatuaauto.com">
     </a>
     <a href="#form" class="btn btn-primary btn-small header-cta">Vendi la tua auto</a>
   </div>
@@ -1164,8 +1188,9 @@
         <a href="#form" class="btn btn-primary">Vendi la tua auto</a>
       </div>
       <div class="hero-visual">
+        <p class="hero-video-title">Come funziona in pochi secondi</p>
         <div class="hero-video-card fade-in">
-          <video class="hero-video" src="assets/rombo.mp4" poster="assets/rombo-poster.jpg" controls controlsList="nodownload noplaybackrate" autoplay muted loop playsinline preload="metadata" aria-label="Video: come funziona il servizio, in 4 passi"></video>
+          <video class="hero-video" src="assets/rombo.mp4" poster="assets/rombo-poster.jpg" controls controlsList="nodownload noplaybackrate" autoplay muted loop playsinline preload="metadata" aria-label="Video: come funziona il servizio in pochi secondi"></video>
         </div>
       </div>
     </div>

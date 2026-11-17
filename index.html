@@ -152,7 +152,7 @@
     padding: 150px 0 90px;
     position: relative;
     overflow: hidden;
-    background: linear-gradient(135deg, #EDF1F7 0%, #FFFFFF 60%);
+    background: linear-gradient(135deg, var(--color-primary-soft) 0%, #DCE6F6 45%, #FFFFFF 85%);
   }
   .hero::before {
     content: "";
@@ -161,7 +161,7 @@
     right: -140px;
     width: 420px;
     height: 420px;
-    background: radial-gradient(circle, rgba(15,45,82,0.09) 0%, rgba(15,45,82,0) 70%);
+    background: radial-gradient(circle, rgba(15,45,82,0.14) 0%, rgba(15,45,82,0) 70%);
     border-radius: 50%;
     animation: blob-float 9s ease-in-out infinite;
   }
@@ -172,7 +172,7 @@
     left: -120px;
     width: 360px;
     height: 360px;
-    background: radial-gradient(circle, rgba(201,162,39,0.2) 0%, rgba(201,162,39,0) 70%);
+    background: radial-gradient(circle, rgba(74,111,165,0.22) 0%, rgba(74,111,165,0) 70%);
     border-radius: 50%;
     animation: blob-float 11s ease-in-out infinite reverse;
   }
@@ -256,88 +256,29 @@
   }
   .hero-bullets svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--color-primary); }
 
-  /* ---------- Hero trust panel ---------- */
+  /* ---------- Hero video ---------- */
   .hero-visual {
     width: 100%;
-    max-width: 380px;
+    max-width: 300px;
     margin: 0 auto;
   }
   @media (min-width: 960px) {
     .hero-visual { margin: 0; flex-shrink: 0; }
   }
-  .hero-panel {
-    background: radial-gradient(circle at 50% 42%, var(--color-primary-soft) 0%, #fff 68%);
+  .hero-video-card {
+    background: #fff;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    padding: 40px;
-    box-shadow: var(--shadow-card);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 10px;
+    box-shadow: 0 24px 60px rgba(15,45,82,0.28), 0 4px 14px rgba(15,45,82,0.12);
   }
-  .hero-panel-car-wrap {
-    position: relative;
-    width: 190px;
-    height: 190px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .pulse-ring {
-    position: absolute;
-    width: 190px;
-    height: 190px;
-    border-radius: 50%;
-    border: 2px solid var(--color-primary);
-    opacity: 0;
-    animation: pulse-ring 3s ease-out infinite;
-  }
-  .pulse-ring.ring-2 { animation-delay: 1.5s; }
-  @keyframes pulse-ring {
-    0% { transform: scale(0.72); opacity: 0.35; }
-    100% { transform: scale(1.12); opacity: 0; }
-  }
-  .hero-panel-car {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
+  .hero-video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    object-fit: cover;
+    border-radius: calc(var(--radius-lg) - 8px);
     background: var(--color-primary-soft);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-    z-index: 2;
-    box-shadow: 0 8px 24px rgba(15,45,82,0.12);
-  }
-  .hero-panel-car svg {
-    width: 76px;
-    height: 76px;
-    color: var(--color-primary);
-    position: relative;
-    z-index: 2;
-    animation: car-hop 2.4s cubic-bezier(.45,0,.55,1) infinite;
-  }
-  .hero-panel-car .car-shadow {
-    position: absolute;
-    bottom: 34px;
-    width: 58px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--color-primary);
-    opacity: 0.18;
-    z-index: 1;
-    animation: car-shadow 2.4s cubic-bezier(.45,0,.55,1) infinite;
-  }
-  @keyframes car-hop {
-    0%, 100% { transform: translate(0, 0) rotate(0deg); }
-    25% { transform: translate(-7px, -16px) rotate(-5deg); }
-    50% { transform: translate(0, -22px) rotate(0deg); }
-    75% { transform: translate(7px, -16px) rotate(5deg); }
-  }
-  @keyframes car-shadow {
-    0%, 100% { transform: scale(1); opacity: 0.18; }
-    50% { transform: scale(0.5); opacity: 0.08; }
   }
 
   /* ---------- Trust bar ---------- */
@@ -547,6 +488,10 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
+    /* Senza questo, un elemento grid non si restringe mai sotto il min-content
+       dei suoi figli (es. una <select> con opzioni lunghe): su mobile la
+       colonna "vince" sul contenitore ed esce dal form-card. */
+    min-width: 0;
   }
   .field label {
     font-size: 14px;
@@ -557,6 +502,8 @@
   .field input,
   .field select,
   .field textarea {
+    width: 100%;
+    max-width: 100%;
     font-family: var(--font-main);
     font-size: 16px;
     padding: 13px 16px;
@@ -578,6 +525,8 @@
     background: #fff;
     border-radius: var(--radius-sm);
     padding: 0 16px;
+    min-width: 0;
+    max-width: 100%;
   }
   .input-suffix-wrap input {
     flex: 1;
@@ -804,11 +753,13 @@
   }
   .wizard-question.invalid .pill { border-color: rgba(255,138,128,0.7); }
 
-  .wizard-dependent-field { margin-top: 14px; max-width: 320px; }
+  .wizard-dependent-field { margin-top: 14px; max-width: 320px; width: 100%; min-width: 0; }
 
-  .phone-row { display: flex; gap: 10px; }
+  .phone-row { display: flex; gap: 10px; min-width: 0; }
   .phone-row select {
     flex: 0 0 100px;
+    min-width: 0;
+    max-width: 100px;
     font-family: var(--font-main);
     font-size: 15px;
     padding: 13px 8px;
@@ -819,6 +770,9 @@
     color: var(--color-secondary-text);
   }
   .phone-row input { flex: 1; min-width: 0; }
+  @media (max-width: 380px) {
+    .phone-row select { flex-basis: 80px; max-width: 80px; }
+  }
 
   .wizard-actions { display: flex; justify-content: flex-end; margin-top: 30px; }
   .wizard-actions .btn { width: 100%; justify-content: center; }
@@ -1210,20 +1164,8 @@
         <a href="#form" class="btn btn-primary">Vendi la tua auto</a>
       </div>
       <div class="hero-visual">
-        <div class="hero-panel fade-in">
-          <div class="hero-panel-car-wrap">
-            <span class="pulse-ring ring-1"></span>
-            <span class="pulse-ring ring-2"></span>
-            <div class="hero-panel-car">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11"/>
-                <path d="M3 11h18v5a1 1 0 0 1-1 1h-1a2 2 0 1 1-4 0H9a2 2 0 1 1-4 0H4a1 1 0 0 1-1-1z"/>
-                <circle cx="7.5" cy="17.5" r="1.5"/>
-                <circle cx="16.5" cy="17.5" r="1.5"/>
-              </svg>
-              <div class="car-shadow"></div>
-            </div>
-          </div>
+        <div class="hero-video-card fade-in">
+          <video class="hero-video" src="assets/rombo.mp4" poster="assets/rombo-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Video: come funziona il servizio, in 4 passi"></video>
         </div>
       </div>
     </div>
@@ -1747,14 +1689,15 @@
     </div>
     <div class="footer-col">
       <h4>Legale</h4>
-      <!-- Placeholder: sostituire con gli URL reali quando le pagine saranno pubblicate -->
+      <!-- Placeholder: sostituire termini.html con l'URL reale quando la pagina sarà pubblicata -->
       <a href="privacy.html">Privacy Policy</a>
+      <a href="cookie.html">Cookie Policy</a>
       <a href="termini.html">Termini e Condizioni</a>
     </div>
   </div>
   <div class="container footer-bottom">
     <span>© <span id="year"></span> Vendiamolatuaauto.com — Tutti i diritti riservati</span>
-    <span>P.IVA 00000000000</span>
+    <span>P.IVA 05202650262</span>
   </div>
 </footer>
 

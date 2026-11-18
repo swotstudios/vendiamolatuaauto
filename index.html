@@ -90,17 +90,20 @@
     padding: 10px 0;
   }
   .logo img {
-    height: 64px;
+    height: 52px;
     width: auto;
+  }
+  @media (min-width: 480px) {
+    .logo img { height: 64px; }
   }
   @media (min-width: 768px) {
     .logo img { height: 72px; }
   }
   .site-header .btn-primary {
-    background: var(--color-accent);
-    color: var(--color-primary-dark);
+    background: #FFF644;
+    color: var(--color-primary);
   }
-  .site-header .btn-primary:hover { background: var(--color-accent-dark); color: #fff; }
+  .site-header .btn-primary:hover { background: #F2E52E; color: var(--color-primary-dark); }
   .header-cta {
     display: none;
   }
